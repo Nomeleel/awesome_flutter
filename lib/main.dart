@@ -1,5 +1,5 @@
-import 'package:awesome_flutter/waterWaveView.dart';
-import 'package:awesome_flutter/yinYangSwitchView.dart';
+import 'waterWaveView.dart';
+import 'yinYangSwitchView.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: "Home"),
+      home: MyHomePage(),
       routes: routes,
     );
   }
@@ -27,7 +27,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   _MyHomePageState();
 
@@ -35,56 +35,78 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+
     // TODO 规范化 根据目录下的文件自动构建路由
-    routes["/pages/waterWaveView"] = (BuildContext context) => WaterWaveView();
     routes["/pages/yinYangSwitchView"] = (BuildContext context) => YinYangSwitchView();
+    routes["/pages/yinYangSwitchView1"] = (BuildContext context) => YinYangSwitchView();
+    routes["/pages/yinYangSwitchView2"] = (BuildContext context) => YinYangSwitchView();
+    routes["/pages/yinYangSwitchView3"] = (BuildContext context) => YinYangSwitchView();
+    routes["/pages/waterWaveView"] = (BuildContext context) => WaterWaveView();
 
     super.initState();
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: routes.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: EdgeInsets.all(15),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed(routes.keys.elementAt(index));
-            },
-            child:  ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-              child: Container(
-                height: MediaQuery.of(context).size.width * 0.618 + 50,
-                color: Colors.deepOrange,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: (MediaQuery.of(context).size.width - 30) * 0.618 - 30,
-                      color: Colors.green,
-                    ),
-                    Container(
-                      height: 33,
-                      color: Colors.purple,
-                    ),
-                    Container(
-                      height: 33,
-                      color: Colors.blue,
-                      child: Text(
-                        routes.keys.elementAt(index),
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(
+              color: Colors.purple,
             ),
           ),
-        );
-      }
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width / 4,
+                right: MediaQuery.of(context).size.width / 4,
+              ),
+              child: PageView(
+                scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
+                controller: PageController(),
+                children: <Widget>[
+                  for (var i = 0; i < routes.length; i++)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, 
+                          PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 300), 
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              Animation tempAnimation = Tween<double>(
+                                  begin: 0.5, 
+                                  end: 1,
+                                ).animate(CurvedAnimation(
+                                  parent: animation, 
+                                  curve: Curves.easeInOut,
+                                )
+                              );
+
+                              return ScaleTransition(
+                                scale: tempAnimation,
+                                child: Function.apply(routes.values.elementAt(i), List()..add(context)),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Function.apply(routes.values.elementAt(i), List()..add(context)),
+                    ),
+                ],
+              )
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              color: Colors.purple,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
