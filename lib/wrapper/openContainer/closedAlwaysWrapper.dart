@@ -7,18 +7,34 @@ class ClosedAlwaysWrapper{
   const ClosedAlwaysWrapper({
     @required this.closedWidget,
     @required this.openWidget,
+    this.limitOpenWidgetHeight,
   });
 
   final Widget closedWidget;
   final Widget openWidget;
+  final double limitOpenWidgetHeight;
 
-  OpenContainerBuilder getClosedBuilder(){
+  OpenContainerBuilder getNoActionClosedBuilder(){
     return (context, action) => closedWidget;
   }
   
-  OpenContainerBuilder getOpenBuilder(){
-    // TODO imp
-    return (context, action) => openWidget;
+  OpenContainerBuilder getNoActionOpenBuilder(){
+    return (context, action) => getClosedAlwaysWidget();
+  }
+
+  Widget getClosedAlwaysWidget(){
+    return Container(
+      color: Color.fromARGB(255, 255, 255, 255),
+      child: ListView(
+        children: <Widget> [
+          closedWidget,
+          Container(
+            height: limitOpenWidgetHeight,
+            child: openWidget,
+          ),
+        ],
+      ),
+    );
   }
 
 }
