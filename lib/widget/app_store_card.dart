@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../helper/helper.dart';
+import '../custom/animation/gesture_scale_transition.dart';
 import '../custom/clipper/padding_radius_rect_clipper.dart';
+import '../helper/helper.dart';
 
 class AppStoreCard extends StatelessWidget {
 
@@ -28,12 +29,12 @@ class AppStoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return GestureScaleTransition(
+      callBack: () => openDetailView(context),
       child: Hero(
         tag: key,
         child: buildCard(),
       ),
-      onTap: () => openDetailView(context),
     );
   }
 
