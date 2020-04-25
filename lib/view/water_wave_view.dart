@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom/clipper/waveRectClipper.dart';
+import '../custom/clipper/wave_rect_clipper.dart';
 
 class WaterWaveView extends StatefulWidget {
   @override

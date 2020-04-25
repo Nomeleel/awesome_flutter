@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector64;
 
-import 'custom/clipper/magatamaClipper.dart';
+import '../custom/clipper/magatama_clipper.dart';
 
 
 class YinYangSwitchView extends StatefulWidget {

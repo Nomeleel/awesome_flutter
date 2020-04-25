@@ -1,6 +1,7 @@
-import 'waterWaveView.dart';
-import 'yinYangSwitchView.dart';
 import 'package:flutter/material.dart';
+
+import 'view/water_wave_view.dart';
+import 'view/yin_yang_switch_view.dart';
 
 void main() => runApp(MyApp());
 
