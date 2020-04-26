@@ -1,12 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'view/water_wave_view.dart';
-import 'view/yin_yang_switch_view.dart';
+import 'package:widget_scan/route/view_routes.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  static Map<String, WidgetBuilder> routes = Map<String, WidgetBuilder>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
-      routes: routes,
+      routes: viewRoutes,
     );
   }
 }
@@ -32,81 +31,51 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   _MyHomePageState();
 
-  Map<String, WidgetBuilder> routes = MyApp.routes;
-
   @override
   void initState() {
-
-    // TODO 规范化 根据目录下的文件自动构建路由
-    routes["/pages/yinYangSwitchView"] = (BuildContext context) => YinYangSwitchView();
-    routes["/pages/yinYangSwitchView1"] = (BuildContext context) => YinYangSwitchView();
-    routes["/pages/yinYangSwitchView2"] = (BuildContext context) => YinYangSwitchView();
-    routes["/pages/yinYangSwitchView3"] = (BuildContext context) => YinYangSwitchView();
-    routes["/pages/waterWaveView"] = (BuildContext context) => WaterWaveView();
 
     super.initState();
   }
   
   @override
   Widget build(BuildContext context) {
+    List<String> routeNameList = viewRoutes.keys.toList();
+    
     return SafeArea(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(
+      child: Container(
+        color: Colors.white,
+        child: ListView.builder(
+          itemCount: viewRoutes.length,
+          itemBuilder: (context, index) => Padding(
+            padding: EdgeInsets.all(5),
+            child: CupertinoButton(
               color: Colors.purple,
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width / 4,
-                right: MediaQuery.of(context).size.width / 4,
-              ),
-              child: PageView(
-                scrollDirection: Axis.horizontal,
-                physics: BouncingScrollPhysics(),
-                controller: PageController(),
-                children: <Widget>[
-                  for (var i = 0; i < routes.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, 
-                          PageRouteBuilder(
-                            transitionDuration: Duration(milliseconds: 300), 
-                            pageBuilder: (context, animation, secondaryAnimation) {
-                              Animation tempAnimation = Tween<double>(
-                                  begin: 0.5, 
-                                  end: 1,
-                                ).animate(CurvedAnimation(
-                                  parent: animation, 
-                                  curve: Curves.easeInOut,
-                                )
-                              );
+              child: Text(routeNameList[index]),
+              onPressed: () {
+                Navigator.push(context, 
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500), 
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      Animation tempAnimation = Tween<double>(
+                          begin: 0, 
+                          end: 1,
+                        ).animate(CurvedAnimation(
+                          parent: animation, 
+                          curve: Curves.easeInOut,
+                        )
+                      );
 
-                              return ScaleTransition(
-                                scale: tempAnimation,
-                                child: Function.apply(routes.values.elementAt(i), List()..add(context)),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: Function.apply(routes.values.elementAt(i), List()..add(context)),
-                    ),
-                ],
-              )
+                      return ScaleTransition(
+                        scale: tempAnimation,
+                        child: viewRoutes[routeNameList[index]](context),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.purple,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
