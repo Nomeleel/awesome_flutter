@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_scan/route/view_routes.dart';
+
+import 'model/app_store_card_data.dart';
+import 'template/app_store_card_description.dart';
+import 'widget/app_store_card.dart';
+import 'wrapper/image_wraper.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,52 +38,44 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   _MyHomePageState();
 
+  List<AppStoreCardData> _cardDataList = List<AppStoreCardData>();
+
   @override
   void initState() {
 
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    List<String> routeNameList = viewRoutes.keys.toList();
-    
     return SafeArea(
       child: Container(
         color: Colors.white,
         child: ListView.builder(
-          itemCount: viewRoutes.length,
-          itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.all(5),
-            child: CupertinoButton(
-              color: Colors.purple,
-              child: Text(routeNameList[index]),
-              onPressed: () {
-                Navigator.push(context, 
-                  PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500), 
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      Animation tempAnimation = Tween<double>(
-                          begin: 0, 
-                          end: 1,
-                        ).animate(CurvedAnimation(
-                          parent: animation, 
-                          curve: Curves.easeInOut,
-                        )
-                      );
-
-                      return ScaleTransition(
-                        scale: tempAnimation,
-                        child: viewRoutes[routeNameList[index]](context),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
+          itemCount: _cardDataList.length,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
         ),
       ),
     );
   }
+
+  Widget appStoreCardItem(BuildContext context, AppStoreCardData data) {
+    return AppStoreCard(
+      key: Key(data.hashCode.toString()),
+      elevation: 5,
+      padding: EdgeInsets.symmetric(
+        horizontal: 22,
+        vertical: 10,
+      ),
+      radius: BorderRadius.all(Radius.circular(20)),
+      showBackgroundWidget: ImageWraper.path(data.imagePath),
+      showForegroundWidget: AppStoreCardDescription(
+        mode: data.descriptionMode,
+        data: data.descriptionData,
+      ),
+      detailWidget: viewRoutes[data.detailViewRouteName](context),
+    );
+  }
+
 }
