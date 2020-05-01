@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:widget_scan/route/view_routes.dart';
 
 import 'model/app_store_card_data.dart';
@@ -42,8 +43,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-
     super.initState();
+    getData();
+  }
+
+  getData() async {
+    String jsonData = await rootBundle.loadString('assets/data/CardDataList.json');
+    if (jsonData != null && jsonData != '') {
+      (json.decode(jsonData)['cardDataList'] as List).forEach((item) {
+        _cardDataList.add(AppStoreCardData.fromMap(item));
+      });
+      
+      setState(() {});
+    }
   }
 
   @override
@@ -51,11 +63,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return SafeArea(
       child: Container(
         color: Colors.white,
-        child: ListView.builder(
-          itemCount: _cardDataList.length,
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
-        ),
+        child: _cardDataList.length == 0 ? 
+          Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+            ),
+          ) :
+          ListView.builder(
+            itemCount: _cardDataList.length,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
+          ),
       ),
     );
   }

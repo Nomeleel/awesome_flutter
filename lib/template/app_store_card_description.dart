@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -84,6 +86,14 @@ class AppStoreCardDescriptionData {
     this.title,
     this.info,
   });
+
+  AppStoreCardDescriptionData.fromMap(Map<String, dynamic> dataMap)
+    : label = dataMap['label'],
+      title = dataMap['title'],
+      info = dataMap['info'];
+
+  AppStoreCardDescriptionData.fromJson(String jsonData)
+    : this.fromMap(json.decode(jsonData));
 
   final String title;
   final String label;
