@@ -1,7 +1,6 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart' as vector64;
 
+import '../custom/animation/rolling_transition.dart';
 import '../custom/clipper/magatama_clipper.dart';
 
 
@@ -67,9 +66,12 @@ class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProvide
               Positioned(
                 left: 5,
                 top: 5,
-                child: RotationTransition2(
+                child: RollingTransition(
                   alignment: Alignment.center,
-                  turns: controller,
+                  turns: Tween(
+                    begin: 0.0,
+                    end: 0.5,
+                  ).animate(controller),
                   child: Container(
                     alignment: Alignment.center,
                     width: 90,
@@ -120,54 +122,6 @@ class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProvide
           ),
         ),
       ),
-    );
-  }
-}
-
-class RotationTransition2 extends AnimatedWidget {
-  // TODO 改名字 => 滚动动画
-  // TODO 目标点偏移量参数 旋转角度
-  /// Creates a rotation transition.
-  ///
-  /// The [turns] argument must not be null.
-  const RotationTransition2({
-    Key key,
-    @required Animation<double> turns,
-    this.alignment = Alignment.center,
-    this.child,
-  }) : assert(turns != null),
-       super(key: key, listenable: turns);
-
-  // TODO 重命名
-  /// The animation that controls the rotation of the child.
-  ///
-  /// If the current value of the turns animation is v, the child will be
-  /// rotated v * 2 * pi radians before being painted.
-  Animation<double> get turns => listenable;
-
-  /// The alignment of the origin of the coordinate system around which the
-  /// rotation occurs, relative to the size of the box.
-  ///
-  /// For example, to set the origin of the rotation to top right corner, use
-  /// an alignment of (1.0, -1.0) or use [Alignment.topRight]
-  final Alignment alignment;
-
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.child}
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final double turnsValue = turns.value;
-    final Matrix4 transform = Matrix4.zero()..setFromTranslationRotation(
-      vector64.Vector3(100 * turnsValue, 0, 0), 
-      vector64.Quaternion.fromRotation(vector64.Matrix3.rotationZ(turnsValue * pi)),
-    );
-    return Transform(
-      transform: transform,
-      alignment: alignment,
-      child: child,
     );
   }
 }
