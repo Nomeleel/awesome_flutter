@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' as vector64;
 
 import '../custom/animation/rolling_transition.dart';
 import '../custom/clipper/magatama_clipper.dart';
@@ -68,10 +69,9 @@ class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProvide
                 top: 5,
                 child: RollingTransition(
                   alignment: Alignment.center,
-                  turns: Tween(
-                    begin: 0.0,
-                    end: 0.5,
-                  ).animate(controller),
+                  controller: controller,
+                  rollingTurns: 0.5,
+                  rollingVector: vector64.Vector3(100, 0, 0),
                   child: Container(
                     alignment: Alignment.center,
                     width: 90,
