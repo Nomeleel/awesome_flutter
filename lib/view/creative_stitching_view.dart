@@ -25,38 +25,34 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
         decoration: TextDecoration.none,
       )
     );
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[ 
-          Padding(
-            padding: EdgeInsets.only(top: 100),
-            child: _imageList.length == 0 ? 
-              defText('Please click this button') :
-              Container(
-                padding: EdgeInsets.zero,
-                color: Colors.grey,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width,
-                child:GridView.count(
-                  crossAxisCount: 3,
-                  children: _imageList,
+    return SafeArea(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[ 
+            Padding(
+              padding: EdgeInsets.only(top: 100),
+              child: _imageList.length == 0 ? 
+                defText('Please click this button') :
+                AspectRatio(
+                  aspectRatio: 1.0,
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 5.0,
+                    crossAxisSpacing: 5.0,
+                    children: _imageList,
+                  ),
                 ),
-              ),
-          ),
-          RaisedButton(
-            onPressed: () async {
-              await creativeStitching();
-            },
-            child: defText('Go'),
-          ),
-          RaisedButton(
-            onPressed: () async {
-              setState(() {});
-            },
-            child: defText('Show'),
-          ),
-        ],
+            ),
+            RaisedButton(
+              onPressed: () async {
+                await creativeStitching();
+                setState(() {});
+              },
+              child: defText('Go'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -65,10 +61,10 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
     ByteData imageByteData = await rootBundle.load('assets/images/SaoSiMing.jpg');
     ui.Image image = await decodeImageFromList(imageByteData.buffer.asUint8List());
     var dst = Rect.fromLTWH(0, image.height.toDouble(), image.width.toDouble(), image.width.toDouble());
+    var paint = Paint()..isAntiAlias = true;
+    
     var getStitchingImage = (src) async {
       var pictureRecorder = ui.PictureRecorder();
-      var paint = Paint();
-      paint.isAntiAlias = true;
       var canvas = Canvas(pictureRecorder);
       canvas.drawImageRect(image, src, dst, paint);
       var pic = pictureRecorder.endRecording();
@@ -82,10 +78,13 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
 
     List<Rect> rectList = getAverageSplitRectList(Rect.fromLTWH(0, 100, image.width.toDouble(), image.width.toDouble()), 3, 3);
     
-    rectList.forEach((item) async {
-      print(item);
+    // for (var rect in rectList)
+    //   _imageList.add(await getStitchingImage(rect));
+    // The effect is similar to the for loop, because forEach does not support await, 
+    // so the following logic is required to be able to sync.
+    await Future.wait(rectList.map((item) async {
       _imageList.add(await getStitchingImage(item));
-    });
+    }));
 
   }
   
