@@ -1,7 +1,8 @@
+import 'dart:io';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CreativeStitchingView extends StatefulWidget {
   CreativeStitchingView({Key key, this.title}) : super(key: key);
@@ -13,7 +14,7 @@ class CreativeStitchingView extends StatefulWidget {
 
 class _CreativeStitchingViewState extends State<CreativeStitchingView> {
   
-  List<Image> _imageList = List<Image>();
+  List<Widget> _imageList = List<Widget>();
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +47,8 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
             ),
             RaisedButton(
               onPressed: () async {
-                await creativeStitching();
-                setState(() {});
+                //await creativeStitching();
+                //setState(() {});
               },
               child: defText('Go'),
             ),
@@ -57,11 +58,20 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
     );
   }
 
-  creativeStitching() async {
-    ByteData imageByteData = await rootBundle.load('assets/images/SaoSiMing.jpg');
-    ui.Image image = await decodeImageFromList(imageByteData.buffer.asUint8List());
-    var dst = Rect.fromLTWH(0, image.height.toDouble(), image.width.toDouble(), image.width.toDouble());
+  creativeStitching(File mainImageFile, List<File> multipleImageList, {
+    Rect mainImageCropRect,
+    int rowCount = 3,
+    int colCount = 3,
+  }) async {
+    ui.Image image = await decodeImageFromList(await mainImageFile.readAsBytes());
     var paint = Paint()..isAntiAlias = true;
+    
+    var getDefaultCropRect = () {
+      double min = math.min(image.height, image.width).toDouble();
+      return Rect.fromLTWH((image.width - min) / 2, (image.height - min) / 2, min, min);
+    };
+
+    var dst = Rect.fromLTWH(0, image.height.toDouble(), image.width.toDouble(), image.width.toDouble());
     
     var getStitchingImage = (src) async {
       var pictureRecorder = ui.PictureRecorder();
@@ -76,24 +86,40 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
       );
     };
 
-    List<Rect> rectList = getAverageSplitRectList(Rect.fromLTWH(0, 100, image.width.toDouble(), image.width.toDouble()), 3, 3);
+    List<Rect> rectList = getAverageSplitRectList(mainImageCropRect ?? getDefaultCropRect(), rowCount, colCount);
+    int maxCount = rowCount * colCount;
+    int doubleImageCount = math.min(math.max(0, multipleImageList.length - maxCount), maxCount);
+
+    // double image mode
+    for(int i = 0; i < doubleImageCount; i++) {
+
+    } 
     
+    // repeat image mode
+    for(int i = doubleImageCount; i < maxCount; i++) {
+
+    } 
+
     // for (var rect in rectList)
     //   _imageList.add(await getStitchingImage(rect));
     // The effect is similar to the for loop, because forEach does not support await, 
     // so the following logic is required to be able to sync.
     await Future.wait(rectList.map((item) async {
-      _imageList.add(await getStitchingImage(item));
+      _imageList.add(ListView(
+        children: <Widget> [
+          await getStitchingImage(item),
+        ],
+      ));
     }));
 
   }
   
   List<Rect> getAverageSplitRectList(Rect rect, int rowCount, int colCount) {
-    Size cellSize = Size(rect.width / colCount, rect.height / rowCount);
+    double length = rect.width / math.max(rowCount, colCount);
     List<Rect> rectList = List<Rect>();
     for (double i = 0; i < rowCount; i++) {
       for (double j = 0; j < colCount; j++) {
-        rectList.add(Rect.fromLTWH(rect.left + j * cellSize.width, rect.top + i * cellSize.height, cellSize.width, cellSize.height));
+        rectList.add(Rect.fromLTWH(rect.left + j * length, rect.top + i * length, length, length));
       }
     }
 
