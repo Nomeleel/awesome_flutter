@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../creative/creative_stitching.dart';
 
@@ -15,6 +17,7 @@ class CreativeStitchingView extends StatefulWidget {
 class _CreativeStitchingViewState extends State<CreativeStitchingView> {
   
   List<Widget> _imageList;
+  List<ByteData> _byteDataList;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +65,7 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
                     ..add('assets/images/LuoWang.png');
                   creativeStitchingByAsset(mainImageAsset, multipleImageList, colCount: 3).then((byteDataList) {
                     setState(() {
+                      _byteDataList = byteDataList;
                       byteDataList.forEach((byteData) {
                         var uniqueTag = DateTime.now().toString() + math.Random().nextInt(77).toString();
                         _imageList.add(GestureDetector(
@@ -99,6 +103,19 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
                   });
                 },
                 child: defText('Go'),
+              ),
+            if (_byteDataList != null)
+              RaisedButton(
+                onPressed: () async {
+                  // Only test for Android.
+                  final String pathPrefix = '/storage/emulated/0/Download/${DateTime.now().minute}_';
+                  for(int i = 0; i < _byteDataList.length; i++ ) {
+                    await File('$pathPrefix$i.png').writeAsBytes(
+                      _byteDataList[i].buffer.asUint8List());
+                  }
+                  print('Save finish...');
+                },
+                child: defText('Export'),
               ),
           ],
         ),
