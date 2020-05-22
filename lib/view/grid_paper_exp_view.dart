@@ -49,7 +49,8 @@ class GridPaperExpViewState extends State<GridPaperExpView> {
                 'Width: $_lineWidth',
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.black
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
                 ),
               ),
             ),

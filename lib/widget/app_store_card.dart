@@ -94,6 +94,7 @@ class AppStoreCard extends StatelessWidget {
     return !isAlwayShow ? 
       detailWidget :
       Container(
+        color: Colors.white,
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: <Widget>[
