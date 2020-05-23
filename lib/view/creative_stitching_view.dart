@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +15,6 @@ class CreativeStitchingView extends StatefulWidget {
 
 class _CreativeStitchingViewState extends State<CreativeStitchingView> {
   
-  List<Widget> _imageList;
   List<ByteData> _byteDataList;
 
   @override
@@ -36,9 +34,9 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
           children: <Widget>[ 
             Padding(
               padding: EdgeInsets.only(top: 100),
-              child: _imageList == null ? 
+              child: _byteDataList == null ? 
                 defText('Please click this button') :
-                _imageList.length == 0 ? 
+                _byteDataList.length == 0 ? 
                   CircularProgressIndicator(
                     backgroundColor: Colors.white,
                   ) :
@@ -48,63 +46,30 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
                       crossAxisCount: 3,
                       mainAxisSpacing: 5.0,
                       crossAxisSpacing: 5.0,
-                      children: _imageList,
+                      children: imageList(),
                     ),
                   ),
             ),
-            if (_imageList == null) 
+            if (_byteDataList == null) 
               RaisedButton(
                 onPressed: () async {
                   setState(() { 
-                    _imageList = List<Widget>();
+                    _byteDataList = List<ByteData>();
                   });
-                  String mainImageAsset = 'assets/images/SaoSiMing.jpg';
+                  String mainImageAsset = 'assets/images/BaoErJie.jpg';
                   List<String> multipleImageList = List.generate(15, (index) => 
-                    'assets/images/LuoWang.png')
+                    'assets/images/SaoSiMing.jpg')
                     ..add(mainImageAsset)
                     ..add('assets/images/LuoWang.png');
                   creativeStitchingByAsset(mainImageAsset, multipleImageList, colCount: 3).then((byteDataList) {
                     setState(() {
                       _byteDataList = byteDataList;
-                      byteDataList.forEach((byteData) {
-                        var uniqueTag = DateTime.now().toString() + math.Random().nextInt(77).toString();
-                        _imageList.add(GestureDetector(
-                          child: Hero(
-                            tag: uniqueTag,
-                            child: Image.memory(
-                              byteData.buffer.asUint8List(),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).push(PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) {
-                                return Hero(
-                                  tag: uniqueTag,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ListView(
-                                      physics: BouncingScrollPhysics(),
-                                      children: <Widget> [
-                                        Image.memory(
-                                          byteData.buffer.asUint8List(),
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ));
-                          },
-                        ));
-                      });
                     });
                   });
                 },
                 child: defText('Go'),
               ),
-            if (_byteDataList != null)
+            if (_byteDataList != null && _byteDataList.length > 0)
               RaisedButton(
                 onPressed: () async {
                   // Only test for Android.
@@ -122,4 +87,45 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
       ),
     );
   }
+
+  List<Widget> imageList() {
+    List<Widget> imageList = List<Widget>();
+    final detailViewList = _byteDataList.map<Widget>((item) => ListView(
+      physics: const BouncingScrollPhysics(),
+      children: <Widget>[
+        Image.memory(
+          item.buffer.asUint8List(),
+          fit: BoxFit.fitWidth,
+        )
+      ],
+    )).toList();
+
+    for (int i = 0; i < _byteDataList.length; i++) {
+      imageList.add(GestureDetector(
+        child: Image.memory(
+          _byteDataList[i].buffer.asUint8List(),
+          fit: BoxFit.cover,
+        ),
+        onTap: () {
+          Navigator.of(context).push(PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return ScaleTransition(
+                scale: animation,
+                child: PageView(
+                  controller: PageController(
+                    initialPage: i,
+                  ),
+                  physics: BouncingScrollPhysics(),
+                  children: detailViewList,
+                ),
+              );
+            },
+          ));
+        },
+      ));
+    }
+
+    return imageList;
+  }
+
 }

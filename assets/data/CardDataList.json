@@ -32,6 +32,17 @@
                 "info": "上善若水，坐忘心法"
             },
             "detailViewRouteName": "water_wave_view"
+        },
+        {
+            "imagePath": "assets/images/BaoErJie.jpg",
+            "videoPath": "",
+            "descriptionMode": "classic",
+            "descriptionData": {
+                "label": "一人之下",
+                "title": "社会我宝儿姐必须在C位",
+                "info": "他们总说我瓜 其实我一点儿也不瓜 大多时候我都机智的一逼"
+            },
+            "detailViewRouteName": "creative_stitching_view"
         }
     ]
 }
