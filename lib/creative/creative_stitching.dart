@@ -30,6 +30,17 @@ Future<List<ByteData>> creativeStitchingByFile(File mainImageFile, List<File> mu
     mainImageCropRect, rowCount, colCount);
 }
 
+Future<List<ByteData>> creativeStitchingByFilePath(String mainImageFilePath, List<String> multipleImagePathList, {
+  Rect mainImageCropRect,
+  int rowCount = 3,
+  int colCount = 3,
+}) async {
+  DecodeImageProvider decodeImageProvider = (filePath) async => await decodeImageFromList(await File(filePath).readAsBytes());
+
+  return _creativeStitching(decodeImageProvider, mainImageFilePath, multipleImagePathList, 
+    mainImageCropRect, rowCount, colCount);
+}
+
 Future<List<ByteData>> _creativeStitching(
   DecodeImageProvider decodeImageProvider,
   dynamic mainImageFile, 
@@ -69,6 +80,11 @@ Future<List<ByteData>> _creativeStitching(
 
     ui.Image finalImage = await pictureRecorder.endRecording().toImage(width, height);
     
+    topImage.dispose();
+    if (!isRepeat) {
+      bottomImage.dispose();
+    }
+
     return await finalImage.toByteData(format: ui.ImageByteFormat.png);
   };
 
