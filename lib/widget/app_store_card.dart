@@ -12,7 +12,7 @@ class AppStoreCard extends StatelessWidget {
     this.elevation,
     this.padding,
     this.radius,
-    this.showBackgroundWidget,
+    @required this.showBackgroundWidget,
     this.showForegroundWidget,
     this.detailWidget,
     this.isAlwayShow = true,
@@ -91,19 +91,20 @@ class AppStoreCard extends StatelessWidget {
   }
 
   Widget detailView(BuildContext context) {
-    return !isAlwayShow ? 
-      detailWidget :
-      Container(
-        color: Colors.white,
-        child: ListView(
+    return Container(
+      color: Colors.white,
+      child: isAlwayShow ? 
+        ListView(
+          padding: EdgeInsets.zero,
           physics: BouncingScrollPhysics(),
           children: <Widget>[
             Stack(
               children: <Widget>[
                 showBackgroundWidget,
-                Positioned.fill(
-                  child: showForegroundWidget,
-                ),
+                if (showForegroundWidget != null)
+                  Positioned.fill(
+                    child: showForegroundWidget,
+                  )
               ],
             ),
             Container(
@@ -111,18 +112,23 @@ class AppStoreCard extends StatelessWidget {
               child: detailWidget,
             ),
           ],
-        ),
-      );
+        ) :
+        detailWidget
+    );
   }
 
   void openDetailView(BuildContext context) {
     Navigator.push(context, 
       PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation animation, Animation secondaryAnimation) {
-          return Hero(
-            tag: key,
-            transitionOnUserGestures: true,
-            child: detailView(context),
+          return GestureScaleTransition(
+            child: Hero(
+              tag: key,
+              child: detailView(context),
+            ),
+            callBack: () {
+              Navigator.pop(context);
+            },
           );
         },
       ),
@@ -130,3 +136,4 @@ class AppStoreCard extends StatelessWidget {
   }
 
 }
+
