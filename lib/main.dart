@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: CupertinoThemeData(
+        primaryColor: Colors.purple,
       ),
       home: MyHomePage(),
       routes: viewRoutes,
@@ -60,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
+    return Scaffold(
+      body: Container(
         color: Colors.white,
         child: _cardDataList.length == 0 ? 
           Center(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../creative/creative_stitching.dart';
+import '../custom/animation/gesture_scale_transition.dart';
 
 class CreativeStitchingView extends StatefulWidget {
   CreativeStitchingView({Key key, this.title}) : super(key: key);
@@ -93,10 +94,13 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
     final detailViewList = _byteDataList.map<Widget>((item) => ListView(
       physics: const BouncingScrollPhysics(),
       children: <Widget>[
-        Image.memory(
-          item.buffer.asUint8List(),
-          fit: BoxFit.fitWidth,
-        )
+        GestureScaleTransition(
+          child: Image.memory(
+            item.buffer.asUint8List(),
+            fit: BoxFit.fitWidth,
+          ),
+          callBack: () => Navigator.pop(context),
+        ),
       ],
     )).toList();
 

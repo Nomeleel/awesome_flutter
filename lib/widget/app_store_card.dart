@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../custom/animation/gesture_scale_transition.dart';
@@ -26,6 +27,9 @@ class AppStoreCard extends StatelessWidget {
   final Widget showForegroundWidget;
   final Widget detailWidget;
   final bool isAlwayShow;
+
+  EdgeInsets get edgeInsets => EdgeInsetsGeometryHelper.getEdgeInsets(padding);
+  BorderRadius get borderRadius => BorderRadiusGeometryHelper.getBorderRadius(radius);
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +60,6 @@ class AppStoreCard extends StatelessWidget {
     }
 
     // build background foreground widget.
-    EdgeInsets edgeInsets = EdgeInsetsGeometryHelper.getEdgeInsets(padding);
-    BorderRadius borderRadius = BorderRadiusGeometryHelper.getBorderRadius(radius);
-
     var clipWidget = (Widget child, {EdgeInsets currentEdgeInsets}) {
       return ClipRRect(
         clipper: PRRectClipper(
@@ -103,6 +104,7 @@ class AppStoreCard extends StatelessWidget {
                 showBackgroundWidget,
                 if (showForegroundWidget != null)
                   Positioned.fill(
+                    top: edgeInsets.top,
                     child: showForegroundWidget,
                   )
               ],
@@ -118,6 +120,9 @@ class AppStoreCard extends StatelessWidget {
   }
 
   void openDetailView(BuildContext context) {
+    if (isAlwayShow) {
+      SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[]);
+    }
     Navigator.push(context, 
       PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation animation, Animation secondaryAnimation) {
@@ -127,6 +132,9 @@ class AppStoreCard extends StatelessWidget {
               child: detailView(context),
             ),
             callBack: () {
+              if (isAlwayShow) {
+                SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[SystemUiOverlay.top, SystemUiOverlay.bottom]);
+              }
               Navigator.pop(context);
             },
           );
