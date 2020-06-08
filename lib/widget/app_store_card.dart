@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../custom/animation/gesture_scale_transition.dart';
 import '../custom/clipper/padding_radius_rect_clipper.dart';
+import '../custom/cupertino/cupertino_slide_back.dart';
 import '../helper/helper.dart';
 
 class AppStoreCard extends StatelessWidget {
@@ -126,16 +127,15 @@ class AppStoreCard extends StatelessWidget {
     Navigator.push(context, 
       PageRouteBuilder(
         pageBuilder: (BuildContext context, Animation animation, Animation secondaryAnimation) {
-          return GestureScaleTransition(
+          return CupertinoSlideBack(
             child: Hero(
               tag: key,
               child: detailView(context),
             ),
-            callBack: () {
+            onBackCallBack: () {
               if (isAlwayShow) {
                 SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[SystemUiOverlay.top, SystemUiOverlay.bottom]);
               }
-              Navigator.pop(context);
             },
           );
         },
