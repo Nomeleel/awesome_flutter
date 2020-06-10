@@ -14,26 +14,41 @@ class CupertinoSlideBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isFromLeftEdge = false;
+    const double edgeOffsetLength = 50.0;
+    bool isCanBack = false;
     return GestureDetector(
-      // TODO(Nomeleel): Use IgnorePointer? solve the problem of gesture conflict.
-      child: child,
+      child: Stack(
+        children: <Widget>[
+          child,
+          AbsorbPointer(
+            child: Container(
+              color: const Color(0x00000000),
+              width: edgeOffsetLength,
+            ),
+          ),
+        ],
+      ),
       onHorizontalDragStart: (DragStartDetails details) {
-        if (details.globalPosition.dx < 50) {
-          isFromLeftEdge = true;
+        if (details.globalPosition.dx < edgeOffsetLength) {
+          isCanBack = true;
+        }
+      },
+      onHorizontalDragUpdate: (DragUpdateDetails details) {
+        if (isCanBack && details.primaryDelta < 0) {
+          isCanBack = false;
         }
       },
       onHorizontalDragCancel: () {
-        isFromLeftEdge = false;
+        isCanBack = false;
       },
       onHorizontalDragEnd: (DragEndDetails details) {
-        if (isFromLeftEdge) {
+        if (isCanBack) {
           if (onBackCallBack != null) {
             onBackCallBack();
           }
           Navigator.of(context).pop();
         }
-        isFromLeftEdge = false;
+        isCanBack = false;
       },
     );
   }
