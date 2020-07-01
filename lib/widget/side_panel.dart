@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
@@ -9,7 +10,8 @@ class SidePanel extends StatefulWidget {
       {Key key,
       this.orientation = SidePanelOrientation.end,
       this.mainAxisHeight,
-      this.child})
+      this.child,
+      this.onSwitched,})
       : super(key: key);
 
   final SidePanelOrientation orientation;
@@ -17,6 +19,8 @@ class SidePanel extends StatefulWidget {
   final double mainAxisHeight;
 
   final Widget child;
+
+  final void Function(bool) onSwitched;
 
   @override
   _SidePanelState createState() => _SidePanelState();
@@ -72,9 +76,9 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
                 color: Colors.white.withOpacity(0.3),
                 borderRadius: const BorderRadius.all(Radius.circular(7)),
                 onPressed: () {
-                  controller.status != AnimationStatus.completed
-                      ? controller.forward()
-                      : controller.reverse();
+                  bool isOpen = controller.status != AnimationStatus.completed;
+                  widget.onSwitched(isOpen);
+                  isOpen ? controller.forward() : controller.reverse();
                 },
               ),
             ),
