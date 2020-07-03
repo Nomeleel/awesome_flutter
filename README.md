@@ -46,3 +46,17 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 <center>
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/creative_stitching.gif" width="25%"/>
 </center>
+
+## Found issues in Flutter
+
+The inevitable thing is that I also found some issues in Flutter.
+
+Current Dev Evn: **Flutter (Channel stable, v1.17.3, on Mac OS X 10.15.5 19F101, locale zh-Hans-CN)**
+
+I have also create some issues, but finally found similar ones, whichever is the earliest.
+
+| Issue ID | Description | About | Note
+| :------: | :------: | :------: | :------: |
+| [24786](https://github.com/flutter/flutter/issues/24786) | ReorderableListView#onReorder passes an incorrect new index. | [ReorderableListView](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/reorderable_list.dart#L59) |  |
+| [60594](https://github.com/flutter/flutter/issues/60594) | The target Hero widget is build three times. | [Hero](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/widgets/heroes.dart#L154) |  |
+| [13937](https://github.com/flutter/flutter/issues/13937) | Unable to call a platform channel method from another isolate. | Isolate |  |
