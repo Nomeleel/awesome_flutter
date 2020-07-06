@@ -1,18 +1,18 @@
-import 'dart:ffi';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class SidePanel extends StatefulWidget {
-  const SidePanel(
-      {Key key,
-      this.orientation = SidePanelOrientation.end,
-      this.mainAxisHeight,
-      this.child,
-      this.onSwitched,})
-      : super(key: key);
+  const SidePanel({
+    Key key,
+    this.orientation = SidePanelOrientation.end,
+    this.mainAxisHeight,
+    this.child,
+    this.onSwitched,
+  }) : super(key: key);
 
   final SidePanelOrientation orientation;
 
@@ -24,16 +24,39 @@ class SidePanel extends StatefulWidget {
 
   @override
   _SidePanelState createState() => _SidePanelState();
+
+  static _SidePanelState of(BuildContext context) {
+    _SidePanelState stack;
+    context.visitChildElements((Element element) {
+      // Find stack.
+      MultiChildRenderObjectElement stackElemrnt =
+          element as MultiChildRenderObjectElement;
+      stackElemrnt?.visitChildren((Element element) {
+        if (element is StatefulElement && element.state is _SidePanelState) {
+          stack = element.state;
+          return;
+        }
+      });
+    });
+    return stack;
+  }
 }
 
 class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
+  AnimationController _controller;
+
   @override
-  Widget build(BuildContext context) {
-    final AnimationController controller = AnimationController(
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final double windowSideMaxLave = math.max(size.height, size.width) - 21;
     final double windowSideMin = math.min(size.height, size.width);
@@ -57,7 +80,7 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
           !isPortrait && !isEnd ? windowSideMaxLave - mainAxisHeight : 0,
           isPortrait && !isEnd ? windowSideMaxLave - mainAxisHeight : 0,
         ),
-      ).animate(controller),
+      ).animate(_controller),
       child: Container(
         height: isPortrait ? mainAxisHeight + 21 : windowSideMin,
         width: !isPortrait ? mainAxisHeight + 21 : windowSideMin,
@@ -75,11 +98,7 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
                 child: const Text(''),
                 color: Colors.white.withOpacity(0.3),
                 borderRadius: const BorderRadius.all(Radius.circular(7)),
-                onPressed: () {
-                  bool isOpen = controller.status != AnimationStatus.completed;
-                  widget.onSwitched(isOpen);
-                  isOpen ? controller.forward() : controller.reverse();
-                },
+                onPressed: switchPanel,
               ),
             ),
             if (isEnd) Expanded(child: widget.child),
@@ -87,6 +106,14 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  void switchPanel() {
+    bool isOpen = _controller.status != AnimationStatus.completed;
+    if (widget.onSwitched != null) {
+      widget.onSwitched(isOpen);
+    }
+    isOpen ? _controller.forward() : _controller.reverse();
   }
 }
 
