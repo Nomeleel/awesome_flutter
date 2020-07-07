@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:awesome_flutter/widget/side_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewExampleView extends StatefulWidget {
-  WebViewExampleView({Key key, this.initialUrl = 'https://flutter.dev/'})
+  WebViewExampleView({Key key, this.initialUrl = 'https://flutter.cn/'})
       : super(key: key);
 
   final String initialUrl;
@@ -20,67 +21,95 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
 
   @override
   Widget build(BuildContext rootContext) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            print('Close web view.');
-          },
-        ),
-        title: WebViewTitle(key: WebViewTitle.globalKey),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.more_horiz),
-            onPressed: () {
-              print('more action.');
-            },
-          ),
-        ],
-      ),
-      body: Builder(
-        builder: (BuildContext context) => WebView(
-          initialUrl: widget.initialUrl,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
-          },
-          javascriptChannels: <JavascriptChannel>[
-            JavascriptChannel(
-              name: 'Toaster',
-              onMessageReceived: (JavascriptMessage message) {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text(message.message)),
-                );
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                print('Close web view.');
+                Navigator.of(context).pop();
               },
             ),
-          ].toSet(),
-          navigationDelegate: (NavigationRequest request) {
-            print('nav: ${request.url}');
+            title: WebViewTitle(key: WebViewTitle.globalKey),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.more_horiz),
+                onPressed: () {
+                  print('more action.');
+                  SidePanel.of(context).switchPanel();
+                },
+              ),
+            ],
+          ),
+          body: Builder(
+            builder: (BuildContext context) => WebView(
+              initialUrl: widget.initialUrl,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+              javascriptChannels: <JavascriptChannel>[
+                JavascriptChannel(
+                  name: 'Toaster',
+                  onMessageReceived: (JavascriptMessage message) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(content: Text(message.message)),
+                    );
+                  },
+                ),
+              ].toSet(),
+              navigationDelegate: (NavigationRequest request) {
+                print('nav: ${request.url}');
 
-            // Check if cross domain
-            // return NavigationDecision.prevent;
+                // Check if cross domain
+                // return NavigationDecision.prevent;
 
-            return NavigationDecision.navigate;
-          },
-          onPageStarted: (String url) {
-            // Can add a progress bar.
-          },
-          onPageFinished: (String url) async {
-            // Update title.
-            WebViewTitle.getState()
-                .changeTitle(await (await _controller.future).getTitle());
-            // Update nav bar.
-            WebViewNavigationBar.getState().update(await _controller.future);
-          },
-          onWebResourceError: (WebResourceError error) {
-            print('Page throw error: $error');
-          },
-          gestureNavigationEnabled: true,
+                return NavigationDecision.navigate;
+              },
+              onPageStarted: (String url) {
+                // Can add a progress bar.
+              },
+              onPageFinished: (String url) async {
+                // Update title.
+                WebViewTitle.getState()
+                    .changeTitle(await (await _controller.future).getTitle());
+                // Update nav bar.
+                WebViewNavigationBar.getState()
+                    .update(await _controller.future);
+              },
+              onWebResourceError: (WebResourceError error) {
+                print('Page throw error: $error');
+              },
+              gestureNavigationEnabled: true,
+            ),
+          ),
+          bottomNavigationBar:
+              WebViewNavigationBar(key: WebViewNavigationBar.globalKey),
         ),
-      ),
-      bottomNavigationBar:
-          WebViewNavigationBar(key: WebViewNavigationBar.globalKey),
+        SidePanel(
+          mainAxisHeight: 300,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xffdddddd),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20),
+              ),
+            ),
+            child: Wrap(
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(Icons.refresh),
+                  onTap: () async {
+                    (await _controller.future).reload();
+                  },
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
