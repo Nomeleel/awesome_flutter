@@ -13,30 +13,27 @@ import 'wrapper/image_wraper.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      title: 'Flutter Demo',
-      theme: CupertinoThemeData(
-        primaryColor: Colors.purple,
+    return MaterialApp(
+      title: 'Awesome Flutter',
+      theme: ThemeData(
+        primaryColor: Colors.white,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
       routes: viewRoutes,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-
   _MyHomePageState();
 
   List<AppStoreCardData> _cardDataList = List<AppStoreCardData>();
@@ -48,12 +45,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   getData() async {
-    String jsonData = await rootBundle.loadString('assets/data/CardDataList.json');
+    String jsonData =
+        await rootBundle.loadString('assets/data/CardDataList.json');
     if (jsonData != null && jsonData != '') {
       (json.decode(jsonData)['cardDataList'] as List).forEach((item) {
         _cardDataList.add(AppStoreCardData.fromMap(item));
       });
-      
+
       setState(() {});
     }
   }
@@ -63,17 +61,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        child: _cardDataList.length == 0 ? 
-          Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-            ),
-          ) :
-          ListView.builder(
-            itemCount: _cardDataList.length,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
-          ),
+        child: _cardDataList.length == 0
+            ? const Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                ),
+              )
+            : ListView.builder(
+                itemCount: _cardDataList.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) =>
+                    appStoreCardItem(context, _cardDataList[index]),
+              ),
       ),
     );
   }
@@ -95,5 +94,4 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       detailWidget: viewRoutes[data.detailViewRouteName](context),
     );
   }
-
 }
