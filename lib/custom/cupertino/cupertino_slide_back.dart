@@ -14,7 +14,7 @@ class CupertinoSlideBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double edgeOffsetLength = 50.0;
+    const double edgeOffsetLength = 7.0;
     bool isCanBack = false;
     return GestureDetector(
       child: Stack(
