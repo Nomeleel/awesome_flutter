@@ -83,7 +83,8 @@ Future<List<ByteData>> _creativeStitching(
       3. Tried to minify the width three times, no crash.
       4. Find a balance between minify and picture quality.
     */
-    int width = math.max(topImage.width, bottomImage.width);
+    // For commint 3 do this update, now is work, but should research accurate value.
+    int width = math.max(topImage.width, bottomImage.width) ~/ 3;
     int resetTopHeight = (width / topImage.width * topImage.height).toInt();
     int resetBottomHeight =
         (width / bottomImage.width * bottomImage.height).toInt();
