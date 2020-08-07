@@ -1,7 +1,7 @@
 /// 对官方SliverAppBar进行扩展
 /// 1. 添加Pinned后支持对Leading，Title，Actions进行更改。
 ///    使用场景：初始背景在Pinned后背景色更改，同一个Leading，Title，Actions不适用于新背景，则需要更改对应Widget样式。
-///    状态： 待完成
+///    状态：完成
 
 import 'dart:math' as math;
 
@@ -42,6 +42,9 @@ class SliverAppBarExp extends StatefulWidget {
     this.stretchTriggerOffset = 100.0,
     this.onStretchTrigger,
     this.shape,
+    this.pinnedLeading,
+    this.pinnedTitle,
+    this.pinnedActions,
   })  : assert(automaticallyImplyLeading != null),
         assert(forceElevated != null),
         assert(primary != null),
@@ -314,13 +317,20 @@ class SliverAppBarExp extends StatefulWidget {
   /// offset specified by [stretchTriggerOffset].
   final AsyncCallback onStretchTrigger;
 
+  ///
+  final Widget pinnedLeading;
+
+  final Widget pinnedTitle;
+
+  final List<Widget> pinnedActions;
+
   @override
-  _SliverAppBarState createState() => _SliverAppBarState();
+  _SliverAppBarExpState createState() => _SliverAppBarExpState();
 }
 
 // This class is only Stateful because it owns the TickerProvider used
 // by the floating appbar snap animation (via FloatingHeaderSnapConfiguration).
-class _SliverAppBarState extends State<SliverAppBar>
+class _SliverAppBarExpState extends State<SliverAppBarExp>
     with TickerProviderStateMixin {
   FloatingHeaderSnapConfiguration _snapConfiguration;
   OverScrollHeaderStretchConfiguration _stretchConfiguration;
@@ -356,7 +366,7 @@ class _SliverAppBarState extends State<SliverAppBar>
   }
 
   @override
-  void didUpdateWidget(SliverAppBar oldWidget) {
+  void didUpdateWidget(SliverAppBarExp oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.snap != oldWidget.snap || widget.floating != oldWidget.floating)
       _updateSnapConfiguration();
@@ -379,7 +389,7 @@ class _SliverAppBarState extends State<SliverAppBar>
       child: SliverPersistentHeader(
         floating: widget.floating,
         pinned: widget.pinned,
-        delegate: _SliverAppBarDelegate(
+        delegate: _SliverAppBarExpDelegate(
           leading: widget.leading,
           automaticallyImplyLeading: widget.automaticallyImplyLeading,
           title: widget.title,
@@ -403,6 +413,9 @@ class _SliverAppBarState extends State<SliverAppBar>
           floating: widget.floating,
           pinned: widget.pinned,
           shape: widget.shape,
+          pinnedLeading: widget.pinnedLeading,
+          pinnedTitle: widget.pinnedTitle,
+          pinnedActions: widget.pinnedActions,
           snapConfiguration: _snapConfiguration,
           stretchConfiguration: _stretchConfiguration,
         ),
@@ -411,8 +424,8 @@ class _SliverAppBarState extends State<SliverAppBar>
   }
 }
 
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate({
+class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarExpDelegate({
     @required this.leading,
     @required this.automaticallyImplyLeading,
     @required this.title,
@@ -438,6 +451,9 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     @required this.snapConfiguration,
     @required this.stretchConfiguration,
     @required this.shape,
+    @required this.pinnedLeading,
+    @required this.pinnedTitle,
+    @required this.pinnedActions,
   })  : assert(primary || topPadding == 0.0),
         _bottomHeight = bottom?.preferredSize?.height ?? 0.0;
 
@@ -464,6 +480,9 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final bool floating;
   final bool pinned;
   final ShapeBorder shape;
+  final Widget pinnedLeading;
+  final Widget pinnedTitle;
+  final List<Widget> pinnedActions;
 
   final double _bottomHeight;
 
@@ -503,17 +522,17 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
             as double
         : 1.0;
     // 判断此时是否显示了Pinnned面板，用来指定是否切换为Pinned Widget。
-    final bool isPinned = shrinkOffset < maxExtent - minExtent;
+    final bool isPinned = shrinkOffset > maxExtent - minExtent;
     final Widget appBar = FlexibleSpaceBar.createSettings(
       minExtent: minExtent,
       maxExtent: maxExtent,
       currentExtent: math.max(minExtent, maxExtent - shrinkOffset),
       toolbarOpacity: toolbarOpacity,
       child: AppBar(
-        leading: leading,
+        leading: (pinnedLeading != null && isPinned) ? pinnedLeading : leading,
         automaticallyImplyLeading: automaticallyImplyLeading,
-        title: title,
-        actions: actions,
+        title: (pinnedTitle != null && isPinned) ? pinnedTitle : title,
+        actions: (pinnedActions != null && isPinned) ? pinnedActions : actions,
         flexibleSpace:
             (title == null && flexibleSpace != null && !excludeHeaderSemantics)
                 ? Semantics(child: flexibleSpace, header: true)
@@ -544,7 +563,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  bool shouldRebuild(covariant _SliverAppBarDelegate oldDelegate) {
+  bool shouldRebuild(covariant _SliverAppBarExpDelegate oldDelegate) {
     return leading != oldDelegate.leading ||
         automaticallyImplyLeading != oldDelegate.automaticallyImplyLeading ||
         title != oldDelegate.title ||
@@ -566,7 +585,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         pinned != oldDelegate.pinned ||
         floating != oldDelegate.floating ||
         snapConfiguration != oldDelegate.snapConfiguration ||
-        stretchConfiguration != oldDelegate.stretchConfiguration;
+        stretchConfiguration != oldDelegate.stretchConfiguration ||
+        pinnedLeading != oldDelegate.pinnedLeading ||
+        pinnedTitle != oldDelegate.pinnedTitle ||
+        pinnedActions != oldDelegate.pinnedActions;
   }
 
   @override
