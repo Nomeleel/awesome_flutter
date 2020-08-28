@@ -11,33 +11,41 @@ class SliverAppBarExpView extends StatelessWidget {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBarExp(
-            expandedHeight: 240,
+            expandedHeight: 430,
             pinned: true,
             leading: Icon(
               Icons.arrow_back_ios,
-              color: Colors.purple,
+              color: Colors.white,
             ),
             pinnedLeading: Icon(
               Icons.arrow_back_ios,
               color: Colors.black,
             ),
             title: Text(
-              '少司命',
+              'Rick And Morty',
               style: TextStyle(
-                color: Colors.purple,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
             pinnedTitle: Text(
-              '少司命',
+              'Rick And Morty',
               style: TextStyle(
                 color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            backgroundColor: Colors.purple[300],
+            brightness: Brightness.dark,
+            pinnedChangeBrightness: true,
+            backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                'assets/images/SaoSiMing.jpg',
-                fit: BoxFit.cover,
+              background: Container(
+                color: Color(0xFF030208),
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/images/RickAndMorty.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

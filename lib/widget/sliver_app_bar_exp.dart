@@ -45,6 +45,7 @@ class SliverAppBarExp extends StatefulWidget {
     this.pinnedLeading,
     this.pinnedTitle,
     this.pinnedActions,
+    this.pinnedChangeBrightness,
   })  : assert(automaticallyImplyLeading != null),
         assert(forceElevated != null),
         assert(primary != null),
@@ -324,6 +325,8 @@ class SliverAppBarExp extends StatefulWidget {
 
   final List<Widget> pinnedActions;
 
+  final bool pinnedChangeBrightness;
+
   @override
   _SliverAppBarExpState createState() => _SliverAppBarExpState();
 }
@@ -416,6 +419,7 @@ class _SliverAppBarExpState extends State<SliverAppBarExp>
           pinnedLeading: widget.pinnedLeading,
           pinnedTitle: widget.pinnedTitle,
           pinnedActions: widget.pinnedActions,
+          pinnedChangeBrightness: widget.pinnedChangeBrightness,
           snapConfiguration: _snapConfiguration,
           stretchConfiguration: _stretchConfiguration,
         ),
@@ -454,6 +458,7 @@ class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
     @required this.pinnedLeading,
     @required this.pinnedTitle,
     @required this.pinnedActions,
+    @required this.pinnedChangeBrightness,
   })  : assert(primary || topPadding == 0.0),
         _bottomHeight = bottom?.preferredSize?.height ?? 0.0;
 
@@ -483,6 +488,7 @@ class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
   final Widget pinnedLeading;
   final Widget pinnedTitle;
   final List<Widget> pinnedActions;
+  final bool pinnedChangeBrightness;
 
   final double _bottomHeight;
 
@@ -544,7 +550,13 @@ class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
             ? elevation ?? 4.0
             : 0.0,
         backgroundColor: backgroundColor,
-        brightness: brightness,
+        brightness: pinnedChangeBrightness
+            ? (isPinned
+                ? (brightness == Brightness.light
+                    ? Brightness.dark
+                    : Brightness.light)
+                : brightness)
+            : brightness,
         iconTheme: iconTheme,
         actionsIconTheme: actionsIconTheme,
         textTheme: textTheme,
@@ -588,7 +600,8 @@ class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
         stretchConfiguration != oldDelegate.stretchConfiguration ||
         pinnedLeading != oldDelegate.pinnedLeading ||
         pinnedTitle != oldDelegate.pinnedTitle ||
-        pinnedActions != oldDelegate.pinnedActions;
+        pinnedActions != oldDelegate.pinnedActions ||
+        pinnedChangeBrightness != oldDelegate.pinnedChangeBrightness;
   }
 
   @override
