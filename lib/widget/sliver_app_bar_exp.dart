@@ -2,6 +2,8 @@
 /// 1. 添加Pinned后支持对Leading，Title，Actions进行更改。
 ///    使用场景：初始背景在Pinned后背景色更改，同一个Leading，Title，Actions不适用于新背景，则需要更改对应Widget样式。
 ///    状态：完成
+/// 2. 同理, 状态栏笔刷Brightness也需要支持切换。
+///    状态：完成
 
 import 'dart:math' as math;
 

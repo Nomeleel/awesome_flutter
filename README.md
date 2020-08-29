@@ -13,6 +13,7 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Grid Paper Expansion](#gridpaperexpansion) | Expansion of flutter widget GridPaper. |
 | [Water Wave](#waterwave) | Combining mathematical trigonometric functions and physical waves to achieve a water wave effect. |
 | [Creative Stitching](#creativestitching) | Explore the possible feasibility of Flutter in image manipulation. |
+| [Sliver AppBar Expansion](#sliverappbarexpansion) | Expansion of flutter widget SliverAppBar, suppert after pinned can switch title leading actions and brightness in app bar widget. |
 
 **Next, let the picture dance.**
 
@@ -45,6 +46,16 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 <center>
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/creative_stitching.gif" width="25%"/>
+</center>
+
+## SliverAppBarExpansion
+
+If the initial background color and the pinned background color after scrolling big different, the same app bar cannot adapt to the two backgrounds. At this time, you need to automatically switch the appbar to adapt to the new background.
+
+<center>SliverAppBar in Flutter ｜ SliverAppBarExpansion</center>
+
+<center>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/sliver_app_bar.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/sliver_app_bar_expansion.gif" width="25%"/>
 </center>
 
 ## Found issues in Flutter
