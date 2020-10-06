@@ -8,7 +8,6 @@ import '../custom/cupertino/cupertino_slide_back.dart';
 import '../helper/helper.dart';
 
 class AppStoreCard extends StatelessWidget {
-
   const AppStoreCard({
     @required Key key,
     this.elevation,
@@ -18,7 +17,8 @@ class AppStoreCard extends StatelessWidget {
     this.showForegroundWidget,
     this.detailWidget,
     this.isAlwayShow = true,
-  })  : assert(key != null, 'This key will be used as the Hero\'s tag. It must be unique and cannot be null.'),
+  })  : assert(key != null,
+            'This key will be used as the Hero\'s tag. It must be unique and cannot be null.'),
         super(key: key);
 
   final double elevation;
@@ -30,7 +30,8 @@ class AppStoreCard extends StatelessWidget {
   final bool isAlwayShow;
 
   EdgeInsets get edgeInsets => EdgeInsetsGeometryHelper.getEdgeInsets(padding);
-  BorderRadius get borderRadius => BorderRadiusGeometryHelper.getBorderRadius(radius);
+  BorderRadius get borderRadius =>
+      BorderRadiusGeometryHelper.getBorderRadius(radius);
 
   @override
   Widget build(BuildContext context) {
@@ -70,23 +71,24 @@ class AppStoreCard extends StatelessWidget {
         child: child,
       );
     };
-    
-    widgetList.add((edgeInsets != EdgeInsets.zero && borderRadius != BorderRadius.zero) ? 
-      clipWidget(showBackgroundWidget) :
-      showBackgroundWidget,
+
+    widgetList.add(
+      (edgeInsets != EdgeInsets.zero && borderRadius != BorderRadius.zero)
+          ? clipWidget(showBackgroundWidget)
+          : showBackgroundWidget,
     );
-    
+
     widgetList.add(Positioned.fill(
       left: edgeInsets.left,
       top: edgeInsets.top,
       right: edgeInsets.right,
       bottom: edgeInsets.bottom,
-      child: borderRadius != BorderRadius.zero ? 
-        clipWidget(
-          showForegroundWidget, 
-          currentEdgeInsets: EdgeInsets.zero,
-        ) : 
-        showForegroundWidget,
+      child: borderRadius != BorderRadius.zero
+          ? clipWidget(
+              showForegroundWidget,
+              currentEdgeInsets: EdgeInsets.zero,
+            )
+          : showForegroundWidget,
     ));
 
     return Stack(children: widgetList);
@@ -94,39 +96,40 @@ class AppStoreCard extends StatelessWidget {
 
   Widget detailView(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: isAlwayShow ? 
-        ListView(
-          padding: EdgeInsets.zero,
-          physics: BouncingScrollPhysics(),
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                showBackgroundWidget,
-                if (showForegroundWidget != null)
-                  Positioned.fill(
-                    top: edgeInsets.top,
-                    child: showForegroundWidget,
-                  )
-              ],
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              child: detailWidget,
-            ),
-          ],
-        ) :
-        detailWidget
-    );
+        color: Colors.white,
+        child: isAlwayShow
+            ? ListView(
+                padding: EdgeInsets.zero,
+                physics: BouncingScrollPhysics(),
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      showBackgroundWidget,
+                      if (showForegroundWidget != null)
+                        Positioned.fill(
+                          top: edgeInsets.top,
+                          child: showForegroundWidget,
+                        )
+                    ],
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: detailWidget,
+                  ),
+                ],
+              )
+            : detailWidget);
   }
 
   void openDetailView(BuildContext context) {
     if (isAlwayShow) {
       SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[]);
     }
-    Navigator.push(context, 
+    Navigator.push(
+      context,
       PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation animation, Animation secondaryAnimation) {
+        pageBuilder: (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
           return CupertinoSlideBack(
             child: Hero(
               tag: key,
@@ -134,7 +137,10 @@ class AppStoreCard extends StatelessWidget {
             ),
             onBackCallBack: () {
               if (isAlwayShow) {
-                SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[SystemUiOverlay.top, SystemUiOverlay.bottom]);
+                SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[
+                  SystemUiOverlay.top,
+                  SystemUiOverlay.bottom
+                ]);
               }
             },
           );
@@ -142,6 +148,4 @@ class AppStoreCard extends StatelessWidget {
       ),
     );
   }
-
 }
-
