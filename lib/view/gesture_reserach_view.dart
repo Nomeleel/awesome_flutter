@@ -93,7 +93,7 @@ class _SubTabViewState extends State<SubTabView> with SingleTickerProviderStateM
             },
             child: TabBarView(
               controller: _controller,
-              physics: NeverScrollableScrollPhysics(),
+              physics: TabViewScrollPhysics(),
               children: <Widget>[
                 Container(
                   color: Colors.purple,
@@ -120,5 +120,28 @@ class TabViewEagerGestureRecognizer extends EagerGestureRecognizer {
     startTrackingPointer(event.pointer, event.transform);
     resolve(GestureDisposition.rejected);
     stopTrackingPointer(event.pointer);
+  }
+}
+
+// ignore: must_be_immutable
+class TabViewScrollPhysics extends ClampingScrollPhysics {
+  TabViewScrollPhysics({ScrollPhysics parent}) : super(parent: parent);
+
+  @override
+  TabViewScrollPhysics applyTo(ScrollPhysics ancestor) {
+    return TabViewScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  bool _allowImplicitScrolling = true;
+
+  @override
+  bool get allowImplicitScrolling => _allowImplicitScrolling;
+
+  @override
+  double applyBoundaryConditions(ScrollMetrics position, double value) {
+    if (value < position.pixels && position.pixels <= position.minScrollExtent) // underscroll
+      print('set _allowImplicitScrolling = false');
+    _allowImplicitScrolling = false;
+    return super.applyBoundaryConditions(position, value);
   }
 }
