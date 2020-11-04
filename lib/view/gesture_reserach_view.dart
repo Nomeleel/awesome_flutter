@@ -64,11 +64,33 @@ class SubTabView extends StatefulWidget {
 
 class _SubTabViewState extends State<SubTabView> with SingleTickerProviderStateMixin {
   TabController _controller;
+  ScrollPhysics _physics;
 
   @override
   void initState() {
     super.initState();
     _controller = TabController(length: 3, vsync: this);
+    _physics = BouncingScrollPhysics();
+    addListener();
+  }
+
+  void addListener() {
+    _controller
+      ..removeListener(listener)
+      ..addListener(listener);
+  }
+
+  void listener() {
+    print(_controller.offset);
+    if (_controller.offset < 0) {
+      print(_controller.offset);
+      //_controller.removeListener(listener);
+      _physics.applyTo(NeverScrollableScrollPhysics());
+      // setState(() {
+      //   _physics = NeverScrollableScrollPhysics();
+      // });
+      //addListener();
+    }
   }
 
   @override
@@ -93,7 +115,7 @@ class _SubTabViewState extends State<SubTabView> with SingleTickerProviderStateM
             },
             child: TabBarView(
               controller: _controller,
-              physics: TabViewScrollPhysics(),
+              physics: _physics,
               children: <Widget>[
                 Container(
                   color: Colors.purple,
