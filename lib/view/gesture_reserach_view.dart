@@ -39,9 +39,7 @@ class _GestureResearchViewState extends State<GestureResearchView> with SingleTi
             child: TabBarView(
               controller: _controller,
               children: <Widget>[
-                Container(
-                  color: Colors.white,
-                ),
+                GestureStack(),
                 SubTabView(),
                 Container(
                   color: Colors.orange,
@@ -166,4 +164,153 @@ class TabViewScrollPhysics extends ClampingScrollPhysics {
     _allowImplicitScrolling = false;
     return super.applyBoundaryConditions(position, value);
   }
+}
+
+// 研究层级页面(Stack)手势穿透问题
+class GestureStack extends StatefulWidget {
+  GestureStack({Key key}) : super(key: key);
+
+  @override
+  _GestureStackState createState() => _GestureStackState();
+}
+
+class _GestureStackState extends State<GestureStack> {
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerUp: (e) {
+        print('Listener onPointerUp');
+      },
+      child: Stack(
+        children: [
+          Listener(
+            onPointerDown: (e) {
+              print('Container');
+            },
+            child: Container(
+              width: 100.0,
+              height: 100.0,
+              alignment: Alignment.center,
+              color: Colors.purple,
+            ),
+          ),
+          Listener(
+            onPointerDown: (e) {
+              print('Stack');
+            },
+            child: Stack(
+              children: [
+                for (int i = 0; i < 3; i++)
+                  Positioned.directional(
+                    start: i * 100.0,
+                    textDirection: TextDirection.ltr,
+                    child: GestureDetector(
+                      onTap: () {
+                        print('Stack Item index: $i');
+                      },
+                      child: Container(
+                        width: 100.0,
+                        height: 100.0,
+                        color: Colors.primaries[i],
+                      ),
+                    ),
+                    // child: Listener(
+                    //   onPointerDown: (e) {
+                    //     print('Stack Item index: $i');
+                    //   },
+                    //   child: Container(
+                    //     width: 100.0,
+                    //     height: 100.0,
+                    //     color: Colors.primaries[i],
+                    //   ),
+                    // ),
+                  )
+              ],
+            ),
+          ),
+          Listener(
+            onPointerDown: (e) {
+              print('PageView');
+            },
+            child: PageView.builder(
+              itemCount: 3,
+              itemBuilder: (BuildContext context, int index) {
+                // return GestureDetector(
+                //   onTap: () {
+                //     print('PageView index: $index');
+                //   },
+                //   child: Container(
+                //     color: Colors.transparent,
+                //   ),
+                // );
+                return RawGestureDetector(
+                  gestures: {
+                    IgnoreTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<IgnoreTapGestureRecognizer>(
+                      () => IgnoreTapGestureRecognizer(),
+                      (IgnoreTapGestureRecognizer instance) {
+                        instance.onTap = () {
+                          print('IgnoreTapGestureRecognizer Tap');
+                        };
+                      },
+                    )
+                  },
+                  child: Listener(
+                    onPointerUp: (e) {
+                      print('PageView index: $index');
+                      print('--------------------------------');
+                      print('onPointerUp: ${e.position.dx}');
+                    },
+                    onPointerDown: (e) {
+                      print('PageView index: $index');
+                      print('onPointerDown: ${e.position.dx}');
+                      print('--------------------------------');
+                    },
+                    child: Container(
+                      color: Colors.primaries[index].withOpacity(0.2),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          // Listener(
+          //   onPointerDown: (e) {
+          //     print('Container 3');
+          //   },
+          //   child: Container(
+          //     width: 100.0,
+          //     height: 100.0,
+          //     alignment: Alignment.center,
+          //     color: Colors.purple,
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+class StackEagerGestureRecognizer extends EagerGestureRecognizer {
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    print(event);
+    startTrackingPointer(event.pointer, event.transform);
+    resolve(GestureDisposition.accepted);
+    stopTrackingPointer(event.pointer);
+  }
+}
+
+class IgnoreTapGestureRecognizer extends TapGestureRecognizer {
+  @override
+  void acceptGesture(int pointer) {
+    rejectGesture(pointer);
+  }
+
+  // @override
+  // void addAllowedPointer(PointerDownEvent event) {
+  //   print(event);
+  //   startTrackingPointer(event.pointer, event.transform);
+  //   resolve(GestureDisposition.rejected);
+  //   stopTrackingPointer(event.pointer);
+  // }
 }
