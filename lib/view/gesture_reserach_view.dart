@@ -179,7 +179,7 @@ class _GestureStackState extends State<GestureStack> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerUp: (e) {
-        print('Listener onPointerUp');
+        //print('Listener onPointerUp');
       },
       child: Stack(
         children: [
@@ -230,49 +230,131 @@ class _GestureStackState extends State<GestureStack> {
           ),
           Listener(
             onPointerDown: (e) {
-              print('PageView');
+              print('Container 1');
+            },
+            child: Container(
+              width: 100.0,
+              height: 100.0,
+              color: Colors.purple,
+              child: const Text('Container 1'),
+            ),
+          ),
+          RawGestureDetector(
+            gestures: {
+              IgnoreTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<IgnoreTapGestureRecognizer>(
+                () => IgnoreTapGestureRecognizer(),
+                (IgnoreTapGestureRecognizer instance) {
+                  print('IgnoreTapGestureRecognizer instance');
+                },
+              )
             },
             child: PageView.builder(
               itemCount: 3,
               itemBuilder: (BuildContext context, int index) {
-                // return GestureDetector(
-                //   onTap: () {
-                //     print('PageView index: $index');
-                //   },
-                //   child: Container(
-                //     color: Colors.transparent,
-                //   ),
-                // );
-                return RawGestureDetector(
-                  gestures: {
-                    IgnoreTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<IgnoreTapGestureRecognizer>(
-                      () => IgnoreTapGestureRecognizer(),
-                      (IgnoreTapGestureRecognizer instance) {
-                        instance.onTap = () {
-                          print('IgnoreTapGestureRecognizer Tap');
-                        };
-                      },
-                    )
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    print('PageView index: $index');
                   },
-                  child: Listener(
-                    onPointerUp: (e) {
-                      print('PageView index: $index');
-                      print('--------------------------------');
-                      print('onPointerUp: ${e.position.dx}');
-                    },
-                    onPointerDown: (e) {
-                      print('PageView index: $index');
-                      print('onPointerDown: ${e.position.dx}');
-                      print('--------------------------------');
-                    },
-                    child: Container(
-                      color: Colors.primaries[index].withOpacity(0.2),
-                    ),
+                  child: Container(
+                    color: Colors.transparent,
                   ),
                 );
               },
             ),
           ),
+          // Listener(
+          //   onPointerDown: (e) {
+          //     print('PageView');
+          //   },
+          //   child: PageView.builder(
+          //     itemCount: 3,
+          //     itemBuilder: (BuildContext context, int index) {
+          //       // return GestureDetector(
+          //       //   onTap: () {
+          //       //     print('PageView index: $index');
+          //       //   },
+          //       //   child: Container(
+          //       //     color: Colors.transparent,
+          //       //   ),
+          //       // );
+          //       return RawGestureDetector(
+          //         gestures: {
+          //           IgnoreTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<IgnoreTapGestureRecognizer>(
+          //             () => IgnoreTapGestureRecognizer(),
+          //             (IgnoreTapGestureRecognizer instance) {
+          //               instance.onTap = () {
+          //                 print('IgnoreTapGestureRecognizer Tap');
+          //               };
+          //             },
+          //           )
+          //         },
+          //         child: Listener(
+          //           onPointerUp: (e) {
+          //             print('PageView index: $index');
+          //             print('--------------------------------');
+          //             print('onPointerUp: ${e.position.dx}');
+          //           },
+          //           onPointerDown: (e) {
+          //             print('PageView index: $index');
+          //             print('onPointerDown: ${e.position.dx}');
+          //             print('--------------------------------');
+          //           },
+          //           child: Container(
+          //             color: Colors.primaries[index].withOpacity(0.2),
+          //           ),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+          // Listener(
+          //   onPointerDown: (e) {
+          //     print('Container 2');
+          //   },
+          //   child: Container(
+          //     width: 150.0,
+          //     height: 150.0,
+          //     alignment: Alignment.center,
+          //     color: Colors.green,
+          //     child: const Text('Container 2'),
+          //   ),
+          // ),
+          // RawGestureDetector(
+          //   gestures: {
+          //     StackEagerGestureRecognizer: GestureRecognizerFactoryWithHandlers<StackEagerGestureRecognizer>(
+          //       () => StackEagerGestureRecognizer(),
+          //       (StackEagerGestureRecognizer instance) {
+          //         print('StackEagerGestureRecognizer instance');
+          //       },
+          //     )
+          //   },
+          //   child: Container(
+          //     width: 110.0,
+          //     height: 110.0,
+          //     color: Colors.amber,
+          //   ),
+          // ),
+          // RawGestureDetector(
+          //   gestures: {
+          //     IgnoreTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<IgnoreTapGestureRecognizer>(
+          //       () => IgnoreTapGestureRecognizer(),
+          //       (IgnoreTapGestureRecognizer instance) {
+          //         print('IgnoreTapGestureRecognizer instance');
+          //         instance.onTapDown = (e) {
+          //           print('IgnoreTapGestureRecognizer onTapDown');
+          //         };
+          //       },
+          //     )
+          //   },
+          //   child: Container(
+          //     width: 100.0,
+          //     height: 100.0,
+          //     alignment: Alignment.center,
+          //     color: Colors.purple,
+          //     child: const Text('Container 3'),
+          //   ),
+          // ),
           // Listener(
           //   onPointerDown: (e) {
           //     print('Container 3');
@@ -282,6 +364,19 @@ class _GestureStackState extends State<GestureStack> {
           //     height: 100.0,
           //     alignment: Alignment.center,
           //     color: Colors.purple,
+          //     child: const Text('Container 3'),
+          //   ),
+          // ),
+          // Listener(
+          //   onPointerDown: (e) {
+          //     print('Container 4');
+          //   },
+          //   child: Container(
+          //     width: 100.0,
+          //     height: 100.0,
+          //     alignment: Alignment.center,
+          //     color: Colors.purple,
+          //     child: const Text('Container 4'),
           //   ),
           // ),
         ],
@@ -291,12 +386,24 @@ class _GestureStackState extends State<GestureStack> {
 }
 
 class StackEagerGestureRecognizer extends EagerGestureRecognizer {
+  // @override
+  // void addAllowedPointer(PointerDownEvent event) {
+  //   print(event);
+  //   startTrackingPointer(event.pointer, event.transform);
+  //   resolve(GestureDisposition.rejected);
+  //   stopTrackingPointer(event.pointer);
+  // }
+
+  // @override
+  // void rejectGesture(int pointer) {
+  //   print('StackEagerGestureRecognizer rejectGesture');
+  //   acceptGesture(pointer);
+  // }
+
   @override
-  void addAllowedPointer(PointerDownEvent event) {
-    print(event);
-    startTrackingPointer(event.pointer, event.transform);
-    resolve(GestureDisposition.accepted);
-    stopTrackingPointer(event.pointer);
+  void acceptGesture(int pointer) {
+    print('StackEagerGestureRecognizer acceptGesture');
+    rejectGesture(pointer);
   }
 }
 
@@ -306,11 +413,18 @@ class IgnoreTapGestureRecognizer extends TapGestureRecognizer {
     rejectGesture(pointer);
   }
 
-  // @override
-  // void addAllowedPointer(PointerDownEvent event) {
-  //   print(event);
-  //   startTrackingPointer(event.pointer, event.transform);
-  //   resolve(GestureDisposition.rejected);
-  //   stopTrackingPointer(event.pointer);
-  // }
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    print(event);
+    startTrackingPointer(event.pointer, event.transform);
+    resolve(GestureDisposition.accepted);
+    stopTrackingPointer(event.pointer);
+  }
+
+  @override
+  void addPointer(PointerDownEvent event) {
+    print('addPointer');
+    handleNonAllowedPointer(event);
+    super.addPointer(event);
+  }
 }
