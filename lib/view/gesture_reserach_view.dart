@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class GestureResearchView extends StatefulWidget {
@@ -166,7 +167,12 @@ class TabViewScrollPhysics extends ClampingScrollPhysics {
   }
 }
 
-// 研究层级页面(Stack)手势穿透问题
+// 使用Listener监听事件
+// 层叠组件同时响应事件有两种实现方式
+// 1. 改写RenderStack的hitTestChildren，使其两个都可以命中
+// 2. 最上层接受事件后，通过点击位置，判定下层组件是否可以点击到
+// 同时响应后，不同手势也会冲突
+// 滑动和点击事件都会响应tap事件，可以通过up和down中point位置得出，相同是点击，反之是滑动
 class GestureStack extends StatefulWidget {
   GestureStack({Key key}) : super(key: key);
 
@@ -175,6 +181,77 @@ class GestureStack extends StatefulWidget {
 }
 
 class _GestureStackState extends State<GestureStack> {
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerUp: (e) {
+        //print('Listener onPointerUp');
+      },
+      child: Stack(
+        children: [
+          for (int i = 0; i < 3; i++)
+            Positioned.directional(
+              start: i * 100.0,
+              textDirection: TextDirection.ltr,
+              child: Listener(
+                onPointerDown: (e) {
+                  print('Stack Item index: $i');
+                },
+                child: Container(
+                  width: 100.0,
+                  height: 100.0,
+                  color: Colors.primaries[i],
+                ),
+              ),
+            ),
+          // Listener(
+          //   onPointerDown: (e) {
+          //     print('Container 1');
+          //   },
+          //   child: Container(
+          //     width: 100.0,
+          //     height: 100.0,
+          //     color: Colors.purple,
+          //     child: const Text('Container 1'),
+          //   ),
+          // ),
+          PageView.builder(
+            itemCount: 3,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  print('PageView index: $index');
+                },
+                child: Container(
+                  color: Colors.primaries[index].withOpacity(0.2),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// 改写这里
+extension RenderStackHitTest on RenderStack {
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {Offset position}) {}
+
+  bool defaultHitTestChildren(BoxHitTestResult result, {Offset position}) {}
+}
+
+// 研究层级页面(Stack)手势穿透问题
+class GestureStackTest extends StatefulWidget {
+  GestureStackTest({Key key}) : super(key: key);
+
+  @override
+  _GestureStackTestState createState() => _GestureStackTestState();
+}
+
+class _GestureStackTestState extends State<GestureStackTest> {
   @override
   Widget build(BuildContext context) {
     return Listener(
@@ -355,28 +432,77 @@ class _GestureStackState extends State<GestureStack> {
           //     child: const Text('Container 3'),
           //   ),
           // ),
-          // Listener(
-          //   onPointerDown: (e) {
-          //     print('Container 3');
+          Listener(
+            onPointerDown: (e) {
+              print('Container 3');
+            },
+            child: Container(
+              width: 100.0,
+              height: 100.0,
+              alignment: Alignment.center,
+              color: Colors.purple,
+              child: const Text('Container 3'),
+            ),
+          ),
+          // RawGestureDetector(
+          //   gestures: {
+          //     AbsorbTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<AbsorbTapGestureRecognizer>(
+          //       () => AbsorbTapGestureRecognizer(),
+          //       (AbsorbTapGestureRecognizer instance) {
+          //         print('AbsorbTapGestureRecognizer instance');
+          //         instance.onTap = () {
+          //           print('Container 3');
+          //         };
+          //       },
+          //     )
           //   },
           //   child: Container(
           //     width: 100.0,
           //     height: 100.0,
-          //     alignment: Alignment.center,
           //     color: Colors.purple,
           //     child: const Text('Container 3'),
           //   ),
           // ),
-          // Listener(
-          //   onPointerDown: (e) {
-          //     print('Container 4');
+          Listener(
+            onPointerDown: (e) {
+              print('Container 4');
+            },
+            child: Container(
+              width: 100.0,
+              height: 100.0,
+              alignment: Alignment.center,
+              color: Colors.purple,
+              child: const Text('Container 4'),
+            ),
+          ),
+          // 点击中间同时相应两个Container的点击事件
+          // RawGestureDetector(
+          //   gestures: {
+          //     AbsorbTapGestureRecognizer: GestureRecognizerFactoryWithHandlers<AbsorbTapGestureRecognizer>(
+          //       () => AbsorbTapGestureRecognizer(),
+          //       (AbsorbTapGestureRecognizer instance) {
+          //         print('AbsorbTapGestureRecognizer instance');
+          //         instance.onTap = () {
+          //           print('Container 5');
+          //         };
+          //       },
+          //     )
           //   },
           //   child: Container(
-          //     width: 100.0,
-          //     height: 100.0,
+          //     width: 321.0,
+          //     height: 321.0,
           //     alignment: Alignment.center,
           //     color: Colors.purple,
-          //     child: const Text('Container 4'),
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         print('Container 6');
+          //       },
+          //       child: Container(
+          //         width: 123.0,
+          //         height: 123.0,
+          //         color: Colors.indigo,
+          //       ),
+          //     ),
           //   ),
           // ),
         ],
@@ -413,18 +539,25 @@ class IgnoreTapGestureRecognizer extends TapGestureRecognizer {
     rejectGesture(pointer);
   }
 
-  @override
-  void addAllowedPointer(PointerDownEvent event) {
-    print(event);
-    startTrackingPointer(event.pointer, event.transform);
-    resolve(GestureDisposition.accepted);
-    stopTrackingPointer(event.pointer);
-  }
+  // @override
+  // void addAllowedPointer(PointerDownEvent event) {
+  //   print(event);
+  //   startTrackingPointer(event.pointer, event.transform);
+  //   resolve(GestureDisposition.accepted);
+  //   stopTrackingPointer(event.pointer);
+  // }
 
+  // @override
+  // void addPointer(PointerDownEvent event) {
+  //   print('addPointer');
+  //   handleNonAllowedPointer(event);
+  //   super.addPointer(event);
+  // }
+}
+
+class AbsorbTapGestureRecognizer extends TapGestureRecognizer {
   @override
-  void addPointer(PointerDownEvent event) {
-    print('addPointer');
-    handleNonAllowedPointer(event);
-    super.addPointer(event);
+  void rejectGesture(int pointer) {
+    acceptGesture(pointer);
   }
 }
