@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -27,6 +27,8 @@ dependencies:
   widget_scan:
     git: git@github.com:Nomeleel/widget_scan.git
   webview_flutter: ^0.3.22+1
+  image_gallery_saver: 1.2.2
+  shelf: ^0.7.9
 
 dev_dependencies:
   flutter_test:
