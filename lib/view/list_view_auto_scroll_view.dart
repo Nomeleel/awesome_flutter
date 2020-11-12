@@ -54,6 +54,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
             child: ListView.builder(
               controller: _controller,
               cacheExtent: double.maxFinite,
+              padding: EdgeInsets.zero,
               itemCount: 77,
               itemBuilder: (BuildContext context, int index) {
                 GlobalKey globalKey = GlobalKey();
@@ -61,6 +62,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
                 return Container(
                   key: globalKey,
                   height: Random().nextInt(200).toDouble(),
+                  //height: 50.0,
                   color: Colors.primaries[index % 15],
                   alignment: Alignment.center,
                   child: Text('$index'),
@@ -90,15 +92,19 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
     //if (isScrollable) return 0.0;
     double center = 0.0;
     for (int i = 0; i < index; i++) {
-      center += _globalKeyList[index].currentContext.size.height;
+      center += _globalKeyList[i].currentContext.size.height;
     }
     center += _globalKeyList[index].currentContext.size.height / 2;
     print(center);
-    return (center + viewportWidth / 2.0).clamp(minExtent, maxExtent) as double;
+    //return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent) as double;
+    return center - viewportWidth / 2.0;
   }
 
   double centeredScrollOffset(int index) {
     final ScrollPosition position = _controller.position;
+    print('viewportDimension: ${position.viewportDimension}');
+    print('minScrollExtent: ${position.minScrollExtent}');
+    print('maxScrollExtent: ${position.maxScrollExtent}');
     return targetScrollOffset(index, position.viewportDimension, position.minScrollExtent, position.maxScrollExtent);
   }
 }
