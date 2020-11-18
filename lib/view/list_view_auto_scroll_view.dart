@@ -96,8 +96,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
     }
     center += _globalKeyList[index].currentContext.size.height / 2;
     print(center);
-    //return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent) as double;
-    return center - viewportWidth / 2.0;
+    return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent) as double;
   }
 
   double centeredScrollOffset(int index) {
