@@ -1,3 +1,5 @@
+import 'package:awesome_flutter/view/gesture_reserach_view.dart';
+import 'package:awesome_flutter/widget/absorb_stack.dart';
 import 'package:flutter/widgets.dart';
 
 typedef Widget StorySwiperWidgetBuilder(int index);
@@ -17,7 +19,7 @@ class StorySwiper extends StatefulWidget {
   final int limitLength;
 
   final Function onPageChanged;
-  final Function onPointUp;
+  final Function onTap;
 
   StorySwiper.builder(
       {Key key,
@@ -33,7 +35,7 @@ class StorySwiper extends StatefulWidget {
       this.endWidget,
       this.limitLength,
       this.onPageChanged,
-      this.onPointUp})
+      this.onTap})
       : super(key: key);
 
   @override
@@ -69,45 +71,19 @@ class _StorySwiperState extends State<StorySwiper> {
 
   @override
   Widget build(BuildContext context) {
-    double positionX = 0.0;
     return Container(
-      child: Stack(children: <Widget>[
-        _getPages(),
-        // TODO(lei): 两个Listener后续合并
-        Listener(
-          onPointerDown: (e) {
-            positionX = e.position.dx;
-          },
-          onPointerUp: (e) {
-            if (positionX == e.position.dx && widget.onPointUp != null) {
-              int index = _pageIndex - 1;
-              double x = e.position.dx;
-              // 最后一个index需特殊处理
-              // TODO(lei) 后期改善
-              int subIndex = widget.visiblePageCount;
-              for (var i = 1; i < numbers.length; ++i) {
-                if (x > numbers[i - 1] && x < numbers[i]) {
-                  subIndex = i;
-                  break;
-                }
-              }
-
-              index += subIndex;
-
-              if (index < _itemCount) {
-                widget.onPointUp(index);
-              }
-            }
-          },
-          child: NotificationListener<ScrollNotification>(
+      child: AbsorbStack(
+        absorbIndex: 0,
+        children: <Widget>[
+          _getPages(),
+          NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               if (notification is ScrollEndNotification && _pageIndex != _pageController.page) {
                 Future.delayed(Duration.zero, () {
                   _pageController.animateToPage(
                     _pageController.page.round(),
                     duration: Duration(
-                      milliseconds: ((_pageController.page - _pageController.page.round())
-                        .abs() * 2000).floor(),
+                      milliseconds: ((_pageController.page - _pageController.page.round()).abs() * 2000).floor(),
                     ),
                     curve: Curves.easeInOut,
                   );
@@ -115,7 +91,10 @@ class _StorySwiperState extends State<StorySwiper> {
               }
 
               // onPageChanged
-              if (widget.onPageChanged != null && notification.depth == 0 && widget.onPageChanged != null && notification is ScrollUpdateNotification) {
+              if (widget.onPageChanged != null &&
+                  notification.depth == 0 &&
+                  widget.onPageChanged != null &&
+                  notification is ScrollUpdateNotification) {
                 final PageMetrics metrics = notification.metrics as PageMetrics;
                 final int currentPage = metrics.page.round();
                 if (currentPage != _pageIndex) {
@@ -129,15 +108,15 @@ class _StorySwiperState extends State<StorySwiper> {
               scrollDirection: Axis.horizontal,
               physics: ClampingScrollPhysics(),
               controller: _pageController,
-              itemCount: _itemCount = (widget.itemCount > widget.limitLength ? 
-                widget.limitLength + 1 : widget.itemCount),
+              itemCount: _itemCount =
+                  (widget.itemCount > widget.limitLength ? widget.limitLength + 1 : widget.itemCount),
               itemBuilder: (context, index) => Container(
                 width: itemWidth,
               ),
             ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
@@ -193,6 +172,14 @@ class _StorySwiperState extends State<StorySwiper> {
         _widgetList.insert(index, childWidget);
       }
     }
+
+    if (widget.onTap != null) {
+      childWidget = GestureDetector(
+        onTap: () => widget.onTap(index),
+        child: childWidget,
+      );
+    }
+
     return Positioned.directional(
       top: top,
       bottom: top,

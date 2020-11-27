@@ -29,11 +29,11 @@ class _StorySwiperViewState extends State<StorySwiperView> {
               verticalPadding: 5,
               visiblePageCount: 4,
               limitLength: 20,
-              onPointUp: ([e]) {
+              onTap: (e) {
                 print('-----tap------');
                 print(e);
               },
-              onPageChanged: ([e]) {
+              onPageChanged: (e) {
                 print('-----page----');
                 print(e);
               },
