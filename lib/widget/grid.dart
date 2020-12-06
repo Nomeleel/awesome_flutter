@@ -28,3 +28,31 @@ class Test {
     widget.columnIndex;
   }
 }
+
+/*
+<Grid>
+  <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition Height="25"/>
+      <RowDefinition Height="20"/>
+  </Grid.RowDefinitions>
+  <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+  </Grid.ColumnDefinitions>
+  <Grid Grid.ColumnSpan="2">
+      <Image/>
+      <Image/>
+  </Grid>
+  <TextBlock Grid.Row="1" Grid.ColumnSpan="2"/>
+  <StackPanel Grid.Row="2">
+      <Image/>
+      <TextBlock>
+  </StackPanel>
+  <StackPanel Grid.Row="2" Grid.Column="1">
+      <Image/>
+      <TextBlock/>
+  </StackPanel>
+</Grid>
+
+*/
