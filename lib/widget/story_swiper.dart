@@ -1,5 +1,6 @@
 import 'package:awesome_flutter/view/gesture_reserach_view.dart';
 import 'package:awesome_flutter/widget/absorb_stack.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 typedef Widget StorySwiperWidgetBuilder(int index);
@@ -102,7 +103,7 @@ class _StorySwiperState extends State<StorySwiper> {
                   widget.onPageChanged(currentPage);
                 }
               }
-              return false;
+              return true;
             },
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -114,6 +115,16 @@ class _StorySwiperState extends State<StorySwiper> {
                 width: itemWidth,
               ),
             ),
+          ),
+                    ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 7,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                width: 100.0,
+                color: Colors.primaries[index % 15].withOpacity(0.7),
+              );
+            },
           ),
         ],
       ),
