@@ -9,12 +9,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final delegate = MyRouteDelegate();
+  final MyRouteDelegate delegate = MyRouteDelegate();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Nav 2 Demo',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -37,7 +37,10 @@ class MyRouteParser extends RouteInformationParser<String> {
   }
 }
 
-class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDelegateMixin<String>, ChangeNotifier {
+class MyRouteDelegate extends RouterDelegate<String>
+    with
+        PopNavigatorRouterDelegateMixin<String>,
+        ChangeNotifier {
   final _stack = <String>[];
 
   static MyRouteDelegate of(BuildContext context) {
@@ -51,7 +54,8 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
 
   @override
   String get currentConfiguration {
-    return _stack.isNotEmpty ? _stack.last : null;
+    print('currentConfiguration: ${_stack.last}');
+    return _stack.isNotEmpty ? _stack.last : '/';
   }
 
   List<String> get stack => List.unmodifiable(_stack);
@@ -65,6 +69,14 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
     String mainRouteName = newRoute.split('/').first;
     _stack.removeWhere((e) => e.split('/').first == mainRouteName);
     _stack.add(newRoute);
+    notifyListeners();
+  }
+
+  void pop() {
+    print('----------pop--------------');
+    String pageName = _stack.removeLast();
+    print(pageName);
+    print('---------------------------');
     notifyListeners();
   }
 
@@ -88,14 +100,24 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
-    if (_stack.isNotEmpty) {
-      if (_stack.last == route.settings.name) {
-        _stack.remove(route.settings.name);
-        notifyListeners();
-      }
+    print('-------_onPopPage: ${route.settings.name}-----------------');
+    if (_stack.length > 1) {
+      _stack.removeLast();
+      notifyListeners();
     }
+
     return route.didPop(result);
   }
+
+  // Route<dynamic> _onGenerateRoute(RouteSettings settings) {
+  //   print('-----_onGenerateRoute: $settings------------');
+  //   return MaterialPageRoute(
+  //     settings: settings,
+  //     builder: (context) => MyHomePage(
+  //       title: settings.name,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +125,7 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
     return Navigator(
       key: navigatorKey,
       onPopPage: _onPopPage,
+      //onGenerateRoute: _onGenerateRoute,
       pages: [
         for (final name in _stack)
           MyPage(
@@ -112,6 +135,14 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
       ],
     );
   }
+
+  // @override
+  // Future<bool> popRoute() {
+  //   print('-----------popRoute-------------');
+  //   final NavigatorState navigator = navigatorKey?.currentState;
+  //   if (navigator == null) return SynchronousFuture<bool>(false);
+  //   return navigator.maybePop();
+  // }
 }
 
 class MyPage extends Page {
@@ -179,6 +210,11 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
     MyRouteDelegate.of(context).push('Route/$_counter');
+    //Navigator.of(context).pushNamed('Route/$_counter');
+    // Navigator.of(context).push(MaterialPageRoute(
+    //   settings: RouteSettings(name: 'Route/$_counter'),
+    //   builder: (context) => MyHomePage(title: 'Route/$_counter',)
+    // ));
   }
 
   void _incrementCounter2() {
@@ -190,6 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _back() {
     Navigator.of(context).pop();
+    //MyRouteDelegate.of(context).pop();
   }
 
   @override
@@ -249,7 +286,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SizedBox(width: 12.0),
           FloatingActionButton(
-            backgroundColor: Colors.cyan,
             heroTag: 'back',
             onPressed: _back,
             tooltip: 'Increment',
