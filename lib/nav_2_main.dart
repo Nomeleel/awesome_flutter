@@ -37,10 +37,7 @@ class MyRouteParser extends RouteInformationParser<String> {
   }
 }
 
-class MyRouteDelegate extends RouterDelegate<String>
-    with
-        PopNavigatorRouterDelegateMixin<String>,
-        ChangeNotifier {
+class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDelegateMixin<String>, ChangeNotifier {
   final _stack = <String>[];
 
   static MyRouteDelegate of(BuildContext context) {
@@ -70,6 +67,10 @@ class MyRouteDelegate extends RouterDelegate<String>
     _stack.removeWhere((e) => e.split('/').first == mainRouteName);
     _stack.add(newRoute);
     notifyListeners();
+  }
+
+  bool canPop() {
+    return _stack.length > 1;
   }
 
   void pop() {
@@ -105,7 +106,6 @@ class MyRouteDelegate extends RouterDelegate<String>
       _stack.removeLast();
       notifyListeners();
     }
-
     return route.didPop(result);
   }
 
@@ -287,7 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(width: 12.0),
           FloatingActionButton(
             heroTag: 'back',
-            onPressed: _back,
+            onPressed: MyRouteDelegate.of(context).canPop() ? _back : null,
             tooltip: 'Increment',
             child: Icon(Icons.arrow_back_ios),
           ),
