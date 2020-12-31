@@ -86,6 +86,14 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
     notifyListeners();
   }
 
+  void removeAll() {
+    _stack.removeRange(1, _stack.length);
+    print('------------_stack------------');
+    print(_stack);
+    print('---------------------------');
+    notifyListeners();
+  }
+
   @override
   Future<void> setInitialRoutePath(String configuration) {
     print('------setInitialRoutePath: $configuration');
@@ -158,23 +166,49 @@ class MyPage extends Page {
     return MaterialPageRoute(
       settings: this,
       builder: (BuildContext context) {
-        return MyHomePage(title: 'Route: $name');
+        return name == '/' ? MyHomePage() : MyItemPage(title: name);
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static int _counter = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('Go'),
+          onPressed: () {
+            MyRouteDelegate.of(context).push('Route/1');
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class MyItemPage extends StatefulWidget {
+  MyItemPage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyItemPageState createState() => _MyItemPageState();
+}
+
+class _MyItemPageState extends State<MyItemPage> {
+  static int _counter = 1;
 
   Future<dynamic> _showDialog() async {
     return await showDialog(
@@ -197,18 +231,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _removeLast() {
-    final delegate = MyRouteDelegate.of(context);
-    final stack = delegate.stack;
-    if (stack.length > 2) {
-      delegate.remove(stack[stack.length - 2]);
-    }
+  void _removeAll() {
+    MyRouteDelegate.of(context).removeAll();
   }
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    _counter++;
     MyRouteDelegate.of(context).push('Route/$_counter');
     //Navigator.of(context).pushNamed('Route/$_counter');
     // Navigator.of(context).push(MaterialPageRoute(
@@ -218,9 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter2() {
-    setState(() {
-      _counter++;
-    });
+    _counter++;
     MyRouteDelegate.of(context).pushAndRemoveExist('Route_Test/$_counter');
   }
 
@@ -234,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: widget.title.contains('Test') ? Colors.purple : Colors.white,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Route: ${widget.title}'),
       ),
       body: Center(
         child: Column(
@@ -244,7 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              widget.title.split('/')[1],
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
@@ -265,8 +291,8 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(width: 12.0),
           FloatingActionButton(
             heroTag: 'remove',
-            onPressed: _removeLast,
-            tooltip: 'Remove last',
+            onPressed: _removeAll,
+            tooltip: 'Remove All',
             child: Icon(Icons.delete),
           ),
           SizedBox(width: 12.0),
@@ -287,6 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(width: 12.0),
           FloatingActionButton(
             heroTag: 'back',
+            backgroundColor: MyRouteDelegate.of(context).canPop() ? null : Colors.grey,
             onPressed: MyRouteDelegate.of(context).canPop() ? _back : null,
             tooltip: 'Increment',
             child: Icon(Icons.arrow_back_ios),
