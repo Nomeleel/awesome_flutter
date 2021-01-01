@@ -34,26 +34,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  _MyHomePageState();
-
-  List<AppStoreCardData> _cardDataList = List<AppStoreCardData>();
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  getData() async {
-    String jsonData =
-        await rootBundle.loadString('assets/data/CardDataList.json');
-    if (jsonData != null && jsonData != '') {
+  Future<List<AppStoreCardData>> getHomePageConfig() async {
+    List<AppStoreCardData> cardDataList = [];
+    String jsonData = await rootBundle.loadString('assets/data/CardDataList.json');
+    if (jsonData?.isNotEmpty ?? false) {
       (json.decode(jsonData)['cardDataList'] as List).forEach((item) {
-        _cardDataList.add(AppStoreCardData.fromMap(item));
+        cardDataList.add(AppStoreCardData.fromMap(item));
       });
-
-      setState(() {});
     }
+    return cardDataList;
   }
 
   @override
@@ -61,18 +50,24 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        child: _cardDataList.length == 0
-            ? const Center(
+        child: FutureBuilder<List<AppStoreCardData>>(
+          future: getHomePageConfig(),
+          builder: (BuildContext context, AsyncSnapshot<List<AppStoreCardData>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) => appStoreCardItem(context, snapshot.data[index]),
+              );
+            } else {
+              return const Center(
                 child: CircularProgressIndicator(
                   backgroundColor: Colors.white,
                 ),
-              )
-            : ListView.builder(
-                itemCount: _cardDataList.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) =>
-                    appStoreCardItem(context, _cardDataList[index]),
-              ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
