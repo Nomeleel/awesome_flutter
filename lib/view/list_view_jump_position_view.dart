@@ -20,11 +20,35 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
       appBar: AppBar(
         title: const Text('List View Jump Position View'),
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          sliverList(),
-          ...List.generate(77, (index) => sliverList()),
-          targetSliverList(),
+      body: Column(
+        children: [
+          Container(
+            height: 222.222,
+            color: Colors.purple,
+          ),
+          Expanded(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                sliverList(),
+                targetSliverList(),
+                sliverList(),
+                ...List.generate(7, (index) => sliverList()),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _SliverDelegate(
+                    minHeight: 40.0,
+                    maxHeight: 100.0,
+                    child: Container(
+                      color: Colors.cyan,
+                      child: Center(
+                        child: const Text('Title'),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -65,14 +89,46 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
   void jump(BuildContext context) {
     ScrollableState scrollableState = Scrollable.of(context);
     if (scrollableState != null) {
-      double target = math.min(_globalKey.currentContext.findRenderObject().getTransformTo(null).getTranslation().y,
-          scrollableState.position.maxScrollExtent);
-      print(target);
+      double offset = getVectorY(_globalKey.currentContext) - getVectorY(scrollableState.context) + 
+        scrollableState.position.pixels;
+      print(offset);
       scrollableState?.position?.animateTo(
-        target,
+        math.min(offset, scrollableState.position.maxScrollExtent),
         duration: Duration(milliseconds: 200),
         curve: Curves.easeIn,
       );
     }
+  }
+
+  double getVectorY(BuildContext context) {
+    return context.findRenderObject().getTransformTo(null).getTranslation().y;
+  }
+}
+
+class _SliverDelegate extends SliverPersistentHeaderDelegate {
+  _SliverDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return new SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight || minHeight != oldDelegate.minHeight || child != oldDelegate.child;
   }
 }
