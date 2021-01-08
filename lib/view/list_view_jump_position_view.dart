@@ -86,11 +86,12 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
     );
   }
 
+  // 这种方式只支持从上跳转到下面， 因为如果锚点在滚动视图上面，位置就会算的不对
   void jump(BuildContext context) {
     ScrollableState scrollableState = Scrollable.of(context);
     if (scrollableState != null) {
-      double offset = getVectorY(_globalKey.currentContext) - getVectorY(scrollableState.context) + 
-        scrollableState.position.pixels;
+      double offset =
+          getVectorY(_globalKey.currentContext) - getVectorY(scrollableState.context) + scrollableState.position.pixels;
       print(offset);
       scrollableState?.position?.animateTo(
         math.min(offset, scrollableState.position.maxScrollExtent),
