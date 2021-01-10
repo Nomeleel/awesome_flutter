@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../widget/scroll_view_jump_top.dart';
+
 class ScrollViewJumpTopView extends StatefulWidget {
   const ScrollViewJumpTopView({Key key}) : super(key: key);
 
@@ -11,61 +13,51 @@ class ScrollViewJumpTopView extends StatefulWidget {
 class _ScrollViewJumpTopViewState extends State<ScrollViewJumpTopView> {
   @override
   Widget build(BuildContext context) {
-    return ScrollViewJumpTop(
-      child: ListView.builder(
-        itemCount: 77,
-        itemBuilder: (BuildContext context, int index) => Container(
-          height: 77.77,
-          margin: EdgeInsets.all(7.7),
-          color: Colors.primaries[index % 16],
-          alignment: Alignment.center,
-          child: RaisedButton(
-            child: const Text('Go'),
-            onPressed: () {
-              ScrollableState scrollableState = Scrollable.of(context);
-              print(scrollableState);
-            },
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Scroll View Jump Top View'),
+      ),
+      body: ScrollViewJumpTop(
+        child: ScrollViewWrap(
+          child: ListView.builder(
+            itemCount: 77,
+            itemBuilder: (BuildContext context, int index) => Container(
+              height: 77.77,
+              margin: EdgeInsets.all(7.7),
+              color: Colors.primaries[index % 16],
+              alignment: Alignment.center,
+              child: Text('$index'),
+            ),
           ),
         ),
+        jumpTopBuilder: (BuildContext context) {
+          return Container(
+            height: 60.0,
+            width: 60.0,
+            margin: EdgeInsets.only(bottom: 20.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.all(Radius.circular(30.0)),
+            ),
+            child: const Icon(Icons.arrow_upward),
+          );
+        },
       ),
     );
   }
 }
 
-class ScrollViewJumpTop extends StatefulWidget {
-  ScrollViewJumpTop({Key key, this.child, this.triggerHeight, this.jumpTopBuilder}) : super(key: key);
-
+class ScrollViewWrap extends StatefulWidget {
+  const ScrollViewWrap({Key key, this.child}) : super(key: key);
   final Widget child;
-  final double triggerHeight;
-  final WidgetBuilder jumpTopBuilder;
-
   @override
-  _ScrollViewJumpTopState createState() => _ScrollViewJumpTopState();
+  _ScrollViewWrapState createState() => _ScrollViewWrapState();
 }
 
-class _ScrollViewJumpTopState extends State<ScrollViewJumpTop> {
+class _ScrollViewWrapState extends State<ScrollViewWrap> {
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      findScrollableState();
-    });
-
     return widget.child;
-  }
-
-  findScrollableState() {
-    (context as Element).visitChildren((element) {
-      if (element is BuildContext) {
-        print(element);
-        ScrollableState scrollableState = Scrollable.of(context);
-        print(scrollableState);
-        (element as Element).visitChildren((element2) {
-          if (element2 is BuildContext) {
-            ScrollableState scrollableState2 = Scrollable.of(element2);
-            print(scrollableState2);
-          }
-        });
-      }
-    });
   }
 }
