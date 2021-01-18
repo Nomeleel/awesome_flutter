@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class ScrollViewJumpTop extends StatefulWidget {
-  ScrollViewJumpTop({Key key, this.child, this.triggerHeight = 777.777, this.jumpTopBuilder})
-      : super(key: key);
+  ScrollViewJumpTop({Key key, this.child, this.triggerHeight = 777.777, this.jumpTopBuilder}) : super(key: key);
 
   final Widget child;
   final double triggerHeight;
@@ -55,9 +54,7 @@ class _ScrollViewJumpTopState extends State<ScrollViewJumpTop> with TickerProvid
   }
 
   void valueChangeListener() {
-    _isShowJumpTop.value
-        ? _jumpTopAnimationController.forward()
-        : _jumpTopAnimationController.reverse();
+    _isShowJumpTop.value ? _jumpTopAnimationController.forward() : _jumpTopAnimationController.reverse();
   }
 
   @override
@@ -100,5 +97,11 @@ class _ScrollViewJumpTopState extends State<ScrollViewJumpTop> with TickerProvid
       duration: Duration(milliseconds: 200),
       curve: Curves.easeIn,
     );
+  }
+
+  @override
+  void dispose() {
+    _jumpTopAnimationController.dispose();
+    super.dispose();
   }
 }
