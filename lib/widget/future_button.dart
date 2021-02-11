@@ -2,6 +2,43 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
+class FutureButton3 extends StatelessWidget {
+  FutureButton3({Key key, this.child, this.activityIndicator, this.future, this.callBack}) : super(key: key);
+
+  final Widget child;
+
+  final Widget activityIndicator;
+
+  final Function future;
+
+  final Function callBack;
+
+  final ValueNotifier<bool> active = ValueNotifier<bool>(false);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: active,
+      builder: (BuildContext context, bool value, Widget child) {
+        return value ? activityIndicator : futureButton();
+      },
+    );
+  }
+
+  Widget futureButton() {
+    return GestureDetector(
+      onTap: () async {
+        active.value = true;
+        var result = await future();
+        await callBack(result);
+        active.value = false;
+      },
+      child: child,
+    );
+  }
+}
+
+
 class FutureButton2 extends StatelessWidget {
   FutureButton2({Key key, this.child, this.activityIndicator, this.future, this.callBack}) : super(key: key);
 
