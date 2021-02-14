@@ -406,6 +406,7 @@ class _IndicatorPainter extends CustomPainter {
     @required this.tabKeys,
     _IndicatorPainter old,
     this.spacing,
+    this.normalDecoration,
   })  : assert(controller != null),
         assert(indicator != null),
         super(repaint: controller.animation) {
@@ -415,6 +416,8 @@ class _IndicatorPainter extends CustomPainter {
   final TabController controller;
 
   final Decoration indicator;
+
+  final Decoration normalDecoration;
 
   final TabBarIndicatorSize indicatorSize;
 
@@ -429,6 +432,8 @@ class _IndicatorPainter extends CustomPainter {
   Rect _currentRect;
 
   BoxPainter _painter;
+  
+  BoxPainter _normalPainter;
 
   bool _needsPaint = false;
 
@@ -438,6 +443,7 @@ class _IndicatorPainter extends CustomPainter {
 
   void dispose() {
     _painter?.dispose();
+    _normalPainter?.dispose();
   }
 
   void saveTabOffsets(List<double> tabOffsets, TextDirection textDirection) {
@@ -511,6 +517,13 @@ class _IndicatorPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     _needsPaint = false;
 
+    if (normalDecoration != null) {
+      _normalPainter ??= normalDecoration.createBoxPainter(markNeedsPaint);
+      for (int i = 0; i < controller.length; i++) {
+        printDecoration(_normalPainter, canvas, indicatorRect(size, i));
+      }
+    }
+
     _painter ??= indicator.createBoxPainter(markNeedsPaint);
 
     if (controller.indexIsChanging) {
@@ -548,12 +561,16 @@ class _IndicatorPainter extends CustomPainter {
 
     assert(_currentRect != null);
 
+    printDecoration(_painter, canvas, _currentRect);
+  }
+
+  void printDecoration(BoxPainter painter, Canvas canvas, Rect rect) {
     final ImageConfiguration configuration = ImageConfiguration(
-      size: _currentRect.size,
+      size: rect.size,
       textDirection: _currentTextDirection,
     );
 
-    _painter.paint(canvas, _currentRect.topLeft, configuration);
+    painter.paint(canvas, rect.topLeft, configuration);
   }
 
   static bool _tabOffsetsEqual(List<double> a, List<double> b) {
@@ -578,7 +595,8 @@ class _IndicatorPainter extends CustomPainter {
         tabKeys.length != old.tabKeys.length ||
         (!_tabOffsetsEqual(_currentTabOffsets, old._currentTabOffsets)) ||
         _currentTextDirection != old._currentTextDirection ||
-        spacing != old.spacing;
+        spacing != old.spacing ||
+        normalDecoration != old.normalDecoration;
   }
 }
 
@@ -1173,7 +1191,8 @@ class _TabBarState extends State<TabBar> {
             indicatorSize: widget.indicatorSize ?? TabBarTheme.of(context).indicatorSize,
             tabKeys: _tabKeys,
             old: _indicatorPainter,
-            spacing: widget.tabSpacing);
+            spacing: widget.tabSpacing,
+            normalDecoration: widget.tabDecoration);
   }
 
   @override
@@ -1445,20 +1464,15 @@ class _TabBarState extends State<TabBar> {
         onTap: () {
           _handleTap(index);
         },
-        child: Container(
-          padding: EdgeInsets.only(bottom: widget.indicatorWeight),
-          margin: EdgeInsets.symmetric(horizontal: ((widget.tabSpacing ?? 0) / 4).toDouble()),
-          decoration: index == _currentIndex ? null : widget.tabDecoration,
-          child: Stack(
-            children: <Widget>[
-              wrappedTabs[index],
-              Semantics(
-                selected: index == _currentIndex,
-                label: localizations.tabLabel(tabIndex: index + 1, tabCount: tabCount),
-              ),
-            ],
-          ),
-        ),
+        child: Stack(
+          children: <Widget>[
+            wrappedTabs[index],
+            Semantics(
+              selected: index == _currentIndex,
+              label: localizations.tabLabel(tabIndex: index + 1, tabCount: tabCount),
+            ),
+          ],
+        )
       );
 
       if (!widget.isScrollable) wrappedTabs[index] = Expanded(child: wrappedTabs[index]);
