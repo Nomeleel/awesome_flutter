@@ -8,6 +8,7 @@ import 'package:widget_scan/route/view_routes.dart';
 import 'model/app_store_card_data.dart';
 import 'template/app_store_card_description.dart';
 import 'widget/app_store_card.dart';
+import 'widget/tab_bar_exp.dart';
 import 'wrapper/image_wraper.dart';
 
 void main() => runApp(MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: const MyHomePage(),
+      home: TabBarExp(),
       routes: viewRoutes,
     );
   }

@@ -4,7 +4,7 @@
 ///    状态：完成
 /// 2. 同理, 状态栏笔刷Brightness也需要支持切换。
 ///    状态：完成
-
+/// 3. 需要添加渐变
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';

@@ -14,6 +14,13 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Water Wave](#waterwave) | Combining mathematical trigonometric functions and physical waves to achieve a water wave effect. |
 | [Creative Stitching](#creativestitching) | Explore the possible feasibility of Flutter in image manipulation. |
 | [Sliver AppBar Expansion](#sliverappbarexpansion) | Expansion of flutter widget SliverAppBar, suppert after pinned can switch title leading actions and brightness in app bar widget. |
+| [Absorb Stack](#absorbstack) | 使stack下层也可以响应手势 解除只能命中一层的限制 |
+| [Future Button](#) | buttton响应后 才能接受下次点击 |
+| [Text Expansion](#) | |
+| [Scroll View Jump Top](#) | |
+| [Side Panel](#) | |
+| [Nav To List View Auto Scroll View](#) | |
+| [Combine List View](#) | |
 
 **Next, let the picture dance.**
 
@@ -62,7 +69,7 @@ If the initial background color and the pinned background color after scrolling 
 
 The inevitable thing is that I also found some issues in Flutter.
 
-Current Dev Evn: **Flutter (Channel stable, v1.17.3, on Mac OS X 10.15.5 19F101, locale zh-Hans-CN)**
+Current Dev Evn: **Flutter (Channel stable, v1.22.1, on Mac OS X 10.15.5 19F101, locale zh-Hans-CN)**
 
 I have also create some issues, but finally found similar ones, whichever is the earliest.
 
@@ -71,3 +78,4 @@ I have also create some issues, but finally found similar ones, whichever is the
 | [24786](https://github.com/flutter/flutter/issues/24786) | ReorderableListView#onReorder passes an incorrect new index. | [ReorderableListView](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/reorderable_list.dart#L59) |  |
 | [60594](https://github.com/flutter/flutter/issues/60594) | The target Hero widget is build three times. | [Hero](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/widgets/heroes.dart#L154) |  |
 | [13937](https://github.com/flutter/flutter/issues/13937) | Unable to call a platform channel method from another isolate. | Isolate |  |
+| [59143](https://github.com/flutter/flutter/issues/59143) | Tabbar initialIndex indicator image not working. | TabBar Indicator Image Decoration |  |
