@@ -5,6 +5,7 @@
 /// 2. 同理, 状态栏笔刷Brightness也需要支持切换。
 ///    状态：完成
 /// 3. 需要添加渐变
+///    状态：完成
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -530,17 +531,20 @@ class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
             as double
         : 1.0;
     // 判断此时是否显示了Pinnned面板，用来指定是否切换为Pinned Widget。
-    final bool isPinned = shrinkOffset > maxExtent - minExtent;
+    final double offset = shrinkOffset + 20.0 - maxExtent + minExtent;
+    final bool isPinned = offset > 0.0 ;
+    final double opacity = (isPinned ? offset / 20.0 : - offset / 20.0).clamp(0.0, 1.0);
     final Widget appBar = FlexibleSpaceBar.createSettings(
       minExtent: minExtent,
       maxExtent: maxExtent,
       currentExtent: math.max(minExtent, maxExtent - shrinkOffset),
       toolbarOpacity: toolbarOpacity,
       child: AppBar(
-        leading: (pinnedLeading != null && isPinned) ? pinnedLeading : leading,
+        leading: pinnedLeading != null ? opacityWrap(opacity, isPinned ? pinnedLeading : leading) : leading,
         automaticallyImplyLeading: automaticallyImplyLeading,
-        title: (pinnedTitle != null && isPinned) ? pinnedTitle : title,
-        actions: (pinnedActions != null && isPinned) ? pinnedActions : actions,
+        title: pinnedTitle != null ? opacityWrap(opacity, isPinned ? pinnedTitle : title) : title,
+        actions: pinnedActions != null ? (isPinned ? pinnedActions : actions)
+          .map((e) => opacityWrap(opacity, e)).toList() : actions,
         flexibleSpace:
             (title == null && flexibleSpace != null && !excludeHeaderSemantics)
                 ? Semantics(child: flexibleSpace, header: true)
@@ -574,6 +578,13 @@ class _SliverAppBarExpDelegate extends SliverPersistentHeaderDelegate {
       ),
     );
     return floating ? _FloatingAppBar(child: appBar) : appBar;
+  }
+
+  Widget opacityWrap(double opacity, Widget child) {
+    return Opacity(
+      opacity: opacity, 
+      child: child,
+    );
   }
 
   @override
