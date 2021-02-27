@@ -25,10 +25,11 @@ dependencies:
   cupertino_icons: ^0.1.2
   animations: ^1.0.0+5
   widget_scan:
-    path: ../widget_scan
+    git: git@github.com:Nomeleel/widget_scan.git
   webview_flutter: ^0.3.22+1
   image_gallery_saver: 1.2.2
   shelf: ^0.7.9
+  adaptive_breakpoints: 0.0.3
 
 dev_dependencies:
   flutter_test:

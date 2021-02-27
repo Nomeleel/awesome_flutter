@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:widget_scan/route/view_routes.dart';
 
+import 'layout/layout.dart';
+import 'view/sliver_app_bar_exp_view.dart';
 import 'model/app_store_card_data.dart';
 import 'template/app_store_card_description.dart';
 import 'widget/app_store_card.dart';
-import 'widget/tab_bar_exp.dart';
 import 'wrapper/image_wraper.dart';
 
 void main() => runApp(MyApp());
@@ -21,8 +22,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: TabBarExp(),
-      routes: viewRoutes,
+      home: Layout(
+        child: const SliverAppBarExpView(),
+      ),
+      //routes: viewRoutes,
     );
   }
 }
