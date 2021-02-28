@@ -12,7 +12,7 @@ class Layout extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         if (isDisplayDesktop(context)) {
           return Container(
-            padding: EdgeInsets.all(30.0),
+            padding: EdgeInsets.all(constraints.maxHeight / 7.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -26,9 +26,9 @@ class Layout extends StatelessWidget {
                 absorbIndex: 0,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(constraints.maxHeight / 40.0),
+                    padding: EdgeInsets.all(constraints.maxHeight / 90.0),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(constraints.maxHeight / 25.0)),
                       child: child,
                     ),
                   ),
