@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:widget_scan/route/view_routes.dart';
 
 import 'layout/layout.dart';
-import 'view/sliver_app_bar_exp_view.dart';
 import 'model/app_store_card_data.dart';
+import 'route/view_routes.dart';
 import 'template/app_store_card_description.dart';
 import 'widget/app_store_card.dart';
 import 'wrapper/image_wraper.dart';
@@ -23,9 +22,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
       ),
       home: Layout(
-        child: const SliverAppBarExpView(),
+        child: const MyHomePage(),
       ),
-      //routes: viewRoutes,
+      routes: viewRoutes,
     );
   }
 }
@@ -38,15 +37,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  Future<List<AppStoreCardData>> getHomePageConfig() async {
-    List<AppStoreCardData> cardDataList = [];
-    String jsonData = await rootBundle.loadString('assets/data/CardDataList.json');
-    if (jsonData?.isNotEmpty ?? false) {
-      (json.decode(jsonData)['cardDataList'] as List).forEach((item) {
-        cardDataList.add(AppStoreCardData.fromMap(item));
-      });
-    }
-    return cardDataList;
+  _MyHomePageState();
+
+  List<AppStoreCardData> _cardDataList = List<AppStoreCardData>();
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() {
+    rootBundle.loadString('assets/data/CardDataList.json').then(
+      (value) {
+        if (value?.isNotEmpty ?? false) {
+          json.decode(value)['cardDataList']?.forEach((item) {
+            _cardDataList.add(AppStoreCardData.fromMap(item));
+          });
+
+          setState(() {});
+        }
+      },
+    );
   }
 
   @override
@@ -54,24 +66,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        child: FutureBuilder<List<AppStoreCardData>>(
-          future: getHomePageConfig(),
-          builder: (BuildContext context, AsyncSnapshot<List<AppStoreCardData>> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) => appStoreCardItem(context, snapshot.data[index]),
-              );
-            } else {
-              return const Center(
+        child: _cardDataList.isEmpty
+            ? const Center(
                 child: CircularProgressIndicator(
                   backgroundColor: Colors.white,
                 ),
-              );
-            }
-          },
-        ),
+              )
+            : ListView.builder(
+                itemCount: _cardDataList.length,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
+              ),
       ),
     );
   }
