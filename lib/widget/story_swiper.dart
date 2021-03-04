@@ -1,7 +1,7 @@
-import 'package:awesome_flutter/view/gesture_reserach_view.dart';
-import 'package:awesome_flutter/widget/absorb_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import '../widget/absorb_stack.dart';
 
 typedef Widget StorySwiperWidgetBuilder(int index);
 

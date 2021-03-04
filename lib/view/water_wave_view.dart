@@ -313,14 +313,6 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                           ),
                         ),
                       ),
-                      Column(
-                        children: <Widget>[
-                          AspectRatio(
-                            aspectRatio: 1,
-                            child: Image.asset("assets/images/bottle.png"),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),
