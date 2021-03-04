@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -25,6 +26,14 @@ class MyApp extends StatelessWidget {
         child: const MyHomePage(),
       ),
       routes: viewRoutes,
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(builder: (context) {
+          final pageName = kIsWeb ? settings.name.substring(1) : settings.name;
+          return Layout(
+            child: viewRoutes.containsKey(pageName) ? viewRoutes[pageName](context) : const MyHomePage(),
+          );
+        });
+      },
     );
   }
 }
