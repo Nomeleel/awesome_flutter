@@ -18,6 +18,9 @@ class AppStoreCardDescription extends StatelessWidget {
     Widget description;
 
     switch (mode) {
+      case AppStoreCardDescriptionMode.simple:
+        description = getSimpleDescription();
+        break;
       case AppStoreCardDescriptionMode.classic:
       default:
         description = getClassicDescription();
@@ -59,6 +62,21 @@ class AppStoreCardDescription extends StatelessWidget {
       ),
     );
   }
+
+  Widget getSimpleDescription() {
+    return Container(
+      alignment: Alignment.center,
+      child: Text(
+        data.title ?? '',
+        style: TextStyle(
+          decoration: TextDecoration.none,
+          color: Colors.black,
+          fontSize: 27,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
 }
 
 enum AppStoreCardDescriptionMode {
@@ -76,6 +94,20 @@ enum AppStoreCardDescriptionMode {
     ————————————————————————————————
   */
   classic,
+  /* Simple Mode
+    ————————————————————————————————
+    |                              |
+    |                              |
+    |                              |
+    |                              |
+    |        TitleTitleTit         |
+    |                              |
+    |                              |
+    |                              |
+    |                              |
+    ————————————————————————————————
+  */
+  simple,
 }
 
 class AppStoreCardDescriptionData {
@@ -90,8 +122,12 @@ class AppStoreCardDescriptionData {
         title = dataMap['title'],
         info = dataMap['info'];
 
-  AppStoreCardDescriptionData.fromJson(String jsonData)
-      : this.fromMap(json.decode(jsonData));
+  AppStoreCardDescriptionData.fromJson(String jsonData) : this.fromMap(json.decode(jsonData));
+
+  AppStoreCardDescriptionData.simple(String dataStr)
+      : label = dataStr,
+        title = dataStr,
+        info = dataStr;
 
   final String title;
   final String label;

@@ -8,6 +8,7 @@ class CombineListView extends StatefulWidget {
     this.combineLoopSize = 1,
     @required this.itemBuilder,
     @required this.combineItemBuilder,
+    this.loadMore,
   }) : super(key: key);
 
   final List list;
@@ -17,6 +18,8 @@ class CombineListView extends StatefulWidget {
 
   final IndexedWidgetBuilder itemBuilder;
   final IndexedWidgetBuilder combineItemBuilder;
+
+  final Function loadMore;
 
   @override
   _CombineListViewState createState() => _CombineListViewState();
@@ -34,15 +37,17 @@ class _CombineListViewState extends State<CombineListView> {
     _list = []..addAll(widget.list);
 
     _controller = ScrollController();
-    _controller
-      ..removeListener(listener)
-      ..addListener(listener);
+    if (widget.loadMore != null) {
+      _controller
+        ..removeListener(listener)
+        ..addListener(listener);
+    }
   }
 
   void listener() {
     if (_controller.offset == _controller.position.maxScrollExtent) {
       setState(() {
-        loadMore();
+        widget.loadMore();
       });
     }
   }

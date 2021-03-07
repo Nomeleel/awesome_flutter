@@ -12,15 +12,21 @@ class AppStoreCardData {
   });
 
   AppStoreCardData.fromMap(Map<String, dynamic> jsonData)
-    : imagePath = jsonData['imagePath'],
-      videoPath = jsonData['videoPath'],
-      descriptionMode = AppStoreCardDescriptionMode.values.firstWhere(
-        (item) => item.toString().endsWith(jsonData['descriptionMode'])),
-      descriptionData = AppStoreCardDescriptionData.fromMap(jsonData['descriptionData']),
-      detailViewRouteName = jsonData['detailViewRouteName'];
+      : imagePath = jsonData['imagePath'],
+        videoPath = jsonData['videoPath'],
+        descriptionMode = AppStoreCardDescriptionMode.values
+            .firstWhere((item) => item.toString().endsWith(jsonData['descriptionMode'])),
+        descriptionData = AppStoreCardDescriptionData.fromMap(jsonData['descriptionData']),
+        detailViewRouteName = jsonData['detailViewRouteName'];
 
-  AppStoreCardData.fromJson(String jsonData)
-    : this.fromMap(json.decode(jsonData));
+  AppStoreCardData.fromJson(String jsonData) : this.fromMap(json.decode(jsonData));
+
+  AppStoreCardData.simple(String name)
+      : imagePath = '',
+        videoPath = '',
+        descriptionMode = AppStoreCardDescriptionMode.simple,
+        descriptionData = AppStoreCardDescriptionData.simple(name),
+        detailViewRouteName = name;
 
   final String imagePath;
   final String videoPath;

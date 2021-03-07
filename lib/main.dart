@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +11,7 @@ import 'model/app_store_card_data.dart';
 import 'route/view_routes.dart';
 import 'template/app_store_card_description.dart';
 import 'widget/app_store_card.dart';
+import 'widget/combine_list_view.dart';
 import 'wrapper/image_wraper.dart';
 
 void main() => runApp(MyApp());
@@ -49,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   _MyHomePageState();
 
   List<AppStoreCardData> _cardDataList = List<AppStoreCardData>();
+  List<AppStoreCardData> _noEnabledList = List<AppStoreCardData>();
 
   @override
   void initState() {
@@ -64,6 +67,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             _cardDataList.add(AppStoreCardData.fromMap(item));
           });
 
+          viewRoutes.forEach((k, v) {
+            if (!_cardDataList.any((e) => e.detailViewRouteName == k)) {
+              _noEnabledList.add(AppStoreCardData.simple(k));
+            }
+          });
+
           setState(() {});
         }
       },
@@ -74,19 +83,27 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
-        child: _cardDataList.isEmpty
-            ? const Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                ),
-              )
-            : ListView.builder(
-                itemCount: _cardDataList.length,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
-              ),
-      ),
+          color: Colors.white,
+          child: _cardDataList.isEmpty
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.white,
+                  ),
+                )
+              : CombineListView(
+                  list: _cardDataList,
+                  itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
+                  combineList: _noEnabledList,
+                  combineItemBuilder: (context, index) => appStoreCardItem(context, _noEnabledList[index]),
+                  combineLoopSize: 3,
+                )),
+    );
+  }
+
+  Widget placeholder() {
+    return Container(
+      height: 222.222,
+      color: Colors.primaries[Random().nextInt(15)],
     );
   }
 
@@ -99,12 +116,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         vertical: 10,
       ),
       radius: BorderRadius.all(Radius.circular(20)),
-      showBackgroundWidget: ImageWraper.path(data.imagePath),
+      showBackgroundWidget: (data.imagePath?.isNotEmpty ?? false) ? ImageWraper.path(data.imagePath) : placeholder(),
       showForegroundWidget: AppStoreCardDescription(
         mode: data.descriptionMode,
         data: data.descriptionData,
       ),
       detailWidget: viewRoutes[data.detailViewRouteName](context),
+      isAlwayShow: data.descriptionMode == AppStoreCardDescriptionMode.classic,
     );
   }
 }
