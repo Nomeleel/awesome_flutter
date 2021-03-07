@@ -1,16 +1,17 @@
 import 'dart:math';
 
+import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ListViewAutoScrollView extends StatefulWidget {
-  ListViewAutoScrollView({Key key}) : super(key: key);
+class ListViewAutoScrollViewView extends StatefulWidget {
+  const ListViewAutoScrollViewView({Key key}) : super(key: key);
 
   @override
-  _ListViewAutoScrollViewState createState() => _ListViewAutoScrollViewState();
+  _ListViewAutoScrollViewViewState createState() => _ListViewAutoScrollViewViewState();
 }
 
-class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
+class _ListViewAutoScrollViewViewState extends State<ListViewAutoScrollViewView> {
   TextEditingController _textEditingController;
   ScrollController _controller;
   List<GlobalKey> _globalKeyList;
@@ -25,10 +26,8 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('List View Auto Scroll View'),
-      ),
+    return ScaffoldView(
+      title: 'List View Auto Scroll View View',
       body: Column(
         children: [
           Container(

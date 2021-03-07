@@ -66,6 +66,15 @@ class _CombineListViewState extends State<CombineListView> {
         children.add(widget.combineItemBuilder(context, combineIndex));
       }
     });
+
+    int combineCount = children.length - _list.length;
+    if (combineCount < widget.combineList.length) {
+      List.generate(widget.combineList.length - combineCount, (int index) {
+        int combineIndex = combineCount + index;
+        children.add(widget.combineItemBuilder(context, combineIndex));
+      });
+    }
+
     return children;
   }
 

@@ -6,8 +6,7 @@ import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewExampleView extends StatefulWidget {
-  WebViewExampleView({Key key, this.initialUrl = 'https://flutter.cn/'})
-      : super(key: key);
+  const WebViewExampleView({Key key, this.initialUrl = 'https://flutter.cn/'}) : super(key: key);
 
   final String initialUrl;
 
@@ -16,8 +15,7 @@ class WebViewExampleView extends StatefulWidget {
 }
 
 class _WebViewExampleViewState extends State<WebViewExampleView> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
   Widget build(BuildContext rootContext) {
@@ -73,11 +71,9 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
               },
               onPageFinished: (String url) async {
                 // Update title.
-                WebViewTitle.getState()
-                    .changeTitle(await (await _controller.future).getTitle());
+                WebViewTitle.getState().changeTitle(await (await _controller.future).getTitle());
                 // Update nav bar.
-                WebViewNavigationBar.getState()
-                    .update(await _controller.future);
+                WebViewNavigationBar.getState().update(await _controller.future);
               },
               onWebResourceError: (WebResourceError error) {
                 print('Page throw error: $error');
@@ -85,8 +81,7 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
               gestureNavigationEnabled: true,
             ),
           ),
-          bottomNavigationBar:
-              WebViewNavigationBar(key: WebViewNavigationBar.globalKey),
+          bottomNavigationBar: WebViewNavigationBar(key: WebViewNavigationBar.globalKey),
         ),
         SidePanel(
           mainAxisHeight: 300,

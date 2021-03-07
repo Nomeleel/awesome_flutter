@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
                   combineList: _noEnabledList,
                   combineItemBuilder: (context, index) => appStoreCardItem(context, _noEnabledList[index]),
-                  combineLoopSize: 3,
+                  combineLoopSize: 1,
                 )),
     );
   }

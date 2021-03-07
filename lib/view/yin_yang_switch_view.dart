@@ -4,8 +4,9 @@ import 'package:vector_math/vector_math_64.dart' as vector64;
 import '../custom/animation/rolling_transition.dart';
 import '../custom/clipper/magatama_clipper.dart';
 
-
 class YinYangSwitchView extends StatefulWidget {
+  const YinYangSwitchView({Key key}) : super(key: key);
+
   @override
   YinYangSwitchViewState createState() => YinYangSwitchViewState();
 }
@@ -19,7 +20,7 @@ class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProvide
   void initState() {
     controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
     Animation<Color> animation = ColorTween(begin: Colors.white, end: Colors.black).animate(controller);
-    controller.addListener((){
+    controller.addListener(() {
       setState(() => color = animation.value);
     });
     color = Colors.white;
@@ -27,9 +28,9 @@ class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProvide
     super.initState();
   }
 
-  // TODO 解决初始居中的问题 
+  // TODO 解决初始居中的问题
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
       color: color,
       child: Center(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ScrollContinuousView extends StatefulWidget {
-  ScrollContinuousView({Key key}) : super(key: key);
+  const ScrollContinuousView({Key key}) : super(key: key);
 
   @override
   _ScrollContinuousViewState createState() => _ScrollContinuousViewState();

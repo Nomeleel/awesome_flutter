@@ -5,18 +5,19 @@ import 'package:flutter/widgets.dart';
 import '../widget/grid_paper_exp.dart';
 
 class GridPaperExpView extends StatefulWidget {
+  const GridPaperExpView({Key key}) : super(key: key);
+
   @override
   GridPaperExpViewState createState() => GridPaperExpViewState();
 }
 
 class GridPaperExpViewState extends State<GridPaperExpView> {
-
   double _lineWidth;
 
   @override
   void initState() {
     _lineWidth = 1.0;
-    
+
     super.initState();
   }
 
@@ -31,7 +32,7 @@ class GridPaperExpViewState extends State<GridPaperExpView> {
             child: Text(''),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0), 
+            padding: EdgeInsets.all(10.0),
             child: AspectRatio(
               aspectRatio: 1,
               child: GridPaperExp(

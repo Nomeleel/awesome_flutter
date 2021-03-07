@@ -15,13 +15,19 @@ class SliverAppBarExpView extends StatelessWidget {
             SliverAppBarExp(
               expandedHeight: 430,
               pinned: true,
-              leading: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
+              leading: popWidget(
+                context,
+                Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                ),
               ),
-              pinnedLeading: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.black,
+              pinnedLeading: popWidget(
+                context,
+                Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.black,
+                ),
               ),
               title: Text(
                 'Rick And Morty',
@@ -61,6 +67,17 @@ class SliverAppBarExpView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget popWidget(BuildContext context, Widget child) {
+    return GestureDetector(
+      onTap: () {
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: child,
     );
   }
 }

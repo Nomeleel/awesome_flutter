@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class ValueListenableBuilderTestView extends StatefulWidget {
-  ValueListenableBuilderTestView({Key key}) : super(key: key);
+  const ValueListenableBuilderTestView({Key key}) : super(key: key);
 
   @override
   _ValueListenableBuilderTestViewState createState() => _ValueListenableBuilderTestViewState();

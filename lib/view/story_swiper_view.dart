@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import '../widget/story_swiper.dart';
 
 class StorySwiperView extends StatefulWidget {
+  const StorySwiperView({Key key}) : super(key: key);
+  
   @override
   _StorySwiperViewState createState() => _StorySwiperViewState();
 }

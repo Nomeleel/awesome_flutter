@@ -5,7 +5,7 @@ import '../todo/tab_bar.dart';
 import '../widget/scaffold_view.dart';
 
 class TabBarExpView extends StatefulWidget {
-  TabBarExpView({Key key}) : super(key: key);
+  const TabBarExpView({Key key}) : super(key: key);
 
   @override
   _TabBarExpViewState createState() => _TabBarExpViewState();
