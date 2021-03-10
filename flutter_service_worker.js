@@ -3,28 +3,27 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "version.json": "9d549dfb7ea5500e0ed5b99f94744b03",
-"index.html": "e8b71a8e2c8ba5f18e0e47aaf223e6da",
-"/": "e8b71a8e2c8ba5f18e0e47aaf223e6da",
-"main.dart.js": "3d3a53a940f99a8ecc5a460af392b358",
+  "assets/AssetManifest.json": "6fcf0d233ce7ab568f40286284f9577d",
+"assets/assets/data/CardDataList.json": "72113362011c6b5e132b668dd3961529",
+"assets/assets/images/BaoErJie.jpg": "af9f9774155b44bf06959784616d29f1",
+"assets/assets/images/BigSurBG.jpg": "f6671a4ae2a8b1311b8203406e2e51e8",
+"assets/assets/images/iPhoneCase12.png": "31812536151688de10c33acca3865fbc",
+"assets/assets/images/LuoWang.png": "04e2a978258fb4b6e1123236cff6cdf2",
+"assets/assets/images/RickAndMorty.jpg": "1be3c4cd9d38fe916c9a773552d807e8",
+"assets/assets/images/SaoSiMing.jpg": "e397217ff504b7eb775c58c63cebbd2a",
+"assets/assets/images/YanLu.gif": "f17568ecf35581c1fc1e22f9f68a18b9",
+"assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
+"assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac",
+"assets/NOTICES": "174e7ed9af559cb332fa53d9fb3a7def",
+"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+"index.html": "3c1b1a9476036268c413f9e1e829abf5",
+"/": "3c1b1a9476036268c413f9e1e829abf5",
+"main.dart.js": "15a53af914526b33337bb80f0b0e1eb5",
 "manifest.json": "64077cbb3a05d1d7073434ff307fd8ab",
-"assets/AssetManifest.json": "6b2bddb16f0a29be90b7f26a8a3c77f4",
-"assets/NOTICES": "bb9a69adee32465d545a5c534c7c9dfe",
-"assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
-"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
-"assets/packages/flutter/assets/images/LuoWang.png": "04e2a978258fb4b6e1123236cff6cdf2",
-"assets/fonts/MaterialIcons-Regular.otf": "1288c9e28052e028aba623321f7826ac",
-"assets/assets/images/iPhoneCase12.png": "31812536151688de10c33acca3865fbc",
-"assets/assets/images/BigSurBG.jpg": "f6671a4ae2a8b1311b8203406e2e51e8",
-"assets/assets/images/YanLu.gif": "f17568ecf35581c1fc1e22f9f68a18b9",
-"assets/assets/images/RickAndMorty.jpg": "1be3c4cd9d38fe916c9a773552d807e8",
-"assets/assets/images/LuoWang.png": "04e2a978258fb4b6e1123236cff6cdf2",
-"assets/assets/images/BaoErJie.jpg": "af9f9774155b44bf06959784616d29f1",
-"assets/assets/images/SaoSiMing.jpg": "e397217ff504b7eb775c58c63cebbd2a",
-"assets/assets/data/CardDataList.json": "72113362011c6b5e132b668dd3961529"
+"version.json": "9d549dfb7ea5500e0ed5b99f94744b03"
 };
 
 // The application shell files that are downloaded before a service worker can
@@ -168,7 +167,7 @@ async function downloadOffline() {
     }
     currentContent[key] = true;
   }
-  for (var resourceKey in Object.keys(RESOURCES)) {
+  for (var resourceKey of Object.keys(RESOURCES)) {
     if (!currentContent[resourceKey]) {
       resources.push(resourceKey);
     }
