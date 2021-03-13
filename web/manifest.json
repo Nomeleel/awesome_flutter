@@ -1,11 +1,11 @@
 {
-    "name": "test_web",
-    "short_name": "test_web",
+    "name": "Awesome Flutter",
+    "short_name": "Awesome Flutter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Awesome Flutter Web Page.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
