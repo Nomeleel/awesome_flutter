@@ -5,7 +5,7 @@ import '../widget/story_swiper.dart';
 
 class StorySwiperView extends StatefulWidget {
   const StorySwiperView({Key key}) : super(key: key);
-  
+
   @override
   _StorySwiperViewState createState() => _StorySwiperViewState();
 }
@@ -18,6 +18,7 @@ class _StorySwiperViewState extends State<StorySwiperView> {
         title: const Text('Story Swiper View'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             height: 200.0,
@@ -53,44 +54,27 @@ class _StorySwiperViewState extends State<StorySwiperView> {
               },
             ),
           ),
-          // Expanded(
-          //   child: CupertinoDatePicker(
-          //     onDateTimeChanged: (t) {
-          //       print(t);
-          //     }
-          //   ),
-          // ),
+          /*
           Expanded(
-            child: ListView.builder(
-              //controller: FixedExtentScrollController(),
-              // physics: FixedExtentScrollPhysics(),
-              itemCount: 77,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  height: 50.0,
-                  color: Colors.primaries[index % 15],
-                );
+            child: ListWheelScrollView.useDelegate(
+              itemExtent: 150,
+              onSelectedItemChanged: (index) {
+                print(index);
               },
+              childDelegate: ListWheelChildBuilderDelegate(
+                builder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                    color: Colors.primaries[index % 15],
+                    alignment: Alignment.center,
+                    child: Text('$index'),
+                  );
+                },
+                childCount: 77,
+              ),
             ),
           ),
-          Expanded(
-              child: ListWheelScrollView.useDelegate(
-            itemExtent: 150,
-            onSelectedItemChanged: (index) {
-              print(index);
-            },
-            childDelegate: ListWheelChildBuilderDelegate(
-              builder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                  color: Colors.primaries[index % 15],
-                  alignment: Alignment.center,
-                  child: Text('$index'),
-                );
-              },
-              childCount: 77,
-            ),
-          )),
+          */
         ],
       ),
     );

@@ -1,3 +1,11 @@
+/*
+This widget is in reference: https://github.com/UdaraWanasinghe/StorySwiper
+On this basis, the following modifications have been made:
+1. Solved the problem that its item cannot be clicked(Stack -> AbsorbStack);
+2. Solved the problem of at most scroll one item per swipe(PageView -> ListView);
+3. Added some special logic for business needs(onPageChanged, onTap);
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -48,7 +56,6 @@ class _StorySwiperState extends State<StorySwiper> {
   double _pagePosition = 0;
   List<Widget> _widgetList = [];
   double itemWidth;
-  int _itemCount = 0;
   int _pageIndex = 0;
 
   List numbers = [];
@@ -84,7 +91,9 @@ class _StorySwiperState extends State<StorySwiper> {
                   _pageController.animateToPage(
                     _pageController.page.round(),
                     duration: Duration(
-                      milliseconds: ((_pageController.page - _pageController.page.round()).abs() * 2000).floor(),
+                      milliseconds:
+                          ((_pageController.page - _pageController.page.round()).abs() * 2000)
+                              .floor(),
                     ),
                     curve: Curves.easeInOut,
                   );
@@ -109,22 +118,13 @@ class _StorySwiperState extends State<StorySwiper> {
               scrollDirection: Axis.horizontal,
               physics: ClampingScrollPhysics(),
               controller: _pageController,
-              itemCount: _itemCount =
-                  (widget.itemCount > widget.limitLength ? widget.limitLength + 1 : widget.itemCount),
+              itemCount: (widget.itemCount > widget.limitLength
+                  ? widget.limitLength + 1
+                  : widget.itemCount),
               itemBuilder: (context, index) => Container(
                 width: itemWidth,
               ),
             ),
-          ),
-                    ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 7,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                width: 100.0,
-                color: Colors.primaries[index % 15].withOpacity(0.7),
-              );
-            },
           ),
         ],
       ),
