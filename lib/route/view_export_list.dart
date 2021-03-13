@@ -14,3 +14,4 @@ export 'package:awesome_flutter/view/list_view_auto_scroll_view_view.dart';
 export 'package:awesome_flutter/view/nested_scroll_view_with_header_view.dart';
 export 'package:awesome_flutter/view/creative_stitching_view.dart';
 export 'package:awesome_flutter/view/tab_bar_exp_view.dart';
+export 'package:awesome_flutter/view/future_button_view.dart';

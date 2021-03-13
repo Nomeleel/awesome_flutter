@@ -30,7 +30,7 @@ class FutureButton3 extends StatelessWidget {
       onTap: () async {
         active.value = true;
         var result = await future();
-        await callBack(result);
+        await callBack?.call(result);
         active.value = false;
       },
       child: child,
@@ -71,7 +71,7 @@ class FutureButton2 extends StatelessWidget {
       onTap: () async {
         _controller.add(false);
         var result = await future();
-        await callBack(result);
+        await callBack?.call(result);
         _controller.add(true);
       },
       child: child,
@@ -111,7 +111,7 @@ class _XFutureButtonState extends State<FutureButton> {
 
         switchWidget();
         var result = await widget.future();
-        await widget.callBack(result);
+        await widget.callBack?.call(result);
         switchWidget();
       },
       child: widget.child,

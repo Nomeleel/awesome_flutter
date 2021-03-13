@@ -25,5 +25,6 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'nested_scroll_view_with_header_view': (BuildContext context) => const NestedScrollViewWithHeaderView(),
   'creative_stitching_view': (BuildContext context) => const CreativeStitchingView(),
   'tab_bar_exp_view': (BuildContext context) => const TabBarExpView(),
+  'future_button_view': (BuildContext context) => const FutureButtonView(),
 
 };
