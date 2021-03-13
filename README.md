@@ -24,6 +24,7 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Color Picker](#sidepanel-colorpicker) | Simple color picker. |
 | [Nav To List View Auto Scroll](#navtolistviewautoscroll) | Navigate to the listview and automatically scroll to the specified index to the middle of the view. |
 | [Combine List View](#combinelistview) | In the listview, provide two lists for it, so that the sub-list is inserted into the main list every few items. |
+| [Story Swiper](#storyswiper) | A very interesting Swiper from [UdaraWanasinghe](https://github.com/UdaraWanasinghe), I expanded on this. | [Reference By Story Swiper](https://github.com/UdaraWanasinghe/StorySwiper) |
 
 **Next, let the picture dance.**
 
@@ -107,6 +108,10 @@ If the initial background color and the pinned background color after scrolling 
 ## CombineListView
 
 [Web demo for Combine List View](https://nomeleel.github.io/awesome_flutter/#/combine_list_view_view)
+
+## StorySwiper
+
+[Web demo for Story Swiper View](https://nomeleel.github.io/awesome_flutter/#/story_swiper_view)
 
 ## Found issues in Flutter
 
