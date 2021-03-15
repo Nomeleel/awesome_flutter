@@ -21,6 +21,7 @@ class GridPaperExpViewState extends State<GridPaperExpView> {
     super.initState();
   }
 
+// buu
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,15 +32,17 @@ class GridPaperExpViewState extends State<GridPaperExpView> {
             flex: 3,
             child: Text(''),
           ),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: GridPaperExp(
-                strokeWidth: _lineWidth,
-                interval: (MediaQuery.of(context).size.width - 20),
-                divisions: 3,
-                subdivisions: 3,
+          Expanded(
+            flex: 7,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: GridPaperExp(
+                  strokeWidth: _lineWidth,
+                  divisions: 3,
+                  subdivisions: 3,
+                ),
               ),
             ),
           ),

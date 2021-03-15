@@ -17,6 +17,7 @@ class _GridPaperExpPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final interval = this.interval ?? size.width;
     final Paint linePaint = Paint()
       ..color = color;
     // Considering that if the line is too wide, the corners of the border will can't align，so the length of the line needs to be extended.
@@ -56,7 +57,7 @@ class GridPaperExp extends GridPaper {
     Key key,
     color = const Color(0xFF9C27B0),
     this.strokeWidth = 1.0,
-    interval = 100.0,
+    interval,
     divisions = 2,
     subdivisions = 5,
     child,
