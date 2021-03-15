@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_flutter/widget/side_panel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -41,46 +42,7 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
               ),
             ],
           ),
-          body: Builder(
-            builder: (BuildContext context) => WebView(
-              initialUrl: widget.initialUrl,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-              javascriptChannels: <JavascriptChannel>[
-                JavascriptChannel(
-                  name: 'Toaster',
-                  onMessageReceived: (JavascriptMessage message) {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(content: Text(message.message)),
-                    );
-                  },
-                ),
-              ].toSet(),
-              navigationDelegate: (NavigationRequest request) {
-                print('nav: ${request.url}');
-
-                // Check if cross domain
-                // return NavigationDecision.prevent;
-
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (String url) {
-                // Can add a progress bar.
-              },
-              onPageFinished: (String url) async {
-                // Update title.
-                WebViewTitle.getState().changeTitle(await (await _controller.future).getTitle());
-                // Update nav bar.
-                WebViewNavigationBar.getState().update(await _controller.future);
-              },
-              onWebResourceError: (WebResourceError error) {
-                print('Page throw error: $error');
-              },
-              gestureNavigationEnabled: true,
-            ),
-          ),
+          body: kIsWeb ? viewForWeb() : Builder(builder: (BuildContext context) => webView()),
           bottomNavigationBar: WebViewNavigationBar(key: WebViewNavigationBar.globalKey),
         ),
         SidePanel(
@@ -105,6 +67,71 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
           ),
         )
       ],
+    );
+  }
+
+  WebView webView() {
+    return WebView(
+      initialUrl: widget.initialUrl,
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebViewCreated: (WebViewController webViewController) {
+        _controller.complete(webViewController);
+      },
+      javascriptChannels: <JavascriptChannel>[
+        JavascriptChannel(
+          name: 'Toaster',
+          onMessageReceived: (JavascriptMessage message) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text(message.message)),
+            );
+          },
+        ),
+      ].toSet(),
+      navigationDelegate: (NavigationRequest request) {
+        print('nav: ${request.url}');
+
+        // Check if cross domain
+        // return NavigationDecision.prevent;
+
+        return NavigationDecision.navigate;
+      },
+      onPageStarted: (String url) {
+        // Can add a progress bar.
+      },
+      onPageFinished: (String url) async {
+        // Update title.
+        WebViewTitle.getState().changeTitle(await (await _controller.future).getTitle());
+        // Update nav bar.
+        WebViewNavigationBar.getState().update(await _controller.future);
+      },
+      onWebResourceError: (WebResourceError error) {
+        print('Page throw error: $error');
+      },
+      gestureNavigationEnabled: true,
+    );
+  }
+
+  Widget viewForWeb() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '禁止套娃',
+            style: TextStyle(
+              color: Colors.purple,
+              fontSize: 55.0,
+            ),
+          ),
+          Text(
+            '请在Android iOS上尝试',
+            style: TextStyle(
+              color: Colors.purple.withOpacity(.7),
+              fontSize: 45.0,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

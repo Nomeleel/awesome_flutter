@@ -15,7 +15,7 @@ class CreativeStitchingView extends StatefulWidget {
 
 class _CreativeStitchingViewState extends State<CreativeStitchingView> {
   List<ByteData> _byteDataList;
-
+// 布局问题
   @override
   Widget build(BuildContext context) {
     var defText = (text) => Text(
@@ -26,8 +26,9 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
             decoration: TextDecoration.none,
           ),
         );
-    return SafeArea(
-      child: Container(
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
         color: Colors.white,
         child: Column(
           children: <Widget>[
