@@ -29,12 +29,13 @@ dependencies:
   image_gallery_saver: 1.2.2
   shelf: ^0.7.9
   adaptive_breakpoints: 0.0.3
+  image: ^3.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_driver:
-    sdk: flutter
+  # flutter_driver:
+  #   sdk: flutter
   test: any
   widget_scan:
     path: ../widget_scan
