@@ -11,6 +11,8 @@ class StorySwiperView extends StatefulWidget {
 }
 
 class _StorySwiperViewState extends State<StorySwiperView> {
+  ValueNotifier<int> index = ValueNotifier(0);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +22,15 @@ class _StorySwiperViewState extends State<StorySwiperView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          ValueListenableBuilder<int>(
+            valueListenable: index,
+            builder: (BuildContext context, int value, Widget child) {
+              return Text(
+                'Index: $value',
+                style: Theme.of(context).textTheme.headline5,
+              );
+            },
+          ),
           Container(
             height: 200.0,
             child: StorySwiper.builder(
@@ -35,10 +46,15 @@ class _StorySwiperViewState extends State<StorySwiperView> {
               onTap: (e) {
                 print('-----tap------');
                 print(e);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Tap: $e'),
+                  duration: const Duration(milliseconds: 2000),
+                ));
               },
               onPageChanged: (e) {
                 print('-----page----');
                 print(e);
+                index.value = e;
               },
               widgetBuilder: (index) {
                 return Container(

@@ -73,6 +73,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 If the initial background color and the pinned background color after scrolling big different, the same app bar cannot adapt to the two backgrounds. At this time, you need to automatically switch the appbar to adapt to the new background.
 
+**The conversion process has achieved a transparent gradient, which can be viewed in the web demo. The image below has not been updated.**
+
 [Web demo for Sliver AppBar Expansion](https://nomeleel.github.io/awesome_flutter/#/sliver_app_bar_exp_view)
 
 <center>SliverAppBar in Flutter ｜ SliverAppBarExpansion</center>
@@ -88,6 +90,10 @@ If the initial background color and the pinned background color after scrolling 
 ## FutureButton
 
 [Web demo for Future Button](https://nomeleel.github.io/awesome_flutter/#/future_button_view)
+
+## TextExpansion
+
+[Web demo for Text Expansion](https://nomeleel.github.io/awesome_flutter/#/text_expansion_view)
 
 ## ScrollViewJumpTop
 
