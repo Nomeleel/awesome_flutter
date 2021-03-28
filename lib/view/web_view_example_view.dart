@@ -1,10 +1,12 @@
 import 'dart:async';
 
-import 'package:awesome_flutter/widget/side_panel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../mixin/unsupported_platform_placeholder_mixin.dart';
+import '../widget/side_panel.dart';
 
 class WebViewExampleView extends StatefulWidget {
   const WebViewExampleView({Key key, this.initialUrl = 'https://flutter.cn/'}) : super(key: key);
@@ -15,11 +17,17 @@ class WebViewExampleView extends StatefulWidget {
   _WebViewExampleViewState createState() => _WebViewExampleViewState();
 }
 
-class _WebViewExampleViewState extends State<WebViewExampleView> {
+class _WebViewExampleViewState extends State<WebViewExampleView> with UnsupportedPlatformPlaceholderMixin {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   @override
-  Widget build(BuildContext rootContext) {
+  void initState() {
+    super.initState();
+    setPlatform(supported: 3);
+  }
+
+  @override
+  Widget builder(BuildContext rootContext) {
     return Stack(
       children: <Widget>[
         Scaffold(
@@ -42,7 +50,7 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
               ),
             ],
           ),
-          body: kIsWeb ? viewForWeb() : Builder(builder: (BuildContext context) => webView()),
+          body: Builder(builder: (BuildContext context) => webView()),
           bottomNavigationBar: WebViewNavigationBar(key: WebViewNavigationBar.globalKey),
         ),
         SidePanel(
@@ -108,30 +116,6 @@ class _WebViewExampleViewState extends State<WebViewExampleView> {
         print('Page throw error: $error');
       },
       gestureNavigationEnabled: true,
-    );
-  }
-
-  Widget viewForWeb() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '禁止套娃',
-            style: TextStyle(
-              color: Colors.purple,
-              fontSize: 55.0,
-            ),
-          ),
-          Text(
-            '请在Android iOS上尝试',
-            style: TextStyle(
-              color: Colors.purple.withOpacity(.7),
-              fontSize: 45.0,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
