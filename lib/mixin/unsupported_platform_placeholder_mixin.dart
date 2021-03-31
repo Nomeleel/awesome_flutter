@@ -1,17 +1,18 @@
-import 'dart:io';
-import 'dart:math' as math;
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-mixin UnsupportedPlatformPlaceholderMixin {
-  int _platforms = Platforms.all;
-  bool get isSupportedPlatform => Platforms.containsCurrentPlatform(_platforms);
+import '../util/platforms.dart';
 
-  int setPlatform({int supported, int unSupported = 0}) {
-    _platforms = supported ?? Platforms.all;
-    _platforms -= unSupported;
-    return _platforms;
+mixin UnsupportedPlatformPlaceholderMixin {
+  int _platforms;
+  bool get isSupportedPlatform => Platforms.containsCurrentPlatform(
+      _platforms ?? setPlatform(supported: supportedPlatforms, unSupported: unSupportedPlatforms));
+
+  int get supportedPlatforms => Platforms.all;
+
+  int get unSupportedPlatforms => Platforms.none;
+
+  int setPlatform({int supported = Platforms.all, int unSupported = Platforms.none}) {
+    return _platforms = Platforms.minus(supported, unSupported);
   }
 
   Widget builder(BuildContext context);
@@ -52,40 +53,5 @@ mixin UnsupportedPlatformPlaceholderMixin {
 
   Widget build(BuildContext context) {
     return isSupportedPlatform ? builder(context) : placeholderBuilder(context);
-  }
-}
-
-class Platforms {
-  static const Map<String, int> platformMap = {
-    'Android': 1,
-    'iOS': 2,
-    'MacOS': 4,
-    'Windows': 8,
-    'Linux': 16,
-    'Fuchsia': 32,
-    'Web': 64,
-  };
-  static final int length = platformMap.length;
-  static final int all = math.pow(2, length) - 1;
-
-  static final String currentPlatform = kIsWeb ? 'web' : Platform.operatingSystem;
-
-  static List<String> platformsParse(int platforms) {
-    final String platformBinStr = platforms.toRadixString(2);
-    return platformMap.keys.take(platformBinStr.length).where(() {
-      int index = 0;
-      return (element) {
-        index++;
-        return platformBinStr[platformBinStr.length - index] == '1';
-      };
-    }()).toList();
-  }
-
-  static bool containsCurrentPlatform(int platforms) {
-    // final String platformBinStr = platforms.toRadixString(2);
-    // int index = length - platformMap.keys.toList().indexWhere((e) => e.toLowerCase() == currentPlatform) - 1;
-    // return index < 0 ? false : platformBinStr[index] == '1';
-
-    return platformsParse(platforms).any((e) => e.toLowerCase() == currentPlatform);
   }
 }
