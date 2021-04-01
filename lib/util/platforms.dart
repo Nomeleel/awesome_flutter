@@ -34,7 +34,9 @@ class Platforms {
   static const int all = 2 << 7 - 1;
   //static final int all = (2 << length) - 1;
 
-  static final String currentPlatform = kIsWeb ? 'web' : Platform.operatingSystem;
+  static final String operatingSystem = kIsWeb ? 'web' : Platform.operatingSystem;
+  
+  static final String currentPlatform = platformMap.keys.singleWhere(equalOperatingSystem);
 
   static List<String> platformsParse(int platforms) {
     final String platformBinStr = platforms.toRadixString(2);
@@ -52,8 +54,10 @@ class Platforms {
     // int index = length - platformMap.keys.toList().indexWhere((e) => e.toLowerCase() == currentPlatform) - 1;
     // return index < 0 ? false : platformBinStr[index] == '1';
 
-    return platformsParse(platforms).any((e) => e.toLowerCase() == currentPlatform);
+    return platformsParse(platforms).any(equalOperatingSystem);
   }
+
+  static bool equalOperatingSystem(String platform) => platform.toLowerCase() == operatingSystem;
 
   static int minus(int a, int b) {
     return a & (~b);
