@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -43,7 +46,7 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
     return ElevatedButton(
       onPressed: () {
         Route route = Platform.isAndroid
-            ? MaterialPageRoute(builder: (BuildContext context) => AndroidView())
+            ? MaterialPageRoute(builder: (BuildContext context) => AndroidViewHybridComposition())
             : CupertinoPageRoute(builder: (BuildContext context) => IosView());
         Navigator.of(context).push(route);
       },
@@ -53,16 +56,61 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
 }
 
 // ignore: must_be_immutable
-class AndroidView extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
-  AndroidView({Key key}) : super(key: key);
+class AndroidViewHybridComposition extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
+  AndroidViewHybridComposition({Key key}) : super(key: key);
 
   @override
   int get supportedPlatforms => Platforms.android;
 
   @override
   Widget builder(BuildContext context) {
-    return Container(
-      color: Colors.green,
+    final String viewType = '<android-platform-view-type>';
+
+    final Map<String, dynamic> creationParams = <String, dynamic>{};
+
+    return PlatformViewLink(
+      viewType: viewType,
+      surfaceFactory: (BuildContext context, PlatformViewController controller) {
+        return AndroidViewSurface(
+          controller: controller,
+          gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
+          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+        );
+      },
+      onCreatePlatformView: (PlatformViewCreationParams params) {
+        return PlatformViewsService.initSurfaceAndroidView(
+          id: params.id,
+          viewType: viewType,
+          layoutDirection: TextDirection.ltr,
+          creationParams: creationParams,
+          creationParamsCodec: StandardMessageCodec(),
+        )
+          ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
+          ..create();
+      },
+    );
+  }
+}
+
+@Deprecated('推荐使用AndroidViewHybridComposition')
+// ignore: must_be_immutable
+class AndroidViewVirtualDisplay extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
+  AndroidViewVirtualDisplay({Key key}) : super(key: key);
+
+  @override
+  int get supportedPlatforms => Platforms.android;
+
+  @override
+  Widget builder(BuildContext context) {
+    final String viewType = '<android-platform-view-type>';
+
+    final Map<String, dynamic> creationParams = <String, dynamic>{};
+
+    return AndroidView(
+      viewType: viewType,
+      layoutDirection: TextDirection.ltr,
+      creationParams: creationParams,
+      creationParamsCodec: const StandardMessageCodec(),
     );
   }
 }
