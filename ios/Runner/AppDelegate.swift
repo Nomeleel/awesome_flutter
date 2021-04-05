@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import StoreKit
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -15,7 +16,22 @@ import Flutter
         withId: "<ios-platform-view-type>"
     )
     
+    // Platform Channel -> Method Channel
     GeneratedPluginRegistrant.register(with: self)
+    let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
+    let channel = FlutterMethodChannel.init(name: "awesome_flutter_platform_view", binaryMessenger: controller.binaryMessenger)
+    channel.setMethodCallHandler({(call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+      if ("openAppStoreProductView" == call.method) {
+          let productView = SKStoreProductViewController()
+          //productView.delegate = self
+          productView.loadProduct(withParameters: [SKStoreProductParameterITunesItemIdentifier : call.arguments as! String])
+          
+          controller.present(productView, animated: true, completion: nil)
+      } else {
+          result(FlutterMethodNotImplemented)
+      }
+    });
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

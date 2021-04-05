@@ -19,6 +19,8 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
   @override
   int get supportedPlatforms => Platforms.android + Platforms.ios;
 
+  static const MethodChannel _methodChannel = MethodChannel('awesome_flutter_platform_view');
+
   @override
   Widget builder(BuildContext context) {
     return ScaffoldView(
@@ -36,6 +38,7 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
               style: Theme.of(context).textTheme.headline5,
             ),
             navToButton(context),
+            if (Platform.isIOS) openAppStoreProductView(),
           ],
         ),
       ),
@@ -51,6 +54,16 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
         Navigator.of(context).push(route);
       },
       child: Text('Go To Native View'),
+    );
+  }
+
+  Widget openAppStoreProductView() {
+    return ElevatedButton(
+      child: const Text('Continue in iOS view for app product view'),
+      onPressed: () async {
+        // 微信bundleID
+        await _methodChannel.invokeMethod<int>('openAppStoreProductView', '414478124');
+      },
     );
   }
 }
