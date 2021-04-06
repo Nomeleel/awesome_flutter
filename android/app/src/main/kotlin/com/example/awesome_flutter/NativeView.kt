@@ -6,9 +6,10 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Space
 import android.widget.TextView
-import androidx.compose.ui.Alignment
+import androidx.compose.Composable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.*
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.common.MethodChannel
@@ -45,4 +46,44 @@ internal class NativeView(context: Context, binaryMessenger: BinaryMessenger, id
     }
 
     override fun dispose() {}
+}
+
+
+// Try to use compose in Flutter's Platform View.
+// Currently not working.
+/*
+    view = ComposeView(context).apply {
+        setContent {
+            testView()
+        }
+    }
+ */
+@Composable
+fun testView() {
+    Scaffold(
+        drawerContent = {
+            Text("Drawer content")
+        },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Android View")
+                }
+            )
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text("Inc") },
+                onClick = { /* Nothing */ }
+            )
+        },
+        content = { innerPadding ->
+            LazyColumn(contentPadding = innerPadding) {
+                items(100) {
+                    Text(it.toString())
+                }
+            }
+        }
+    )
 }
