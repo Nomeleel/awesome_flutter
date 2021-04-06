@@ -12,19 +12,42 @@ import '../mixin/unsupported_platform_placeholder_mixin.dart';
 import '../util/platforms.dart';
 import '../widget/scaffold_view.dart';
 
-// ignore: must_be_immutable
-class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
-  NativePlatformView({Key key}) : super(key: key);
+class NativePlatformView extends StatefulWidget {
+  const NativePlatformView({Key key}) : super(key: key);
 
   @override
-  int get supportedPlatforms => Platforms.android + Platforms.ios;
+  _NativePlatformViewState createState() => _NativePlatformViewState();
+}
 
-  static const MethodChannel _methodChannel = MethodChannel('awesome_flutter_platform_view');
+class _NativePlatformViewState extends State<NativePlatformView> with UnsupportedPlatformPlaceholderMixin {
+  static const MethodChannel _methodChannel = MethodChannel('awesome_flutter/platform_view/method_channel');
 
   @override
-  Widget builder(BuildContext context) {
+  void initState() {
+    super.initState();
+
+    setPlatform(supported: Platforms.android + Platforms.ios);
+
+    _methodChannel.setMethodCallHandler(methodCallHandler);
+  }
+
+  Future<dynamic> methodCallHandler(MethodCall call) async {
+    print('-----------');
+    print(call.method);
+    print('-----------');
+    switch (call.method) {
+      case "showViewBottomSheet":
+      default:
+        await showViewBottomSheet(call.arguments);
+    }
+  }
+
+  @override
+  Widget builder(BuildContext context) => mainView(context);
+
+  Widget mainView(BuildContext context, [String title]) {
     return ScaffoldView(
-      title: 'Native Platform View',
+      title: title ?? 'Native Platform View',
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -39,6 +62,7 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
             ),
             navToButton(context),
             if (Platform.isIOS) openAppStoreProductView(),
+            if (Platform.isAndroid) openAndroidShareView(),
           ],
         ),
       ),
@@ -59,11 +83,40 @@ class NativePlatformView extends StatelessWidget with UnsupportedPlatformPlaceho
 
   Widget openAppStoreProductView() {
     return ElevatedButton(
-      child: const Text('Continue in iOS view for app product view'),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateColor.resolveWith((states) => Colors.grey[100]),
+        foregroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
+      ),
+      child: const Text('Open WeChat of app product view in iOS view'),
       onPressed: () async {
         // 微信bundleID
         await _methodChannel.invokeMethod<int>('openAppStoreProductView', '414478124');
       },
+    );
+  }
+
+  Widget openAndroidShareView() {
+    return ElevatedButton(
+      style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.green[700])),
+      child: const Text('Open Android Share View'),
+      onPressed: () async {
+        await _methodChannel.invokeMethod<int>('openShareView', '😊This is text from Flutter view.😊');
+      },
+    );
+  }
+
+  Future<dynamic> showViewBottomSheet(String from) async {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.grey,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      builder: (BuildContext context) => mainView(context, 'From $from View'),
     );
   }
 }

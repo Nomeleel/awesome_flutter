@@ -32,6 +32,7 @@ class FLNativeViewFactory: NSObject, FlutterPlatformViewFactory {
 
 class FLNativeView: NSObject, FlutterPlatformView {
     private var _view: UIView
+    private var _methodChannel: FlutterMethodChannel
 
     init(
         frame: CGRect,
@@ -40,6 +41,7 @@ class FLNativeView: NSObject, FlutterPlatformView {
         binaryMessenger messenger: FlutterBinaryMessenger?
     ) {
         _view = UIView()
+        _methodChannel = FlutterMethodChannel(name: "awesome_flutter/platform_view/method_channel", binaryMessenger: messenger!)
         super.init()
         // iOS views can be created here
         createNativeView(view: _view)
@@ -50,12 +52,26 @@ class FLNativeView: NSObject, FlutterPlatformView {
     }
 
     func createNativeView(view _view: UIView){
-        _view.backgroundColor = UIColor.blue
-        let nativeLabel = UILabel()
-        nativeLabel.text = "Native text from iOS"
-        nativeLabel.textColor = UIColor.white
-        nativeLabel.textAlignment = .center
-        nativeLabel.frame = CGRect(x: 100, y: 300, width: 180, height: 48.0)
-        _view.addSubview(nativeLabel)
+        _view.backgroundColor = UIColor.white
+
+        let platformLabel = UILabel()
+        platformLabel.text = "This is iOS view"
+        platformLabel.textColor = UIColor.black
+        platformLabel.textAlignment = .center
+        platformLabel.frame = CGRect(x: 70.0, y: 300.0, width: 300.0, height: 50.0)
+        _view.addSubview(platformLabel)
+        
+        let showButton = UIButton()
+        showButton.setTitle("Show Flutter View Bottom Sheet", for: .normal)
+        showButton.backgroundColor = UIColor.purple
+        showButton.layer.cornerRadius = 25.0
+        showButton.frame = CGRect(x: 70.0, y: 400, width: 300.0, height: 50.0)
+        showButton.addTarget(self, action: #selector(showFlutterViewBottomSheet(_:)), for: .touchUpInside)
+        _view.addSubview(showButton)
+    }
+    
+    @objc func showFlutterViewBottomSheet(_ sender:UIButton!)
+    {
+        _methodChannel.invokeMethod("showViewBottomSheet", arguments: "iOS")
     }
 }
