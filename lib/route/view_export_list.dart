@@ -6,6 +6,7 @@ export 'package:awesome_flutter/view/future_button_view.dart';
 export 'package:awesome_flutter/view/grid_paper_exp_view.dart';
 export 'package:awesome_flutter/view/list_view_auto_scroll_view_view.dart';
 export 'package:awesome_flutter/view/list_view_jump_position_view.dart';
+export 'package:awesome_flutter/view/native_platform_view.dart';
 export 'package:awesome_flutter/view/nav_to_list_view_auto_scroll_view.dart';
 export 'package:awesome_flutter/view/nested_scroll_view_with_header_view.dart';
 export 'package:awesome_flutter/view/scroll_view_jump_top_view.dart';

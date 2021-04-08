@@ -17,6 +17,7 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'grid_paper_exp_view': (BuildContext context) => const GridPaperExpView(),
   'list_view_auto_scroll_view_view': (BuildContext context) => const ListViewAutoScrollViewView(),
   'list_view_jump_position_view': (BuildContext context) => const ListViewJumpPositionView(),
+  'native_platform_view': (BuildContext context) => const NativePlatformView(),
   'nav_to_list_view_auto_scroll_view': (BuildContext context) => const NavToListViewAutoScrollView(),
   'nested_scroll_view_with_header_view': (BuildContext context) => const NestedScrollViewWithHeaderView(),
   'scroll_view_jump_top_view': (BuildContext context) => const ScrollViewJumpTopView(),
