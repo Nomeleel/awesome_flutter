@@ -25,7 +25,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Nav To List View Auto Scroll](#navtolistviewautoscroll) | Navigate to the listview and automatically scroll to the specified index to the middle of the view. |
 | [Combine List View](#combinelistview) | In the listview, provide two lists for it, so that the sub-list is inserted into the main list every few items. |
 | [Story Swiper](#storyswiper) | A very interesting Swiper from [UdaraWanasinghe](https://github.com/UdaraWanasinghe), I expanded on this. | [Reference By Story Swiper](https://github.com/UdaraWanasinghe/StorySwiper) |
-
+| [Flutter Web View](#flutterwebview) | A Flutter plugin of that provides a WebView widget. [on pub](https://pub.dev/packages/webview_flutter) | I tried the old version a long time ago and will try the latest version in the future.|
+| [Platform View](#platformview) | Try host native platform views within Flutter app by Platform view. | And communication between the two platforms (use **Method Channel**) |
 **Next, let the picture dance.**
 
 ## AppStoreCard
@@ -118,6 +119,36 @@ If the initial background color and the pinned background color after scrolling 
 ## StorySwiper
 
 [Web demo for Story Swiper View](https://nomeleel.github.io/awesome_flutter/#/story_swiper_view)
+
+## FlutterWebView
+
+**Tried the plugin old version a long time ago.**
+
+<center>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_example_view.gif" width="25%"/>
+</center>
+
+## PlatformView
+
+**Flutter View Navigation to Native Platform View**
+
+<center>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_platform_view_open_ios_view.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_platform_view_open_android_view.gif" width="25%"/>
+</center>
+
+**Flutter View open Native Platform Modal Sheet View**
+**Flutter** -------- **Method Channel** --------**>** **Native**
+
+<center>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_view_open_ios_app_store_product_view.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_view_open_android_share_view.gif" width="25%"/>
+</center>
+
+**Native Platform View open Flutter Modal Sheet View**
+**Native** -------- **Method Channel** --------**>** **Flutter**
+
+<center>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/ios_view_show_flutter_bottom_sheet.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/android_view_show_flutter_bottom_sheet.gif" width="25%"/>
+</center>
 
 ## Found issues in Flutter
 
