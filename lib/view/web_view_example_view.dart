@@ -90,6 +90,9 @@ class _WebViewExampleViewState extends State<WebViewExampleView> with Unsupporte
               builder: (BuildContext context) => Container(
                 height: 400.0,
                 padding: EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                  top: 20.0,
                   bottom: MediaQuery.of(context).padding.bottom,
                 ),
                 child: Column(
@@ -294,22 +297,124 @@ class MenuPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       children: <Widget>[
-        IconButton(
-          onPressed: () async {
-            showDialog("Url", await controller.currentUrl());
-          },
-          icon: const Icon(Icons.assignment_ind),
-        )
+        ActionItem(Icons.home, 'Home', goHome),
+        ActionItem(Icons.refresh, 'Refresh', refresh),
+        ActionItem(Icons.arrow_downward, 'Down', scrollDown),
+        ActionItem(Icons.arrow_upward, 'Top', jumpTop),
+        ActionItem(Icons.my_location, 'Position', showPosition),
+        ActionItem(Icons.place, 'Url', showUrl),
+        ActionItem(Icons.add, 'Cache', addCache),
+        ActionItem(Icons.data_usage, 'Caches', showCaches),
+        ActionItem(Icons.delete_forever_sharp, 'Clear', clear),
+        ActionItem(Icons.assignment_ind, 'User Agent', showUserAgent),
+        ActionItem(Icons.label, 'Cookie', showCookie),
+        ActionItem(Icons.edit, 'Console', null),
       ],
     );
   }
 
-  Future toast(String message) async {
-    await controller.evaluateJavascript('Toaster.postMessage("$message");');
+  Future<void> goHome() async {
+    await controller.loadUrl('https://flutter.dev/');
   }
 
-  Future showDialog(String title, String content) async {
+  Future<void> refresh() async {
+    await controller.reload();
+  }
+
+  Future<void> scrollDown() async {
+    await controller.scrollBy(0, 100);
+  }
+
+  Future<void> jumpTop() async {
+    await controller.scrollTo(0, 0);
+  }
+
+  Future<void> showPosition() async {
+    await showDialog(
+      "Position",
+      'x: ${await controller.getScrollX()}; '
+          'y: ${await controller.getScrollY()};',
+    );
+  }
+
+  Future<void> showUrl() async {
+    await showDialog("Url", await controller.currentUrl());
+  }
+
+  void addCache() async {
+    await controller.evaluateJavascript('caches.open("Add cache test"); localStorage["testLocalStorage"] = "Test";');
+  }
+
+  Future<void> showCaches() async {
+    await controller.evaluateJavascript('caches.keys()'
+        '.then((cacheKeys) => JSON.stringify({"cacheKeys" : cacheKeys, "localStorage" : localStorage}))'
+        '.then((caches) => Dialog.postMessage("Caches$separator" + caches))');
+  }
+
+  Future<void> clear() async {
+    await controller.clearCache();
+  }
+
+  Future<void> showUserAgent() async {
+    await showScriptDialog('UserAgent', 'navigator.userAgent');
+  }
+
+  Future<void> showCookie() async {
+    await showScriptDialog('Cookie', 'document.cookie');
+  }
+
+  Future<void> toastString(String message) async {
+    await toastScript('"$message"');
+  }
+
+  Future<void> toastScript(String script) async {
+    await controller.evaluateJavascript('Toaster.postMessage($script);');
+  }
+
+  Future<void> showScriptDialog(String title, String script) async {
+    await controller.evaluateJavascript('Dialog.postMessage("$title$separator" + $script);');
+  }
+
+  Future<void> showDialog(String title, String content) async {
     await controller.evaluateJavascript('Dialog.postMessage("$title$separator$content");');
+  }
+}
+
+class ActionItem extends StatelessWidget {
+  const ActionItem(
+    this.iconData,
+    this.label,
+    this.action, {
+    Key key,
+  }) : super(key: key);
+
+  final IconData iconData;
+  final String label;
+  final Function action;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        padding: EdgeInsets.all(5.0),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+              ),
+              child: Icon(iconData),
+            ),
+            Text(label)
+          ],
+        ),
+      ),
+    );
   }
 }
 
