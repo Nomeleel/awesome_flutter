@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../custom/rendering/sliver_grid_delegate.dart';
+import '../widget/auto_switch_widget.dart';
 import '../widget/scaffold_view.dart';
 
 class CustomGridViewView extends StatelessWidget {
@@ -14,19 +17,36 @@ class CustomGridViewView extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         itemCount: 77,
         itemBuilder: (BuildContext context, int index) {
-          return Container(
-            color: Colors.primaries[index % 15],
-            alignment: Alignment.center,
-            child: Text('$index'),
+          return AutoSwitchWidget(
+            initWidget: 'item',
+            widgetMap: {
+              'item': Container(
+                color: Colors.primaries[index % (Colors.primaries.length - 1)],
+                alignment: Alignment.center,
+                child: Text('$index'),
+              ),
+              'max': Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ),
+                child: Text(
+                  '$index',
+                  style: TextStyle(fontSize: 77.0),
+                ),
+              ),
+            },
+            widgetSwitch: (Size size) => size.width > size.height ? 'max' : 'item',
           );
         },
         gridDelegate: SliverGridDelegateWithMultipleFixedCrossAxisCount(
           gridDelegateList: [
             SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 1,
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: 3.0,
+              childAspectRatio: 2.5,
             ),
             SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
@@ -35,7 +55,7 @@ class CustomGridViewView extends StatelessWidget {
               childAspectRatio: 1.0,
             ),
           ],
-          gridRowCountList: [2, 2],
+          mainAxisCountList: [1, 2],
         ),
       ),
     );
