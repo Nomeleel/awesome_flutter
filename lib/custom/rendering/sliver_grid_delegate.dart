@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class SliverGridDelegateWithMultipleFixedCrossAxisCount extends SliverGridDelegate {
-  const SliverGridDelegateWithMultipleFixedCrossAxisCount({this.gridDelegateList, this.gridRowCountList});
+  const SliverGridDelegateWithMultipleFixedCrossAxisCount({
+    @required this.gridDelegateList,
+    @required this.mainAxisCountList,
+  }) : assert(gridDelegateList.length == mainAxisCountList.length);
 
   final List<SliverGridDelegateWithFixedCrossAxisCount> gridDelegateList;
-  final List<int> gridRowCountList;
+  final List<int> mainAxisCountList;
 
   @override
   SliverGridLayout getLayout(SliverConstraints constraints) {
@@ -18,7 +21,7 @@ class SliverGridDelegateWithMultipleFixedCrossAxisCount extends SliverGridDelega
       layoutList: [
         for (var layout in gridDelegateList) getSliverGridLayout(constraints, layout),
       ],
-      gridRowCountList: gridRowCountList,
+      mainAxisCountList: mainAxisCountList,
     );
   }
 
@@ -49,15 +52,15 @@ class SliverGridDelegateWithMultipleFixedCrossAxisCount extends SliverGridDelega
 // ignore: must_be_immutable
 class SliverGridMultipleTileLayout extends SliverGridLayout {
   SliverGridMultipleTileLayout({
-    this.layoutList,
-    this.gridRowCountList,
-  }) : assert(layoutList.length == gridRowCountList.length) {
+    @required this.layoutList,
+    @required this.mainAxisCountList,
+  }) : assert(layoutList.length == mainAxisCountList.length) {
     groupCountList = getGroupCountList();
     scrollOffsetList = getScrollOffsetList();
   }
 
   final List<SliverGridRegularTileLayout> layoutList;
-  final List<int> gridRowCountList;
+  final List<int> mainAxisCountList;
 
   List<int> groupCountList;
   List<double> scrollOffsetList;
@@ -65,8 +68,8 @@ class SliverGridMultipleTileLayout extends SliverGridLayout {
   List<int> getGroupCountList() {
     List<int> countList = [0];
     int count = 0;
-    for (var i = 0; i < gridRowCountList.length; i++) {
-      countList.add(count += gridRowCountList[i] * layoutList[i].crossAxisCount);
+    for (var i = 0; i < mainAxisCountList.length; i++) {
+      countList.add(count += mainAxisCountList[i] * layoutList[i].crossAxisCount);
     }
     return countList;
   }
@@ -74,8 +77,8 @@ class SliverGridMultipleTileLayout extends SliverGridLayout {
   List<double> getScrollOffsetList() {
     final List<double> list = [.0];
     double scrollOffset = .0;
-    for (var i = 0; i < gridRowCountList.length; i++) {
-      list.add(scrollOffset += (gridRowCountList[i] * layoutList[i].mainAxisStride));
+    for (var i = 0; i < mainAxisCountList.length; i++) {
+      list.add(scrollOffset += (mainAxisCountList[i] * layoutList[i].mainAxisStride));
     }
     return list;
   }
