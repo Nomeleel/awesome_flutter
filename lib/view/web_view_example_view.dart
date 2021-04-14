@@ -295,20 +295,34 @@ class MenuPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    final pageController = PageController();
+    return PageView(
+      controller: pageController,
       children: <Widget>[
-        ActionItem(Icons.home, 'Home', goHome),
-        ActionItem(Icons.refresh, 'Refresh', refresh),
-        ActionItem(Icons.arrow_downward, 'Down', scrollDown),
-        ActionItem(Icons.arrow_upward, 'Top', jumpTop),
-        ActionItem(Icons.my_location, 'Position', showPosition),
-        ActionItem(Icons.place, 'Url', showUrl),
-        ActionItem(Icons.add, 'Cache', addCache),
-        ActionItem(Icons.data_usage, 'Caches', showCaches),
-        ActionItem(Icons.delete_forever_sharp, 'Clear', clear),
-        ActionItem(Icons.assignment_ind, 'User Agent', showUserAgent),
-        ActionItem(Icons.label, 'Cookie', showCookie),
-        ActionItem(Icons.edit, 'Console', null),
+        Wrap(
+          children: <Widget>[
+            ActionItem(Icons.home, 'Home', goHome),
+            ActionItem(Icons.refresh, 'Refresh', refresh),
+            ActionItem(Icons.arrow_downward, 'Down', scrollDown),
+            ActionItem(Icons.arrow_upward, 'Top', jumpTop),
+            ActionItem(Icons.my_location, 'Position', showPosition),
+            ActionItem(Icons.place, 'Url', showUrl),
+            ActionItem(Icons.add, 'Cache', addCache),
+            ActionItem(Icons.data_usage, 'Caches', showCaches),
+            ActionItem(Icons.delete_forever_sharp, 'Clear', clear),
+            ActionItem(Icons.assignment_ind, 'User Agent', showUserAgent),
+            ActionItem(Icons.label, 'Cookie', showCookie),
+            ActionItem(Icons.edit, 'Console', () => jumpToConsole(pageController)),
+          ],
+        ),
+        Column(
+          children: [
+            CupertinoTextField(
+              autofocus: true,
+              onSubmitted: consoleSubmitted,
+            ),
+          ],
+        )
       ],
     );
   }
@@ -363,6 +377,14 @@ class MenuPanel extends StatelessWidget {
     await showScriptDialog('Cookie', 'document.cookie');
   }
 
+  Future<void> jumpToConsole(PageController controller) async {
+    controller.animateToPage(1, duration: Duration(milliseconds: 200), curve: Curves.easeInBack);
+  }
+
+  Future<void> consoleSubmitted(String str) async {
+    await showScriptDialog('Console', str);
+  }
+
   Future<void> toastString(String message) async {
     await toastScript('"$message"');
   }
@@ -372,7 +394,7 @@ class MenuPanel extends StatelessWidget {
   }
 
   Future<void> showScriptDialog(String title, String script) async {
-    await controller.evaluateJavascript('Dialog.postMessage("$title$separator" + $script);');
+    await controller.evaluateJavascript('Dialog.postMessage("$title$separator" + ($script));');
   }
 
   Future<void> showDialog(String title, String content) async {
