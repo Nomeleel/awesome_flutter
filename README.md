@@ -27,6 +27,10 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Story Swiper](#storyswiper) | A very interesting Swiper from [UdaraWanasinghe](https://github.com/UdaraWanasinghe), I expanded on this. | [Reference By Story Swiper](https://github.com/UdaraWanasinghe/StorySwiper) |
 | [Flutter Web View](#flutterwebview) | A Flutter plugin of that provides a WebView widget. [on pub](https://pub.dev/packages/webview_flutter) | I tried the old version a long time ago and will try the latest version in the future.|
 | [Platform View](#platformview) | Try host native platform views within Flutter app by Platform view. | And communication between the two platforms (use **Method Channel**) |
+| [Fireworks](#fireworks) | Everything can be painted. Use CustomPainter to draw a firework. |
+| [Custom Grid View](#customgridview) | Implement irregular GridView layout through custom delegate. |
+
+
 **Next, let the picture dance.**
 
 ## AppStoreCard
@@ -149,6 +153,14 @@ If the initial background color and the pinned background color after scrolling 
 <center>
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/ios_view_show_flutter_bottom_sheet.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/android_view_show_flutter_bottom_sheet.gif" width="25%"/>
 </center>
+
+## Fireworks
+
+[Web demo for Fireworks](https://nomeleel.github.io/awesome_flutter/#/fireworks_view)
+
+## CustomGridView
+
+[Web demo for Custom Grid View](https://nomeleel.github.io/awesome_flutter/#/custom_grid_view_view)
 
 ## Found issues in Flutter
 

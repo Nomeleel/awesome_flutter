@@ -1,6 +1,7 @@
 export 'package:awesome_flutter/view/absorb_stack_view.dart';
 export 'package:awesome_flutter/view/combine_list_view_view.dart';
 export 'package:awesome_flutter/view/creative_stitching_view.dart';
+export 'package:awesome_flutter/view/custom_grid_view_view.dart';
 export 'package:awesome_flutter/view/fireworks_view.dart';
 export 'package:awesome_flutter/view/future_button_view.dart';
 export 'package:awesome_flutter/view/grid_paper_exp_view.dart';

@@ -12,6 +12,7 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'absorb_stack_view': (BuildContext context) => const AbsorbStackView(),
   'combine_list_view_view': (BuildContext context) => const CombineListViewView(),
   'creative_stitching_view': (BuildContext context) => const CreativeStitchingView(),
+  'custom_grid_view_view': (BuildContext context) => const CustomGridViewView(),
   'fireworks_view': (BuildContext context) => const FireworksView(),
   'future_button_view': (BuildContext context) => const FutureButtonView(),
   'grid_paper_exp_view': (BuildContext context) => const GridPaperExpView(),
