@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'configure/configure_nonweb.dart' if (dart.library.html) 'configure/configure_web.dart';
 import 'layout/layout.dart';
 import 'model/app_store_card_data.dart';
 import 'route/view_routes.dart';
@@ -14,7 +16,10 @@ import 'widget/app_store_card.dart';
 import 'widget/combine_list_view.dart';
 import 'wrapper/image_wraper.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  configureApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -29,13 +34,24 @@ class MyApp extends StatelessWidget {
       ),
       routes: viewRoutes,
       onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(builder: (context) {
-          final pageName = kIsWeb ? settings.name.substring(1) : settings.name;
+        final WidgetBuilder builder = (BuildContext context) {
+          final String pageName = kIsWeb ? settings.name.substring(1) : findSimilarPageName(settings.name);
           return Layout(
             child: viewRoutes.containsKey(pageName) ? viewRoutes[pageName](context) : const MyHomePage(),
           );
-        });
+        };
+
+        return (kIsWeb || Platform.isAndroid)
+            ? MaterialPageRoute(builder: builder)
+            : CupertinoPageRoute(builder: builder);
       },
+    );
+  }
+
+  String findSimilarPageName(String pageName) {
+    return viewRoutes.keys.firstWhere(
+      (e) => pageName.contains(e),
+      orElse: () => 'index',
     );
   }
 }
@@ -50,8 +66,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   _MyHomePageState();
 
-  List<AppStoreCardData> _cardDataList = List<AppStoreCardData>();
-  List<AppStoreCardData> _noEnabledList = List<AppStoreCardData>();
+  List<AppStoreCardData> _cardDataList = <AppStoreCardData>[];
+  List<AppStoreCardData> _noEnabledList = <AppStoreCardData>[];
 
   @override
   void initState() {
@@ -83,20 +99,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          color: Colors.white,
-          child: _cardDataList.isEmpty
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                  ),
-                )
-              : CombineListView(
-                  list: _cardDataList,
-                  itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
-                  combineList: _noEnabledList,
-                  combineItemBuilder: (context, index) => appStoreCardItem(context, _noEnabledList[index]),
-                  combineLoopSize: 1,
-                )),
+        color: Colors.white,
+        child: _cardDataList.isEmpty
+            ? const Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                ),
+              )
+            : CombineListView(
+                list: _cardDataList,
+                itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
+                combineList: _noEnabledList,
+                combineItemBuilder: (context, index) => appStoreCardItem(context, _noEnabledList[index]),
+                combineLoopSize: 1,
+              ),
+      ),
     );
   }
 
