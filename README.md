@@ -37,10 +37,10 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 [Web demo for App Store Card](https://nomeleel.github.io/awesome_flutter/)
 
-<center>
+<div align="center">
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/app_store_card_1.gif" width="25%"/>
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/app_store_card_2.gif" width="25%"/>
-</center>
+</div>
 
 ## YinYangSwitch
 
