@@ -8,7 +8,7 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 [Web page for Awesome Flutter](https://nomeleel.github.io/awesome_flutter/)
 
-| Name | Introduction | Note
+| Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Introduction | Note
 | :------: | ------ | ------ |
 | [App Store Card](#appstorecard) | Realize the animation of the Today tab page card of the Apple App Store. |
 | [Yin Yang Switch](#yinyangswitch) | Use clipper method to achieve irregular shapes. |
@@ -38,129 +38,183 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 [Web demo for App Store Card](https://nomeleel.github.io/awesome_flutter/)
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/app_store_card_1.gif" width="25%"/>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/app_store_card_2.gif" width="25%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/app_store_card_1.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/app_store_card_2.gif" width="30%"/>
 </div>
 
 ## YinYangSwitch
 
 [Web demo for Yin Yang Switch](https://nomeleel.github.io/awesome_flutter/#/yin_yang_switch_view)
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/yin_yang_switch.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/yin_yang_switch.gif" width="30%"/>
+</div>
 
 ## GridPaperExpansion
 
 [Web demo for Grid Paper Expansion](https://nomeleel.github.io/awesome_flutter/#/grid_paper_exp_view)
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/grid_paper_exp.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/grid_paper_exp.gif" width="30%"/>
+</div>
 
 ## WaterWave
 
 [Web demo for Water Wave](https://nomeleel.github.io/awesome_flutter/#/water_wave_view)
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/water_wave.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/water_wave.gif" width="30%"/>
+</div>
 
 ## CreativeStitching
 
 [Web demo for Creative Stitching](https://nomeleel.github.io/awesome_flutter/#/creative_stitching_view)
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/creative_stitching.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/creative_stitching.gif" width="30%"/>
+</div>
 
 ## SliverAppBarExpansion
 
 If the initial background color and the pinned background color after scrolling big different, the same app bar cannot adapt to the two backgrounds. At this time, you need to automatically switch the appbar to adapt to the new background.
 
-**The conversion process has achieved a transparent gradient, which can be viewed in the web demo. The image below has not been updated.**
+**The conversion process has achieved a transparent gradient, which can be viewed in the web demo.**
 
 [Web demo for Sliver AppBar Expansion](https://nomeleel.github.io/awesome_flutter/#/sliver_app_bar_exp_view)
 
-<center>SliverAppBar in Flutter ｜ SliverAppBarExpansion</center>
+<div align="center">SliverAppBar in Flutter ｜ SliverAppBarExpansion</div>
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/sliver_app_bar.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/sliver_app_bar_expansion.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/sliver_app_bar.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/sliver_app_bar_expansion_2.gif" width="30.5%"/>
+</div>
 
 ## AbsorbStack
 
 [Web demo for Absorb Stack](https://nomeleel.github.io/awesome_flutter/#/absorb_stack_view)
 
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/absorb_stack_view.gif" width="30%"/>
+</div>
+
 ## FutureButton
 
 [Web demo for Future Button](https://nomeleel.github.io/awesome_flutter/#/future_button_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/future_button_view.gif" width="30%"/>
+</div>
 
 ## TextExpansion
 
 [Web demo for Text Expansion](https://nomeleel.github.io/awesome_flutter/#/text_expansion_view)
 
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/text_expansion_view.gif" width="30%"/>
+</div>
+
 ## ScrollViewJumpTop
 
 [Web demo for Scroll View Jump Top](https://nomeleel.github.io/awesome_flutter/#/scroll_view_jump_top_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/scroll_view_jump_top_view.gif" width="30%"/>
+</div>
 
 ## SidePanel-ColorPicker
 
 [Web demo for Side Panel && Color Picker](https://nomeleel.github.io/fine_client/)
 
-<center>
+<div align="center">
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/fine_client/markdown/gctsq_2.gif" width="60%" />
-</center>
+</div>
 
 ## NavToListViewAutoScroll
 
 [Web demo for Nav To List View Auto Scroll](https://nomeleel.github.io/awesome_flutter/#/nav_to_list_view_auto_scroll_view)
 
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/nav_to_list_view_auto_scroll_view.gif" width="30%"/>
+</div>
+
 ## CombineListView
 
 [Web demo for Combine List View](https://nomeleel.github.io/awesome_flutter/#/combine_list_view_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/combine_list_view_view.gif" width="30%"/>
+</div>
 
 ## StorySwiper
 
 [Web demo for Story Swiper View](https://nomeleel.github.io/awesome_flutter/#/story_swiper_view)
 
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/story_swiper_view.gif" width="30%"/>
+</div>
+
 ## FlutterWebView
 
-**Tried the plugin old version a long time ago.**
+<!-- **Tried the plugin old version a long time ago.** -->
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_example_view.gif" width="25%"/>
-</center>
+<!-- <div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_example_view.gif" width="30%"/>
+</div> -->
+
+**The latest version:** 
+[![Pub Package](https://img.shields.io/pub/v/webview_flutter.svg)](https://pub.dev/packages/webview_flutter)
+<br/>
+**Version used this time: 2.0.4**
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_navigation_bar.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_bottom_home_action.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_bottom_action_posrition.gif" width="30%"/>
+</div>
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_bottom_action_cache.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_bottom_action_agent_cookie.gif" width="30%"/>
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/web_view_bottom_action_console_close.gif" width="30%"/>
+</div>
 
 ## PlatformView
 
-**Flutter View Navigation to Native Platform View**
+### Flutter View Navigation to Native Platform View
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_platform_view_open_ios_view.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_platform_view_open_android_view.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_platform_view_open_ios_view.gif" width="31.2%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_platform_view_open_android_view.gif" width="30%"/>
+</div>
 
-**Flutter View open Native Platform Modal Sheet View**
+### Flutter View open Native Platform Modal Sheet View
 **Flutter** -------- **Method Channel** --------**>** **Native**
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_view_open_ios_app_store_product_view.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_view_open_android_share_view.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_view_open_ios_app_store_product_view.gif" width="34.5%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/flutter_view_open_android_share_view.gif" width="30%"/>
+</div>
 
-**Native Platform View open Flutter Modal Sheet View**
+### Native Platform View open Flutter Modal Sheet View
 **Native** -------- **Method Channel** --------**>** **Flutter**
 
-<center>
-    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/ios_view_show_flutter_bottom_sheet.gif" width="25%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/android_view_show_flutter_bottom_sheet.gif" width="25%"/>
-</center>
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/ios_view_show_flutter_bottom_sheet.gif" width="31.2%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/android_view_show_flutter_bottom_sheet.gif" width="30%"/>
+</div>
 
 ## Fireworks
 
 [Web demo for Fireworks](https://nomeleel.github.io/awesome_flutter/#/fireworks_view)
 
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/fireworks_view.gif" width="33%"/>
+</div>
+
 ## CustomGridView
 
 [Web demo for Custom Grid View](https://nomeleel.github.io/awesome_flutter/#/custom_grid_view_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/custom_grid_view_view.gif" width="30%"/>
+</div>
 
 ## Found issues in Flutter
 
