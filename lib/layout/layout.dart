@@ -28,7 +28,7 @@ class Layout extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(constraints.maxHeight / 90.0),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(constraints.maxHeight / 25.0)),
+                      borderRadius: BorderRadius.circular(constraints.maxHeight / 25.0),
                       child: child,
                     ),
                   ),

@@ -12,6 +12,7 @@ import 'layout/layout.dart';
 import 'model/app_store_card_data.dart';
 import 'route/view_routes.dart';
 import 'template/app_store_card_description.dart';
+import 'util/math_util.dart';
 import 'widget/app_store_card.dart';
 import 'widget/combine_list_view.dart';
 import 'wrapper/image_wraper.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
             ? MaterialPageRoute(builder: builder)
             : CupertinoPageRoute(builder: builder);
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 
@@ -67,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   _MyHomePageState();
 
   List<AppStoreCardData> _cardDataList = <AppStoreCardData>[];
-  List<AppStoreCardData> _noEnabledList = <AppStoreCardData>[];
+  List<Widget> _noEnabledList = <Widget>[];
 
   @override
   void initState() {
@@ -85,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
           viewRoutes.forEach((k, v) {
             if (!_cardDataList.any((e) => e.detailViewRouteName == k)) {
-              _noEnabledList.add(AppStoreCardData.simple(k));
+              _noEnabledList.add(appStoreCardItem(context, AppStoreCardData.simple(k)));
             }
           });
 
@@ -110,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 list: _cardDataList,
                 itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
                 combineList: _noEnabledList,
-                combineItemBuilder: (context, index) => appStoreCardItem(context, _noEnabledList[index]),
+                combineItemBuilder: (context, index) => _noEnabledList[index],
                 combineLoopSize: 1,
               ),
       ),
@@ -119,8 +121,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Widget placeholder() {
     return Container(
-      height: 222.222,
-      color: Colors.primaries[Random().nextInt(15)],
+      height: random(123.456, 654.321),
+      color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
     );
   }
 
@@ -132,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         horizontal: 22,
         vertical: 10,
       ),
-      radius: BorderRadius.all(Radius.circular(20)),
+      radius: BorderRadius.circular(20),
       showBackgroundWidget: (data.imagePath?.isNotEmpty ?? false) ? ImageWraper.path(data.imagePath) : placeholder(),
       showForegroundWidget: AppStoreCardDescription(
         mode: data.descriptionMode,

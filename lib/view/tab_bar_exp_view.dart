@@ -38,11 +38,11 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
               tabSpacing: 10.0,
               indicator: BoxDecoration(
                 color: Colors.purple.withOpacity(.7),
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                borderRadius: BorderRadius.circular(15.0),
               ),
               tabDecoration: BoxDecoration(
                 color: Colors.grey.withOpacity(.2),
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                borderRadius: BorderRadius.circular(15.0),
               ),
               tabs: [
                 for (int i = 1; i <= _controller.length; i++)
@@ -58,7 +58,7 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
               children: [
                 for (int i = 0; i < _controller.length; i++)
                   Container(
-                    color: Colors.primaries[i % 15],
+                    color: Colors.primaries[i % Colors.primaries.length],
                   )
               ],
             ),

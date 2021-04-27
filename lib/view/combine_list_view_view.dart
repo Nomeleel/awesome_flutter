@@ -17,7 +17,7 @@ class CombineListViewView extends StatelessWidget {
           return Container(
             height: 77.77,
             alignment: Alignment.center,
-            color: Colors.primaries[index % (Colors.primaries.length - 1)],
+            color: Colors.primaries[index % Colors.primaries.length],
             child: Text('$index'),
           );
         },

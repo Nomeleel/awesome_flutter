@@ -60,10 +60,8 @@ class _StorySwiperViewState extends State<StorySwiperView> {
                 return Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Colors.primaries[index % 15],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
+                    color: Colors.primaries[index % Colors.primaries.length],
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text('$index'),
                 );
@@ -81,7 +79,7 @@ class _StorySwiperViewState extends State<StorySwiperView> {
                 builder: (context, index) {
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                    color: Colors.primaries[index % 15],
+                    color: Colors.primaries[index % Colors.primaries.length],
                     alignment: Alignment.center,
                     child: Text('$index'),
                   );

@@ -428,7 +428,7 @@ class ActionItem extends StatelessWidget {
               padding: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                borderRadius: BorderRadius.circular(50.0),
               ),
               child: Icon(iconData),
             ),

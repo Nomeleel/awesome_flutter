@@ -19,7 +19,7 @@ class ColorfulListView extends StatelessWidget {
       itemCount: itemCount,
       itemBuilder: (BuildContext context, int index) => Container(
         height: itemExtent,
-        color: Colors.primaries[index % (Colors.primaries.length - 1)],
+        color: Colors.primaries[index % Colors.primaries.length],
         alignment: Alignment.center,
         child: Text(
           '$index',

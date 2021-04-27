@@ -43,15 +43,7 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
     loopAnimationController = AnimationController(
       duration: duration,
       vsync: this,
-    )
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          loopAnimationController.repeat();
-        } else if (status == AnimationStatus.dismissed) {
-          loopAnimationController.forward();
-        }
-      })
-      ..forward();
+    )..repeat();
 
     // adjustWaterHeightController
     adjustWaterHeightController = AnimationController(
@@ -157,9 +149,7 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                 width: 1,
               ),
               color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(waterContainerWidth / 2),
-              ),
+              borderRadius: BorderRadius.circular(waterContainerWidth / 2),
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.9),
@@ -171,9 +161,7 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(waterContainerWidth / 2),
-                ),
+                borderRadius: BorderRadius.circular(waterContainerWidth / 2),
               ),
               child: AnimatedBuilder(
                 animation: CurvedAnimation(
@@ -188,9 +176,7 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                           Container(
                             decoration: BoxDecoration(
                               color: fullColor.withOpacity(0.618),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(waterContainerWidth / 2),
-                              ),
+                              borderRadius: BorderRadius.circular(waterContainerWidth / 2),
                               gradient: LinearGradient(
                                 colors: [
                                   fullColor.withOpacity(0.2),
@@ -219,9 +205,7 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(waterContainerWidth / 2),
-                              ),
+                              borderRadius: BorderRadius.circular(waterContainerWidth / 2),
                             ),
                           ),
                         ],
@@ -253,8 +237,7 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                       bottom: 8,
                       child: ScaleTransition(
                         alignment: Alignment.center,
-                        scale: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                            parent: loopAnimationController, curve: Interval(0.0, 1.0, curve: Curves.fastOutSlowIn))),
+                        scale: CurvedAnimation(parent: loopAnimationController, curve: Curves.fastOutSlowIn),
                         child: Container(
                           width: 2,
                           height: 2,
@@ -271,8 +254,10 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                       bottom: 16,
                       child: ScaleTransition(
                         alignment: Alignment.center,
-                        scale: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                            parent: loopAnimationController, curve: Interval(0.4, 1.0, curve: Curves.fastOutSlowIn))),
+                        scale: CurvedAnimation(
+                          parent: loopAnimationController,
+                          curve: Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+                        ),
                         child: Container(
                           width: 4,
                           height: 4,

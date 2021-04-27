@@ -53,9 +53,7 @@ class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProvide
                     width: 5,
                     color: Colors.blue,
                   ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
+                  borderRadius: BorderRadius.circular(50.0),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.grey,

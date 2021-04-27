@@ -55,7 +55,7 @@ class _ScrollContinuousViewState extends State<ScrollContinuousView> with Ticker
                     itemCount: 3,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        color: Colors.primaries[index % 15],
+                        color: Colors.primaries[index % Colors.primaries.length],
                       );
                     },
                   ),
@@ -66,7 +66,7 @@ class _ScrollContinuousViewState extends State<ScrollContinuousView> with Ticker
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         width: 100.0,
-                        color: Colors.primaries[index % 15],
+                        color: Colors.primaries[index % Colors.primaries.length],
                       );
                     },
                   ),

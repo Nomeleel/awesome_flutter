@@ -10,17 +10,33 @@ class FireworksView extends StatefulWidget {
 }
 
 class _FireworksViewState extends State<FireworksView> with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      duration: const Duration(hours: 1),
+      vsync: this,
+    )..repeat();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: CustomPaint(
         size: Size.infinite,
-        painter: FireworksPainter(AnimationController(
-          duration: const Duration(hours: 1),
-          vsync: this,
-        )..forward()),
+        painter: FireworksPainter(animationController),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    animationController
+      ..stop()
+      ..dispose();
+    super.dispose();
   }
 }

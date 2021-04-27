@@ -28,7 +28,7 @@ class _ScrollViewJumpTopViewState extends State<ScrollViewJumpTopView> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(30.0)),
+              borderRadius: BorderRadius.circular(30.0),
             ),
             child: const Icon(Icons.arrow_upward),
           );

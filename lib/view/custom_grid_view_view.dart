@@ -21,7 +21,7 @@ class CustomGridViewView extends StatelessWidget {
             initWidget: 'item',
             widgetMap: {
               'item': Container(
-                color: Colors.primaries[index % (Colors.primaries.length - 1)],
+                color: Colors.primaries[index %Colors.primaries.length],
                 alignment: Alignment.center,
                 child: Text('$index'),
               ),
@@ -29,7 +29,7 @@ class CustomGridViewView extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: Colors.purple,
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Text(
                   '$index',

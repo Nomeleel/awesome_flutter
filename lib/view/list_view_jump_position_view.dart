@@ -60,7 +60,7 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
         (context, index) => Container(
           height: 77.77,
           margin: EdgeInsets.all(7.7),
-          color: Colors.primaries[index % 15],
+          color: Colors.primaries[index % Colors.primaries.length],
           alignment: Alignment.center,
           child: RaisedButton(
             child: const Text('Go'),

@@ -70,12 +70,10 @@ class _ScrollViewJumpTopState extends State<ScrollViewJumpTop> with TickerProvid
           right: 0.0,
           bottom: 0.0,
           child: SlideTransition(
-            position: _jumpTopAnimationController.drive(
-              Tween(
-                begin: Offset(1, 0),
-                end: Offset(0, 0),
-              ),
-            ),
+            position: Tween(
+              begin: Offset(1, 0),
+              end: Offset(0, 0),
+            ).animate(_jumpTopAnimationController),
             child: jumpTopWidget(),
           ),
         ),

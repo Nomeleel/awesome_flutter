@@ -55,7 +55,7 @@ class _FlutterDriverTestViewState extends State<FlutterDriverTestView> {
                 return Container(
                   key: ValueKey('list_item_$index'),
                   height: 77.7,
-                  color: Colors.primaries[index % 15],
+                  color: Colors.primaries[index % Colors.primaries.length],
                 );
               },
             ),

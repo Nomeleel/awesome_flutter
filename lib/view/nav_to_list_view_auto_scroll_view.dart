@@ -85,7 +85,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
             key: globalKey,
             height: Random().nextInt(200).toDouble(),
             //height: 50.0,
-            color: Colors.primaries[index % 15],
+            color: Colors.primaries[index % Colors.primaries.length],
             alignment: Alignment.center,
             child: Text('$index'),
           );

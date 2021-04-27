@@ -116,6 +116,7 @@ class _StorySwiperState extends State<StorySwiper> {
             },
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              // 可以尝试重写 FixedExtentScrollPhysics 达到类似于PageView停止准确定位到某一页的效果
               physics: ClampingScrollPhysics(),
               controller: _pageController,
               itemCount: (widget.itemCount > widget.limitLength

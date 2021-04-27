@@ -97,7 +97,7 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
               child: CupertinoButton(
                 child: const Text(''),
                 color: Colors.white.withOpacity(0.3),
-                borderRadius: const BorderRadius.all(Radius.circular(7)),
+                borderRadius: BorderRadius.circular(7.0),
                 onPressed: switchPanel,
               ),
             ),

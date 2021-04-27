@@ -21,7 +21,7 @@ class _FutureButtonViewState extends State<FutureButtonView> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isDisable ? Colors.grey : Colors.purple,
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          borderRadius: BorderRadius.circular(25.0),
         ),
         child: child,
       );
