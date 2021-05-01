@@ -432,7 +432,7 @@ class _IndicatorPainter extends CustomPainter {
   Rect _currentRect;
 
   BoxPainter _painter;
-  
+
   BoxPainter _normalPainter;
 
   bool _needsPaint = false;
@@ -813,6 +813,7 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
     this.onTap,
     this.tabDecoration,
     this.tabSpacing,
+    this.direction = Axis.horizontal,
   })  : assert(tabs != null),
         assert(isScrollable != null),
         assert(dragStartBehavior != null),
@@ -1051,6 +1052,9 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
   /// 例子： 假设[tabSpacing]为'--', 最终显示效果为'-A--B--C-'
 
   final double tabSpacing;
+
+  // 指定TabBar的方向, 默认为水平
+  final Axis direction;
 
   /// A size whose height depends on if the tabs have both icons and text.
 
@@ -1390,10 +1394,10 @@ class _TabBarState extends State<TabBar> {
 
     final TabBarTheme tabBarTheme = TabBarTheme.of(context);
 
-    final List<Widget> wrappedTabs = List<Widget>(widget.tabs.length);
+    final List<Widget> wrappedTabs = <Widget>[];
 
     for (int i = 0; i < widget.tabs.length; i += 1) {
-      wrappedTabs[i] = Center(
+      wrappedTabs.add(Center(
         heightFactor: 1.0,
         child: Padding(
           padding: widget.labelPadding ?? tabBarTheme.labelPadding ?? kTabLabelPadding,
@@ -1402,7 +1406,7 @@ class _TabBarState extends State<TabBar> {
             child: widget.tabs[i],
           ),
         ),
-      );
+      ));
     }
 
     // If the controller was provided by DefaultTabController and we're part
@@ -1459,7 +1463,7 @@ class _TabBarState extends State<TabBar> {
 
     final int tabCount = widget.tabs.length;
 
-    for (int index = 0; index < tabCount; index += 1) {
+    for (int index = 0; index < tabCount; index ++) {
       wrappedTabs[index] = InkWell(
         onTap: () {
           _handleTap(index);
@@ -1472,8 +1476,15 @@ class _TabBarState extends State<TabBar> {
               label: localizations.tabLabel(tabIndex: index + 1, tabCount: tabCount),
             ),
           ],
-        )
+        ),
       );
+
+      if (widget.direction == Axis.vertical) {
+        wrappedTabs[index] = RotatedBox(
+          quarterTurns: 3,
+          child: wrappedTabs[index],
+        );
+      }
 
       if (!widget.isScrollable) wrappedTabs[index] = Expanded(child: wrappedTabs[index]);
     }
@@ -1494,12 +1505,19 @@ class _TabBarState extends State<TabBar> {
       ),
     );
 
+    if (widget.direction == Axis.vertical) {
+      tabBar = RotatedBox(
+        quarterTurns: 1,
+        child: tabBar,
+      );
+    }
+
     if (widget.isScrollable) {
       _scrollController ??= _TabBarScrollController(this);
 
       tabBar = SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
-        scrollDirection: Axis.horizontal,
+        scrollDirection: widget.direction,
         controller: _scrollController,
         child: tabBar,
       );

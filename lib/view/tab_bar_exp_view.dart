@@ -13,6 +13,7 @@ class TabBarExpView extends StatefulWidget {
 
 class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateMixin {
   TabController _controller;
+  Axis _direction = Axis.vertical;
 
   @override
   void initState() {
@@ -27,12 +28,15 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
   Widget build(BuildContext context) {
     return ScaffoldView(
       title: 'Tab Bar Exp View',
-      body: Column(
+      body: Flex(
+        direction: _direction,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 30.0,
-            margin: EdgeInsets.symmetric(vertical: 22.22),
+            //height: 30.0,
+            margin: EdgeInsets.all(7.7),
             child: TabBar(
+              direction: flipAxis(_direction),
               isScrollable: true,
               controller: _controller,
               tabSpacing: 10.0,
@@ -47,8 +51,8 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
               tabs: [
                 for (int i = 1; i <= _controller.length; i++)
                   Tab(
-                    text: List.filled(i, i).join()
-                  )
+                    text: List.filled(i, i).join(),
+                  ),
               ],
             ),
           ),
@@ -64,6 +68,14 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
             ),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _direction = flipAxis(_direction);
+          });
+        },
+        child: Icon(Icons.rotate_left),
       ),
     );
   }
