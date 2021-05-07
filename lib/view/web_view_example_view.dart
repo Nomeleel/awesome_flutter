@@ -456,7 +456,7 @@ class WebViewControllerBuilder extends StatelessWidget {
     return FutureBuilder<WebViewController>(
       future: controller,
       builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
-        if (controller.connectionState == ConnectionState.done) {
+        if (controller.hasData) {
           return builder(context, controller.data);
         }
         return placeholdBuilder?.call(context) ?? SizedBox();
@@ -498,11 +498,10 @@ class WebViewChangedFutureBuilder<T> extends StatelessWidget {
           future: future(controller),
           initialData: initialData,
           builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
-            if (snapshot.connectionState == ConnectionState.none || (snapshot.data?.toString()?.isEmpty ?? true)) {
-              return placeholdBuilder(context);
+            if (snapshot.hasData) {
+              return builder(context, snapshot.data, child);
             }
-
-            return builder(context, snapshot.data, child);
+            return placeholdBuilder(context);
           },
         );
       },
