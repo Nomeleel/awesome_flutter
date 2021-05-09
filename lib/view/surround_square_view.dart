@@ -130,80 +130,87 @@ class _SurroundSquareViewState extends State<SurroundSquareView> with SingleTick
     );
   }
 
-  List positionedList(double squareLength, [double offset = 0.0]) {
+  List positionedList(double squareLength, [double offset = 20.0]) {
     squareLength -= offset * 2.0;
-    final double height = squareLength / (childAspectRatio + 1.0).toDouble();
-    final double width = height * childAspectRatio;
-    return positionedSurround(height, width, offset)
-      ..addAll(positionedCenter((width - height).abs(), math.min(height, width) + offset));
+    final double unit = squareLength / (childAspectRatio + 1.0).toDouble();
+    return positionedSurround(unit, offset)
+      ..addAll(positionedCenter(math.min(unit, unit * childAspectRatio) + offset));
   }
 
-  List<Positioned> positionedSurround(double height, double width, [double offset = .0]) {
+  // 正方体可采用旋转 4个item大小相同
+  // 实际当成长方形 正方形为长方形的一种特殊情况
+  List<Positioned> positionedSurround(double length, [double offset = 0.0]) {
+    final double allOffset = length + offset;
     return <Positioned>[
       if (children.length > 0)
         Positioned(
           left: offset,
+          right: allOffset,
           top: offset,
-          width: width,
-          height: height,
+          height: length,
           child: children[0],
         ),
       if (children.length > 1)
         Positioned(
           right: offset,
+          width: length,
           top: offset,
-          width: height,
-          height: width,
+          bottom: allOffset,
           child: children[1],
         ),
       if (children.length > 2)
         Positioned(
+          left: allOffset,
           right: offset,
           bottom: offset,
-          width: width,
-          height: height,
+          height: length,
           child: children[2],
         ),
       if (children.length > 3)
         Positioned(
           left: offset,
+          width: length,
+          top: allOffset,
           bottom: offset,
-          width: height,
-          height: width,
           child: children[3],
         ),
     ];
   }
 
-  List<Positioned> positionedCenter(double length, [double offset = .0]) {
+  List<Positioned> positionedCenter([double offset = .0]) {
     final mapPositioned = (Widget e) => Positioned(
           left: offset,
+          right: offset,
           top: offset,
-          width: length,
-          height: length,
+          bottom: offset,
           child: e,
         );
     return children.skip(4).map(mapPositioned).toList().reversed.toList();
   }
 
   Widget getRandomItem(int index) {
-    return Container(
-      // color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-      // alignment: Alignment.center,
-      // child: Icon(IconData(Random().nextInt(0xfff) + 0xe000, fontFamily: 'MaterialIcons')),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/images/${math.Random().nextInt(7).isEven ? 'SaoSiMing' : 'BaoErJie'}.jpg',
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: 0.0,
-            right: 0.0,
-            child: Text('$index'),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Tap $index.')));
+      },
+      child: Container(
+        // color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+        // alignment: Alignment.center,
+        // child: Icon(IconData(Random().nextInt(0xfff) + 0xe000, fontFamily: 'MaterialIcons')),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              'assets/images/${math.Random().nextInt(7).isEven ? 'SaoSiMing' : 'BaoErJie'}.jpg',
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              top: 0.0,
+              right: 0.0,
+              child: Text('$index'),
+            ),
+          ],
+        ),
       ),
     );
   }
