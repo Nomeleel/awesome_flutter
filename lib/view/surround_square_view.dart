@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
+import '../widget/surround_square.dart';
 
 //TODO 后期将用RenderObject实现。
 //TODO 嵌套循环的方式可以当成加载动画来实现(下次一定)
@@ -63,7 +64,7 @@ class _SurroundSquareViewState extends State<SurroundSquareView> with SingleTick
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          surroundSquare(),
+          surroundSquareWidget(),
           Text(
             'Children Count: ${children.length}',
             style: Theme.of(context).textTheme.subtitle1,
@@ -130,11 +131,20 @@ class _SurroundSquareViewState extends State<SurroundSquareView> with SingleTick
     );
   }
 
+  Widget surroundSquareWidget() {
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: SurroundSquare(
+        childAspectRatio: childAspectRatio,
+        children: children,
+      ),
+    );
+  }
+
   List positionedList(double squareLength, [double offset = 20.0]) {
     squareLength -= offset * 2.0;
     final double unit = squareLength / (childAspectRatio + 1.0).toDouble();
-    return positionedSurround(unit, offset)
-      ..addAll(positionedCenter(math.min(unit, unit * childAspectRatio) + offset));
+    return positionedSurround(unit, offset)..addAll(positionedCenter(math.min(unit, unit * childAspectRatio) + offset));
   }
 
   // 正方体可采用旋转 4个item大小相同
