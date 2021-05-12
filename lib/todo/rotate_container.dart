@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// 含有子节点的Widget应用RotatedBox后，子节点要进一步校对调整角度。
@@ -6,7 +7,7 @@ import 'package:flutter/widgets.dart';
 /// 如果想对现有Widget直接套用这个效果，就需要这个封装好的Widget了。
 
 // 好像带有Children的Widget都没有什么继承等约束
-class RotateContainer extends StatelessWidget {
+class RotateContainer extends StatelessWidget with RotatedBoxMixin{
   const RotateContainer({
     Key key,
     @required this.quarterTurns,
@@ -18,13 +19,20 @@ class RotateContainer extends StatelessWidget {
   final Widget child;
   final List<Widget> children;
 
-  int get reverseQuarterTurns => 4 - (quarterTurns % 4);
-
   @override
   Widget build(BuildContext context) {
     // 这里还不知道怎么组装children
-    final rotateChildren = children.map((e) => rotatedBox(e, reverseQuarterTurns)).toList();
+    final rotatedChildren = rotateChildren(children, quarterTurns);
     return rotatedBox(child, quarterTurns);
+  }
+}
+
+mixin RotatedBoxMixin {
+  int getReverseQuarterTurns(int quarterTurns) => 4 - (quarterTurns % 4);
+
+  List<Widget> rotateChildren(List<Widget> children, int quarterTurns) {
+    final int reverseQuarterTurns = getReverseQuarterTurns(quarterTurns);
+    return children.map((e) => rotatedBox(e, reverseQuarterTurns)).toList();
   }
 
   Widget rotatedBox(Widget child, int quarterTurns) {
@@ -33,4 +41,8 @@ class RotateContainer extends StatelessWidget {
       child: child,
     );
   }
+}
+
+extension RotatedTabBar on TabBar {
+
 }
