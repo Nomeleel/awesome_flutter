@@ -29,6 +29,7 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Platform View](#platformview) | Try host native platform views within Flutter app by Platform view. | And communication between the two platforms (use **Method Channel**) |
 | [Fireworks](#fireworks) | Everything can be painted. Use CustomPainter to draw a firework. |
 | [Custom Grid View](#customgridview) | Implement irregular GridView layout through custom delegate. |
+| [Surround Square View](#surroundsquareview) | Try to customize the RenderObject to achieve the effect. |
 
 
 **Next, let the picture dance.**
@@ -214,6 +215,14 @@ If the initial background color and the pinned background color after scrolling 
 
 <div align="center">
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/custom_grid_view_view.gif" width="30%"/>
+</div>
+
+## SurroundSquare
+
+[Web demo for Surround Square](https://nomeleel.github.io/awesome_flutter/#/surround_square)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/surround_square.gif" width="30%"/>
 </div>
 
 ## Found issues in Flutter

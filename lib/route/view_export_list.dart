@@ -13,6 +13,7 @@ export 'package:awesome_flutter/view/nested_scroll_view_with_header_view.dart';
 export 'package:awesome_flutter/view/scroll_view_jump_top_view.dart';
 export 'package:awesome_flutter/view/sliver_app_bar_exp_view.dart';
 export 'package:awesome_flutter/view/story_swiper_view.dart';
+export 'package:awesome_flutter/view/surround_square_view.dart';
 export 'package:awesome_flutter/view/tab_bar_exp_view.dart';
 export 'package:awesome_flutter/view/text_expansion_view.dart';
 export 'package:awesome_flutter/view/water_wave_view.dart';

@@ -24,6 +24,7 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'scroll_view_jump_top_view': (BuildContext context) => const ScrollViewJumpTopView(),
   'sliver_app_bar_exp_view': (BuildContext context) => const SliverAppBarExpView(),
   'story_swiper_view': (BuildContext context) => const StorySwiperView(),
+  'surround_square_view': (BuildContext context) => const SurroundSquareView(),
   'tab_bar_exp_view': (BuildContext context) => const TabBarExpView(),
   'text_expansion_view': (BuildContext context) => const TextExpansionView(),
   'water_wave_view': (BuildContext context) => const WaterWaveView(),
