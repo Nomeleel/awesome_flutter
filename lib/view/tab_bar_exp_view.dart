@@ -58,6 +58,8 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
           ),
           Expanded(
             child: TabBarView(
+              scrollDirection: flipAxis(_direction),
+              physics: BouncingScrollPhysics(),
               controller: _controller,
               children: [
                 for (int i = 0; i < _controller.length; i++)

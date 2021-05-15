@@ -1562,6 +1562,7 @@ class TabBarView extends StatefulWidget {
     Key key,
     @required this.children,
     this.controller,
+    this.scrollDirection = Axis.horizontal,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
   })  : assert(children != null),
@@ -1587,6 +1588,11 @@ class TabBarView extends StatefulWidget {
   /// list, as well as the [controller]'s [TabController.length].
 
   final List<Widget> children;
+
+  /// The axis along which the tab bar view scrolls.
+  ///
+  /// Defaults to [Axis.horizontal].
+  final Axis scrollDirection;
 
   /// How the page view should respond to user input.
 
@@ -1812,6 +1818,7 @@ class _TabBarViewState extends State<TabBarView> {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: PageView(
+        scrollDirection: widget.scrollDirection ?? Axis.horizontal,
         dragStartBehavior: widget.dragStartBehavior,
         controller: _pageController,
         physics: widget.physics == null ? _kTabBarViewPhysics : _kTabBarViewPhysics.applyTo(widget.physics),
