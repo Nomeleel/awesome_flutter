@@ -3,8 +3,8 @@
 /// 然后动态组装布局，或许是个很好的想法，经典的思想加上新近的弹性布局或许1 + 1 > 2
 /// 这里先留个TODO，接下来去调研实现！！！
 
-// 可以参考Stack和Positioned
-// Stack用来布局，children中可以用来Positioned包装位置信息
+// 可以参考Flex和Flexible
+// Flex用来布局，children中可以用来Flexible包装位置信息
 // 新定义一个RanderObject，用来处理ParentData上的配置信息 来进行计算和布局。
 import 'package:flutter/widgets.dart';
 
