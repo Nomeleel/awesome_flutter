@@ -1821,7 +1821,9 @@ class _TabBarViewState extends State<TabBarView> {
         scrollDirection: widget.scrollDirection ?? Axis.horizontal,
         dragStartBehavior: widget.dragStartBehavior,
         controller: _pageController,
-        physics: widget.physics == null ? _kTabBarViewPhysics : _kTabBarViewPhysics.applyTo(widget.physics),
+        physics: widget.physics == null
+          ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
+          : const PageScrollPhysics().applyTo(widget.physics),
         children: _childrenWithKey,
       ),
     );
