@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Awesome Flutter',
       theme: ThemeData(
+        platform: TargetPlatform.iOS,
         primaryColor: Colors.white,
       ),
       home: Layout(
@@ -109,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ),
               )
             : CombineListView(
+                primary: true,
                 list: _cardDataList,
                 itemBuilder: (context, index) => appStoreCardItem(context, _cardDataList[index]),
                 combineList: _noEnabledList,

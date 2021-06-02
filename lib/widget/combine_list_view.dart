@@ -9,6 +9,7 @@ class CombineListView extends StatefulWidget {
     @required this.itemBuilder,
     @required this.combineItemBuilder,
     this.loadMore,
+    this.primary,
   }) : super(key: key);
 
   final List list;
@@ -20,6 +21,8 @@ class CombineListView extends StatefulWidget {
   final IndexedWidgetBuilder combineItemBuilder;
 
   final Function loadMore;
+
+  final bool primary;
 
   @override
   _CombineListViewState createState() => _CombineListViewState();
@@ -82,7 +85,8 @@ class _CombineListViewState extends State<CombineListView> {
   Widget build(BuildContext context) {
     final List children = childrenCombine(context);
     return ListView.builder(
-      controller: _controller,
+      primary: widget.primary,
+      //controller: _controller,
       physics: ClampingScrollPhysics(),
       itemCount: children.length,
       itemBuilder: (BuildContext context, int index) => children[index],
