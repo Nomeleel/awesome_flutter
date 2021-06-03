@@ -1,4 +1,5 @@
 import 'package:awesome_flutter/widget/scaffold_view.dart';
+import 'package:awesome_flutter/widget/tab_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -14,43 +15,89 @@ class _InteractiveViewerTestViewState extends State<InteractiveViewerTestView> {
   Widget build(BuildContext context) {
     return ScaffoldView(
       title: 'Interactive Viewer Test View',
-      body: InteractiveViewerTestConstrained(),
+      body: TabView(
+        tabs: [
+          'Constrained',
+          'Scale',
+        ],
+        children: [
+          InteractiveViewerTestConstrained(),
+          InteractiveViewerTestScale(),
+        ],
+      ),
     );
   }
 }
 
-class InteractiveViewerTestConstrained extends StatefulWidget {
-  InteractiveViewerTestConstrained({Key key}) : super(key: key);
-
-  @override
-  _InteractiveViewerTestConstrainedState createState() => _InteractiveViewerTestConstrainedState();
-}
-
-class _InteractiveViewerTestConstrainedState extends State<InteractiveViewerTestConstrained> {
-  bool _constrained = true;
+class InteractiveViewerTestConstrained extends StatelessWidget {
+  const InteractiveViewerTestConstrained({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: InteractiveViewer(
-            constrained: _constrained,
-            child: Image.asset('assets/images/SaoSiMing.jpg'),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 77.77),
-          child: FloatingActionButton(
-            child: Icon(_constrained ? Icons.fullscreen : Icons.fullscreen_exit),
-            onPressed: () {
-              setState(() {
-                _constrained = !_constrained;
-              });
-            },
-          ),
-        ),
-      ],
+    final ValueNotifier<bool> constrained = ValueNotifier<bool>(true);
+    return ValueListenableBuilder(
+      valueListenable: constrained,
+      builder: (BuildContext context, bool value, Widget child) {
+        return Column(
+          children: [
+            Expanded(
+              child: InteractiveViewer(
+                child: Image.asset('assets/images/SaoSiMing.jpg'),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 77.77),
+              child: FloatingActionButton(
+                child: Icon(constrained.value ? Icons.fullscreen : Icons.fullscreen_exit),
+                onPressed: () {
+                  constrained.value = !constrained.value;
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class InteractiveViewerTestScale extends StatelessWidget {
+  const InteractiveViewerTestScale({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // InteractiveViewer.builder
+    return InteractiveViewer(
+      scaleEnabled: true,
+      minScale: 0.7,
+      maxScale: 2.0,
+      child: Image.asset(
+        'assets/images/SaoSiMing.jpg',
+        fit: BoxFit.cover,
+      ),
+      // child: Container(
+      //   child: GridView.builder(
+      //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      //       crossAxisCount: 7,
+      //       childAspectRatio: 0.5,
+      //     ),
+      //     itemCount: 77,
+      //     itemBuilder: (BuildContext context, int index) => Stack(
+      //       children: [
+      //         Image.asset(
+      //           'assets/images/SaoSiMing.jpg',
+      //           fit: BoxFit.cover,
+      //         ),
+      //         Center(
+      //           child: Text(
+      //             '$index',
+      //             style: Theme.of(context).textTheme.bodyText1,
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
