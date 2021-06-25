@@ -15,7 +15,7 @@ class FakePaddingView extends StatelessWidget {
       body: Center(
         child: GestureDetector(
           onTap: () {
-            print('------Tap------');
+            print('------Tap------https://www.abc.com');
           },
           child: FakePadding(
             padding: EdgeInsets.all(20.0),
