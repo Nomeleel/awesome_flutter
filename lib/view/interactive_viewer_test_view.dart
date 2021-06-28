@@ -42,7 +42,8 @@ class InteractiveViewerTestConstrained extends StatelessWidget {
           children: [
             Expanded(
               child: InteractiveViewer(
-                child: Image.asset('assets/images/SaoSiMing.jpg'),
+                constrained: constrained.value,
+                child: child,
               ),
             ),
             Padding(
@@ -57,6 +58,7 @@ class InteractiveViewerTestConstrained extends StatelessWidget {
           ],
         );
       },
+      child: Image.asset('assets/images/SaoSiMing.jpg'),
     );
   }
 }
