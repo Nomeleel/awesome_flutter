@@ -18,15 +18,17 @@ class CustomScrollViewTestView extends StatelessWidget {
       body: TabView(
         tabs: [
           'Custom Scroll View',
+          'Single Scroll View',
         ],
         children: [
-          customScrollView(context),
+          _customScrollView(context),
+          _singleScrollView(context),
         ],
       ),
     );
   }
 
-  Widget customScrollView(BuildContext context) {
+  Widget _customScrollView(BuildContext context) {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -42,16 +44,33 @@ class CustomScrollViewTestView extends StatelessWidget {
           delegate: _getBuilderDelegate(),
         ),
         _getPersistentHeader(3),
-        SliverPadding(
-          padding: padding,
-          sliver: _buildListView().buildChildLayout(context),
+        SliverToBoxScrollViewAdapter(
+          boxScrollView: _buildListView(),
         ),
         _getPersistentHeader(4),
+        SliverToBoxScrollViewAdapter(
+          boxScrollView: _buildGridView(),
+        ),
         SliverPadding(
           padding: padding,
           sliver: _buildGridView().buildChildLayout(context),
         ),
       ],
+    );
+  }
+
+  // 不推荐 仅作为演示才使用
+  Widget _singleScrollView(BuildContext context) {
+    final children = [
+      _buildTitle('Title 1'),
+      _buildListView(),
+      _buildTitle('Title 2'),
+      _buildGridView(),
+    ];
+
+    return ListView.builder(
+      itemCount: children.length,
+      itemBuilder: (_, int index) => children[index],
     );
   }
 
@@ -80,19 +99,25 @@ class CustomScrollViewTestView extends StatelessWidget {
 
   ListView _buildListView() {
     return ListView.builder(
-      padding: padding,
       itemExtent: itemHeight,
       itemCount: itemCount,
       itemBuilder: _itemBuilder,
+      // 以下属性在转换为Sliver后无效
+      padding: padding,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
     );
   }
 
   GridView _buildGridView() {
     return GridView.builder(
-      padding: padding,
       gridDelegate: _getGridDelegate(),
       itemCount: itemCount,
       itemBuilder: _itemBuilder,
+      // 以下属性在转换为Sliver后无效
+      padding: padding,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
     );
   }
 
@@ -151,4 +176,36 @@ class _IndexItemState extends State<IndexItem> {
     print('--------build: ${widget.index}---------');
     return Container(color: Colors.primaries[widget.index % Colors.primaries.length]);
   }
+}
+
+class SliverToBoxScrollViewAdapter extends StatelessWidget {
+  const SliverToBoxScrollViewAdapter({
+    Key key,
+    @required this.boxScrollView,
+  })  : assert(boxScrollView != null),
+        super(key: key);
+
+  final BoxScrollView boxScrollView;
+
+  @override
+  Widget build(BuildContext context) {
+    return _toSliver(context, boxScrollView) ?? _sliverEmpty;
+  }
+
+  Widget _toSliver(BuildContext context, BoxScrollView view) {
+    if (view == null) return view;
+
+    final padding = view.padding;
+    // ignore: invalid_use_of_protected_member
+    Widget sliver = view.buildChildLayout(context);
+    if (padding != null && padding != EdgeInsets.zero) {
+      sliver = SliverPadding(
+        padding: padding,
+        sliver: sliver,
+      );
+    }
+    return sliver;
+  }
+
+  Widget _sliverEmpty() => SliverPadding(padding: EdgeInsets.zero);
 }
