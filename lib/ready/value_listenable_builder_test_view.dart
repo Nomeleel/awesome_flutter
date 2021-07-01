@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ValueListenableBuilderTestView extends StatefulWidget {
+class ValueListenableBuilderTestView extends StatelessWidget {
   const ValueListenableBuilderTestView({Key key}) : super(key: key);
 
   @override
-  _ValueListenableBuilderTestViewState createState() => _ValueListenableBuilderTestViewState();
-}
-
-class _ValueListenableBuilderTestViewState extends State<ValueListenableBuilderTestView> {
-  ValueNotifier<int> _counter = ValueNotifier<int>(0);
-
-  void _incrementCounter() {
-    _counter.value++;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final ValueNotifier<int> counter = ValueNotifier<int>(0);
+    final ValueNotifier<Person> person = ValueNotifier<Person>(Person(id: 7, name: '七', age: counter.value));
     return Scaffold(
       appBar: AppBar(
         title: const Text('ValueListenableBuilder Test View'),
@@ -25,32 +16,24 @@ class _ValueListenableBuilderTestViewState extends State<ValueListenableBuilderT
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
             ValueListenableBuilder(
-              valueListenable: _counter,
-              builder: (BuildContext context, int value, Widget child) {
-                return Text(
-                  '${_counter.value}',
-                  style: Theme.of(context).textTheme.headline4,
+              valueListenable: person,
+              builder: (BuildContext context, Person value, Widget child) {
+                return Column(
+                  children: [
+                    Text('Id: ${value.id}', style: Theme.of(context).textTheme.headline5),
+                    Text('Name: ${value.name}', style: Theme.of(context).textTheme.headline5),
+                    Text('Age: ${value.age}', style: Theme.of(context).textTheme.headline4),
+                  ],
                 );
               },
             ),
+            const Text('You have pushed the button this many times:'),
             ValueListenableBuilder(
-              valueListenable: _counter,
+              valueListenable: counter,
               builder: (BuildContext context, int value, Widget child) {
                 return Text(
-                  '${_counter.value}',
-                  style: Theme.of(context).textTheme.headline4,
-                );
-              },
-            ),
-            ValueListenableBuilder(
-              valueListenable: _counter,
-              builder: (BuildContext context, int value, Widget child) {
-                return Text(
-                  '${_counter.value}',
+                  '$value',
                   style: Theme.of(context).textTheme.headline4,
                 );
               },
@@ -59,10 +42,47 @@ class _ValueListenableBuilderTestViewState extends State<ValueListenableBuilderT
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          counter.value++;
+          person.value = person.value.copyWith(age: counter.value);
+          // 可行
+          // final personTemp = person.value..age = counter.value;
+          // person.value = null;
+          // person.value = personTemp;
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
     );
   }
+}
+
+class Person {
+  final int id;
+  final String name;
+
+  int age;
+
+  Person({this.id, this.name, this.age});
+
+  Person copyWith({int age}) {
+    return Person(
+      id: id,
+      name: name,
+      age: age ?? this.age,
+    );
+  }
+
+  // 可以不重写
+  // @override
+  // operator ==(Object other) {
+  //   return other is Person &&
+  //       runtimeType == other.runtimeType &&
+  //       id == other.id &&
+  //       name == other.name &&
+  //       age == other.age;
+  // }
+
+  // @override
+  // int get hashCode => id.hashCode ^ name.hashCode ^ age.hashCode;
 }
