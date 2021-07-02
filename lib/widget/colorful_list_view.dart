@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ColorfulListView extends StatelessWidget {
+import 'sliver_to_box_adapter.dart';
+
+class ColorfulListView extends StatelessWidget with SliverToBoxAdapterMixin {
   const ColorfulListView({
     Key key,
     this.itemCount = 77,
@@ -13,7 +15,7 @@ class ColorfulListView extends StatelessWidget {
   final TextStyle itemTextStyle;
 
   @override
-  Widget build(BuildContext context) {
+  ListView build(BuildContext context) {
     return ListView.builder(
       padding: EdgeInsets.zero,
       itemCount: itemCount,
@@ -27,5 +29,10 @@ class ColorfulListView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Widget buildSliver(BuildContext context) {
+    return boxScrollViewToSliver(context, build(context));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
+import '../widget/sliver_to_box_adapter.dart';
 import '../widget/tab_view.dart';
 
 class CustomScrollViewTestView extends StatelessWidget {
@@ -176,36 +177,4 @@ class _IndexItemState extends State<IndexItem> {
     print('--------build: ${widget.index}---------');
     return Container(color: Colors.primaries[widget.index % Colors.primaries.length]);
   }
-}
-
-class SliverToBoxScrollViewAdapter extends StatelessWidget {
-  const SliverToBoxScrollViewAdapter({
-    Key key,
-    @required this.boxScrollView,
-  })  : assert(boxScrollView != null),
-        super(key: key);
-
-  final BoxScrollView boxScrollView;
-
-  @override
-  Widget build(BuildContext context) {
-    return _toSliver(context, boxScrollView) ?? _sliverEmpty;
-  }
-
-  Widget _toSliver(BuildContext context, BoxScrollView view) {
-    if (view == null) return view;
-
-    final padding = view.padding;
-    // ignore: invalid_use_of_protected_member
-    Widget sliver = view.buildChildLayout(context);
-    if (padding != null && padding != EdgeInsets.zero) {
-      sliver = SliverPadding(
-        padding: padding,
-        sliver: sliver,
-      );
-    }
-    return sliver;
-  }
-
-  Widget _sliverEmpty() => SliverPadding(padding: EdgeInsets.zero);
 }
