@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 class GalleryView extends StatelessWidget {
   const GalleryView.builder({
     Key key,
-    this.minPreRow = 1,
-    this.maxPreRow = 77,
+    this.minPreRow = 2,
+    this.maxPreRow = 5,
     this.duration = const Duration(milliseconds: 300),
     this.itemCount,
     @required this.itemBuilder,
@@ -19,29 +19,26 @@ class GalleryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<int> count = ValueNotifier<int>(minPreRow);
-    final ValueNotifier<double> scale = ValueNotifier<double>(1.0);
-    int startCount = minPreRow;
-    double startScale = 1.0;
+    final ValueNotifier<double> count = ValueNotifier<double>(minPreRow.toDouble());
+    double startCount = minPreRow.toDouble();
     return Scaffold(
       body: GestureDetector(
-        onScaleStart: (e) {
-          startCount = count.value;
-          startScale = scale.value;
-        },
+        onScaleStart: (e) => startCount = count.value,
         onScaleUpdate: (ScaleUpdateDetails details) {
-          count.value = (startCount * (1.0 / details.scale) ~/ 1).clamp(minPreRow, maxPreRow);
-          scale.value = startScale * details.scale;
+          count.value = _getValidCount(startCount * (1.0 / details.scale));
+        },
+        onScaleEnd: (e) {
+          count.value = _getValidCount(count.value.floorToDouble());
         },
         child: ValueListenableBuilder(
-          valueListenable: scale,
+          valueListenable: count,
           builder: (_, double value, __) {
+            final int crossAxisCount = count.value.ceil();
             return Transform.scale(
-              scale: value,
+              scale: (crossAxisCount / count.value).toDouble(),
               alignment: Alignment.topLeft,
               child: GridView.builder(
-                // TODO: 转变太快, 并且一行不能显示半个然后自动校准
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: count.value),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount),
                 itemCount: itemCount,
                 itemBuilder: (BuildContext context, int index) {
                   return AnimatedSwitcher(
@@ -59,4 +56,6 @@ class GalleryView extends StatelessWidget {
       ),
     );
   }
+
+  double _getValidCount(double a) => a.clamp(minPreRow, maxPreRow).toDouble();
 }
