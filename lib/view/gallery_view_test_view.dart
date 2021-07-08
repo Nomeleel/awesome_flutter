@@ -12,9 +12,14 @@ class GalleryViewTestView extends StatelessWidget {
       title: 'Gallery View Test View',
       body: GalleryView.builder(
         itemCount: 77,
+        minPreRow: 2,
+        maxPreRow: 7,
+        duration: const Duration(milliseconds: 500),
         itemBuilder: (_, int index) {
           return Container(
             color: Colors.primaries[index % Colors.primaries.length],
+            alignment: Alignment.center,
+            child: Text('$index'),
           );
         },
       ),

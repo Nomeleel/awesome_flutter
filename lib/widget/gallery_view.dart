@@ -28,7 +28,7 @@ class GalleryView extends StatelessWidget {
           count.value = _getValidCount(startCount * (1.0 / details.scale));
         },
         onScaleEnd: (e) {
-          count.value = _getValidCount(count.value.floorToDouble());
+          count.value = _getValidCount(count.value.roundToDouble());
         },
         child: ValueListenableBuilder(
           valueListenable: count,
@@ -44,6 +44,7 @@ class GalleryView extends StatelessWidget {
                   return AnimatedSwitcher(
                     duration: duration,
                     child: Container(
+                      // 位置变化才有淡入淡出动画 否者可以使用UniqueKey
                       key: ValueKey('${index ~/ value}-${index % value}'),
                       child: itemBuilder(context, index),
                     ),
