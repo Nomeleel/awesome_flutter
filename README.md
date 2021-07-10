@@ -1,6 +1,6 @@
 # Awesome Flutter
 
-[![Support Platforms](https://img.shields.io/badge/flutter-android%20%7C%20ios-green.svg)](https://github.com/Nomeleel/awesome_flutter) [![Flutter Sample](https://img.shields.io/badge/flutter-sample-purple.svg)](https://github.com/Nomeleel/fine_client) [![Star on GitHub](https://img.shields.io/github/stars/Nomeleel/awesome_flutter.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Nomeleel/awesome_flutter) 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/Nomeleel/awesome_flutter) [![Support Platforms](https://img.shields.io/badge/flutter-android%20%7C%20ios-green.svg)](https://github.com/Nomeleel/awesome_flutter) [![Flutter Sample](https://img.shields.io/badge/flutter-sample-purple.svg)](https://github.com/Nomeleel/fine_client) [![Star on GitHub](https://img.shields.io/github/stars/Nomeleel/awesome_flutter.svg?style=flat&logo=github&colorB=deeppink&label=stars)](https://github.com/Nomeleel/awesome_flutter) 
 
 You say you are great, I do not believe it, I will verify it myself. Here are some attempts to use Flutter.
 
