@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,14 +10,21 @@ class FollowView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(
-      initialPage: 7,
-      viewportFraction: 0.7,
+      initialPage: 0,
+      viewportFraction: 0.8,
     );
     controller.addListener(() {});
     return ScaffoldView(
       title: 'Follow View',
       body: Column(
         children: [
+          Container(
+            constraints: BoxConstraints.expand(height: 200.0),
+            child: CustomPaint(
+              painter: ArcIndicatorPainter(repaint: controller),
+            ),
+          ),
+          /*
           Container(
             height: 200.0,
             alignment: Alignment.center,
@@ -43,21 +52,101 @@ class FollowView extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
+          */
+          SizedBox(
+            height: 220.0,
             child: PageView.builder(
               controller: controller,
               physics: const BouncingScrollPhysics(),
-              itemCount: 77,
+              itemCount: 7,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   margin: const EdgeInsets.all(10.0),
-                  color: Colors.primaries[index % Colors.primaries.length],
+                  decoration: BoxDecoration(
+                    color: Colors.primaries[index % Colors.primaries.length],
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                 );
               },
             ),
           ),
+          const Spacer(),
         ],
       ),
     );
   }
+}
+
+class ArcIndicatorPainter extends CustomPainter {
+  const ArcIndicatorPainter({this.repaint}) : super(repaint: repaint);
+
+  final PageController repaint;
+
+  // 0 ~ pi / 2
+  final offsetAngle = pi * .25;
+  final count = 7;
+
+  double get startAngle => pi / 2 - offsetAngle;
+  double get sweepAngle => -pi + offsetAngle * 2;
+  Tween<double> get tween => Tween(begin: 0, end: sweepAngle);
+  // 0.0 <= repaint.page <= pageSize - 1 但是两端溢出值我还是要的
+  double get curPage {
+    double overflow = 0;
+    if (repaint.offset < 0) overflow = repaint.offset;
+    if (repaint.offset > repaint.position.maxScrollExtent) overflow = repaint.offset - repaint.position.maxScrollExtent;
+    return repaint.page + overflow / 500.0;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // bg color
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..color = Colors.grey.withOpacity(.7),
+    );
+
+    final center = Offset(size.width / 2, -size.width);
+    canvas.translate(center.dx, center.dy);
+
+    // bg arc color
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset.zero, radius: size.width + size.height),
+      startAngle,
+      pi * 2,
+      false,
+      Paint()
+        ..color = Colors.grey
+        ..style = PaintingStyle.stroke
+        ..isAntiAlias = true
+        ..strokeWidth = size.height * 1.3,
+    );
+
+    canvas.rotate(offsetAngle - _rotateAngle(curPage));
+
+    final radius = size.width + size.height * 0.8;
+
+    // bg arc line
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset.zero, radius: radius),
+      startAngle,
+      sweepAngle,
+      false,
+      Paint()
+        ..color = Colors.black
+        ..style = PaintingStyle.stroke
+        ..isAntiAlias = true
+        ..strokeWidth = 5,
+    );
+
+    // bg arc line point
+    for (int i = 0; i < count; i++) {
+      final angle = startAngle + _rotateAngle(i);
+      canvas.drawCircle(Offset(cos(angle) * radius, sin(angle) * radius), 8.0, Paint()..color = Colors.black);
+    }
+  }
+
+  double _rotateAngle(num index) => tween.transform(index / (count - 1));
+
+  @override
+  bool shouldRepaint(covariant ArcIndicatorPainter oldDelegate) => false;
 }
