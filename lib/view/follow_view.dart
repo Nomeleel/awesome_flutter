@@ -10,7 +10,7 @@ class FollowView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(
-      initialPage: 0,
+      initialPage: 2,
       viewportFraction: 0.8,
     );
     controller.addListener(() {});
@@ -21,7 +21,7 @@ class FollowView extends StatelessWidget {
           Container(
             constraints: BoxConstraints.expand(height: 200.0),
             child: CustomPaint(
-              painter: ArcIndicatorPainter(repaint: controller),
+              painter: ArcIndicatorPainter(repaint: controller, level: 3),
             ),
           ),
           /*
@@ -78,13 +78,18 @@ class FollowView extends StatelessWidget {
 }
 
 class ArcIndicatorPainter extends CustomPainter {
-  const ArcIndicatorPainter({this.repaint}) : super(repaint: repaint);
+  const ArcIndicatorPainter({
+    this.repaint,
+    this.level = 1,
+    this.maxLevel = 7,
+  }) : super(repaint: repaint);
 
   final PageController repaint;
+  final int level;
+  final int maxLevel;
 
   // 0 ~ pi / 2
   final offsetAngle = pi * .25;
-  final count = 7;
 
   double get startAngle => pi / 2 - offsetAngle;
   double get sweepAngle => -pi + offsetAngle * 2;
@@ -121,11 +126,11 @@ class ArcIndicatorPainter extends CustomPainter {
         ..strokeWidth = size.height * 1.3,
     );
 
-    canvas.rotate(offsetAngle - _rotateAngle(curPage));
+    canvas.rotate(offsetAngle - _sweepAngle(curPage));
 
     final radius = size.width + size.height * 0.8;
 
-    // bg arc line
+    // arc line
     canvas.drawArc(
       Rect.fromCircle(center: Offset.zero, radius: radius),
       startAngle,
@@ -135,17 +140,82 @@ class ArcIndicatorPainter extends CustomPainter {
         ..color = Colors.black
         ..style = PaintingStyle.stroke
         ..isAntiAlias = true
+        ..strokeWidth = 3,
+    );
+
+    // arc active line
+    canvas.drawArc(
+      Rect.fromCircle(center: Offset.zero, radius: radius),
+      startAngle,
+      _sweepAngle(level - 1),
+      false,
+      Paint()
+        ..color = Colors.yellowAccent
+        ..style = PaintingStyle.stroke
+        ..isAntiAlias = true
         ..strokeWidth = 5,
     );
 
-    // bg arc line point
-    for (int i = 0; i < count; i++) {
-      final angle = startAngle + _rotateAngle(i);
-      canvas.drawCircle(Offset(cos(angle) * radius, sin(angle) * radius), 8.0, Paint()..color = Colors.black);
+    // indicator point
+    final angle = startAngle + _sweepAngle(repaint.page.floor());
+    canvas.drawCircle(
+      Offset(cos(angle) * radius, sin(angle) * radius),
+      9.0,
+      Paint()..color = Colors.yellow.withOpacity(.7),
+    );
+
+    // arc line point / active
+    for (int i = 0; i < maxLevel; i++) {
+      final angle = startAngle + _sweepAngle(i);
+      canvas.drawCircle(
+        Offset(cos(angle) * radius, sin(angle) * radius),
+        6.0,
+        Paint()..color = i < level ? Colors.yellow : Colors.black,
+      );
+    }
+
+    canvas.rotate(-offsetAngle);
+
+    // arc line point text
+    for (int i = 0; i < maxLevel; i++) {
+      final TextPainter painter = TextPainter(
+        text: TextSpan(
+          style: TextStyle(
+            color: Colors.purple,
+            fontSize: 14,
+          ),
+          children: [
+            TextSpan(text: 'V', style: TextStyle(fontSize: 12)),
+            TextSpan(text: '${i + 1}'),
+          ],
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      painter.layout();
+
+      // active text bg
+      if (i == level - 1) {
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(center: Offset(0, radius + 18.5), width: painter.width + 10.0, height: painter.height),
+            Radius.circular(20.0),
+          ),
+          Paint()..color = Colors.amber,
+        );
+      }
+
+      painter.paint(
+        canvas,
+        Offset(
+          -painter.width / 2,
+          radius + 10.0,
+        ),
+      );
+      canvas.rotate(_sweepAngle(1));
     }
   }
 
-  double _rotateAngle(num index) => tween.transform(index / (count - 1));
+  double _sweepAngle(num index) => tween.transform(index / (maxLevel - 1));
 
   @override
   bool shouldRepaint(covariant ArcIndicatorPainter oldDelegate) => false;
