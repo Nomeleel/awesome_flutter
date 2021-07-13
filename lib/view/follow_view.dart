@@ -7,10 +7,12 @@ import 'package:flutter/widgets.dart';
 class FollowView extends StatelessWidget {
   const FollowView({Key key}) : super(key: key);
 
+  final int itemCount = 9;
+
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController(
-      initialPage: 2,
+      initialPage: 5,
       viewportFraction: 0.8,
     );
     controller.addListener(() {});
@@ -19,9 +21,13 @@ class FollowView extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            constraints: BoxConstraints.expand(height: 200.0),
+            constraints: BoxConstraints.expand(height: 210.0),
             child: CustomPaint(
-              painter: ArcIndicatorPainter(repaint: controller, level: 3),
+              painter: ArcIndicatorPainter(
+                repaint: controller,
+                level: 3,
+                maxLevel: itemCount,
+              ),
             ),
           ),
           /*
@@ -58,7 +64,7 @@ class FollowView extends StatelessWidget {
             child: PageView.builder(
               controller: controller,
               physics: const BouncingScrollPhysics(),
-              itemCount: 7,
+              itemCount: itemCount,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   margin: const EdgeInsets.all(10.0),
@@ -128,19 +134,34 @@ class ArcIndicatorPainter extends CustomPainter {
 
     canvas.rotate(offsetAngle - _sweepAngle(curPage));
 
+    // arc mock line
+    for (int i = 1; i < 6; i++) {
+      canvas.drawArc(
+        Rect.fromCircle(center: Offset.zero, radius: size.width + size.height * (i * 0.225 + 0.35)),
+        startAngle,
+        2 * pi,
+        false,
+        Paint()
+          ..color = Colors.black.withOpacity(.2)
+          ..style = PaintingStyle.stroke
+          ..isAntiAlias = true
+          ..strokeWidth = 2.5,
+      );
+    }
+
     final radius = size.width + size.height * 0.8;
 
     // arc line
     canvas.drawArc(
       Rect.fromCircle(center: Offset.zero, radius: radius),
       startAngle,
-      sweepAngle,
+      sweepAngle - pi / 2,
       false,
       Paint()
         ..color = Colors.black
         ..style = PaintingStyle.stroke
         ..isAntiAlias = true
-        ..strokeWidth = 3,
+        ..strokeWidth = 2.5,
     );
 
     // arc active line
@@ -153,14 +174,14 @@ class ArcIndicatorPainter extends CustomPainter {
         ..color = Colors.yellowAccent
         ..style = PaintingStyle.stroke
         ..isAntiAlias = true
-        ..strokeWidth = 5,
+        ..strokeWidth = 3,
     );
 
     // indicator point
     final angle = startAngle + _sweepAngle(repaint.page.floor());
     canvas.drawCircle(
       Offset(cos(angle) * radius, sin(angle) * radius),
-      9.0,
+      7.0,
       Paint()..color = Colors.yellow.withOpacity(.7),
     );
 
@@ -169,7 +190,7 @@ class ArcIndicatorPainter extends CustomPainter {
       final angle = startAngle + _sweepAngle(i);
       canvas.drawCircle(
         Offset(cos(angle) * radius, sin(angle) * radius),
-        6.0,
+        5.0,
         Paint()..color = i < level ? Colors.yellow : Colors.black,
       );
     }
@@ -197,7 +218,7 @@ class ArcIndicatorPainter extends CustomPainter {
       if (i == level - 1) {
         canvas.drawRRect(
           RRect.fromRectAndRadius(
-            Rect.fromCenter(center: Offset(0, radius + 18.5), width: painter.width + 10.0, height: painter.height),
+            Rect.fromCenter(center: Offset(0, radius + 20.0), width: painter.width + 10.0, height: painter.height),
             Radius.circular(20.0),
           ),
           Paint()..color = Colors.amber,
@@ -208,7 +229,7 @@ class ArcIndicatorPainter extends CustomPainter {
         canvas,
         Offset(
           -painter.width / 2,
-          radius + 10.0,
+          radius + 12.0,
         ),
       );
       canvas.rotate(_sweepAngle(1));
