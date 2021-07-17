@@ -11,9 +11,7 @@ class FakeOverflowBox extends SingleChildRenderObjectWidget {
   final double fakeHeight;
 
   @override
-  RenderObject createRenderObject(BuildContext context) {
-    return RenderFakeOverflowBox(fakeHeight: fakeHeight);
-  }
+  RenderObject createRenderObject(BuildContext context) => RenderFakeOverflowBox(fakeHeight: fakeHeight);
 
   @override
   void updateRenderObject(BuildContext context, covariant RenderFakeOverflowBox renderObject) {
@@ -30,5 +28,52 @@ class RenderFakeOverflowBox extends RenderProxyBox {
   void performLayout() {
     child.layout(constraints);
     size = Size(constraints.maxWidth, fakeHeight ?? constraints.maxHeight);
+  }
+}
+
+class SliverFakeOverflow extends SingleChildRenderObjectWidget {
+  const SliverFakeOverflow({
+    Key key,
+    Widget child,
+  }) : super(key: key, child: child);
+
+  @override
+  RenderSliverFakeOverflow createRenderObject(BuildContext context) => RenderSliverFakeOverflow();
+}
+
+class RenderSliverFakeOverflow extends RenderSliverSingleBoxAdapter {
+  @override
+  void performLayout() {
+    if (child == null) {
+      geometry = SliverGeometry.zero;
+      return;
+    }
+    final SliverConstraints constraints = this.constraints;
+    child.layout(constraints.asBoxConstraints(), parentUsesSize: true);
+    final double childExtent = 120.0;
+    // switch (constraints.axis) {
+    //   case Axis.horizontal:
+    //     childExtent = child.size.width;
+    //     break;
+    //   case Axis.vertical:
+    //     childExtent = child.size.height;
+    //     break;
+    // }
+    // assert(childExtent != null);
+    // final double paintedChildSize = calculatePaintOffset(constraints, from: 0.0, to: childExtent);
+    final double paintedChildSize = 120.0;
+    final double cacheExtent = calculateCacheOffset(constraints, from: 0.0, to: childExtent);
+
+    assert(paintedChildSize.isFinite);
+    assert(paintedChildSize >= 0.0);
+    geometry = SliverGeometry(
+      scrollExtent: childExtent,
+      paintExtent: paintedChildSize,
+      cacheExtent: cacheExtent,
+      maxPaintExtent: childExtent,
+      hitTestExtent: paintedChildSize,
+      hasVisualOverflow: childExtent > constraints.remainingPaintExtent || constraints.scrollOffset > 0.0,
+    );
+    setChildParentData(child, constraints, geometry);
   }
 }
