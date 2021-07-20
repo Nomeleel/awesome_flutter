@@ -34,8 +34,63 @@ class _TraceRedPathTestViewState extends State<TraceRedPathTestView> with Single
     return ScaffoldView(
       title: 'Trace Red Path Test View',
       body: Center(
-        child: CustomPaint(
-          painter: TraceRedPathPainter(repaint: _controller),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CustomPaint(
+              painter: TraceRedPathPainter(repaint: _controller),
+            ),
+            ClipPath(
+              clipper: TraceRedPathClipper(
+                reclip: _controller,
+                size: Size(200.0, 150.0),
+              ),
+              child: _container(),
+            ),
+            ClipPath(
+              clipper: TraceRedPathClipper(
+                reclip: CurvedAnimation(
+                  parent: _controller,
+                  curve: Interval(
+                    0.3,
+                    0.9,
+                    curve: Curves.bounceIn,
+                  ),
+                ),
+                size: Size(200.0, 150.0),
+              ),
+              child: _container(),
+            ),
+            ClipPath(
+              clipper: TraceRedPathClipper(
+                reclip: CurveTween(
+                  curve: Interval(
+                    0.3,
+                    0.9,
+                    curve: Curves.bounceIn,
+                  ),
+                ).animate(_controller),
+                size: Size(200.0, 150.0),
+              ),
+              child: _container(),
+            ),
+            ClipPath(
+              clipper: TraceRedPathClipper(
+                reclip: _controller.drive(
+                  CurveTween(
+                    curve: Interval(
+                      0.3,
+                      0.9,
+                      curve: Curves.bounceIn,
+                    ),
+                  ),
+                ),
+                size: Size(200.0, 150.0),
+              ),
+              child: _container(),
+            ),
+            _container(),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -48,6 +103,14 @@ class _TraceRedPathTestViewState extends State<TraceRedPathTestView> with Single
         },
         child: const Text('Go'),
       ),
+    );
+  }
+
+  Container _container() {
+    return Container(
+      width: 200.0,
+      height: 150.0,
+      color: Colors.purple,
     );
   }
 }
@@ -84,4 +147,31 @@ class TraceRedPathPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class TraceRedPathClipper extends CustomClipper<Path> {
+  final Animation<double> reclip;
+  final Size size;
+  final PathMetric pathMetric;
+
+  TraceRedPathClipper({this.reclip, this.size})
+      : pathMetric = (Path()
+              ..addRRect(
+                RRect.fromRectAndRadius(
+                  Rect.fromCenter(center: Offset.zero, width: size.width, height: size.height),
+                  Radius.circular(0.0),
+                ),
+              ))
+            .computeMetrics()
+            .single,
+        super(reclip: reclip);
+
+  @override
+  Path getClip(Size size) {
+    return Path()..addRect(Rect.fromLTWH(0.0, 0.0, reclip.value * size.width, size.height));
+    // return Path()..addPath(pathMetric.extractPath(0, pathMetric.length * reclip.value), Offset.zero);
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
