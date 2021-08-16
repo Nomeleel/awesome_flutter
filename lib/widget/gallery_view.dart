@@ -43,7 +43,7 @@ class GalleryView extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return AnimatedSwitcher(
                     duration: duration,
-                    child: Container(
+                    child: KeyedSubtree(
                       // 位置变化才有淡入淡出动画 否者可以使用UniqueKey
                       key: ValueKey('${index ~/ value}-${index % value}'),
                       child: itemBuilder(context, index),
