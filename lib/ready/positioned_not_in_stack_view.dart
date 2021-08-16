@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
@@ -52,7 +53,12 @@ class PositionedWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isInStack = context.findAncestorWidgetOfExactType<Stack>().children.any((e) => e == this);
+    bool isInStack = false;
+    context.visitAncestorElements((element) {
+      isInStack = element.renderObject.runtimeType == RenderStack;
+      return false;
+    });
+    // final isInStack = context.findAncestorWidgetOfExactType<Stack>().children.any((e) => e == this);
     if (isInStack) {
       return Positioned(
         top: 20.0,
