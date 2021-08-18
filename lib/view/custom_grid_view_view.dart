@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../custom/rendering/sliver_grid_delegate.dart';
 import '../widget/auto_switch_widget.dart';
 import '../widget/scaffold_view.dart';
+import '../widget/tab_view.dart';
 
 class CustomGridViewView extends StatelessWidget {
   const CustomGridViewView({Key key}) : super(key: key);
@@ -13,63 +15,138 @@ class CustomGridViewView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldView(
       title: 'Custom Grid View View',
-      body: GridView.builder(
-        padding: EdgeInsets.all(10.0),
-        itemCount: 77,
-        itemBuilder: (BuildContext context, int index) {
-          return AutoSwitchWidget(
-            initWidget: 'item',
-            widgetMap: {
-              'item': Container(
-                color: Colors.primaries[index %Colors.primaries.length],
-                alignment: Alignment.center,
-                child: Text('$index'),
-              ),
-              'max': Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.purple,
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  '$index',
-                  style: TextStyle(fontSize: 77.0),
-                ),
-              ),
-            },
-            widgetSwitch: (Size size) => size.width > size.height ? 'max' : 'item',
-          );
-        },
-        gridDelegate: SliverGridDelegateWithMultipleFixedCrossAxisCount(
-          gridDelegateList: [
-            SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 3,
-            ),
-            SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: .9,
-            ),
-            SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 1.2,
-            ),
-            SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 1.0,
-            ),
-          ],
-          mainAxisCountList: [1, 1, 2, 3],
-        ),
+      body: TabView(
+        tabs: ['Stack', 'Absorb Stack'],
+        children: [
+          usedMultipleFixedCrossAxisCount(),
+          usedFixedPartAspectRatio(),
+        ],
       ),
+    );
+  }
+
+  Widget usedMultipleFixedCrossAxisCount() {
+    return GridView.builder(
+      padding: EdgeInsets.all(10.0),
+      itemCount: 77,
+      itemBuilder: (BuildContext context, int index) {
+        return AutoSwitchWidget(
+          initWidget: 'item',
+          widgetMap: {
+            'item': Container(
+              color: Colors.primaries[index % Colors.primaries.length],
+              alignment: Alignment.center,
+              child: Text('$index'),
+            ),
+            'max': Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.purple,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Text(
+                '$index',
+                style: TextStyle(fontSize: 77.0),
+              ),
+            ),
+          },
+          widgetSwitch: (Size size) => size.width > size.height ? 'max' : 'item',
+        );
+      },
+      gridDelegate: SliverGridDelegateWithMultipleFixedCrossAxisCount(
+        gridDelegateList: [
+          SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 3,
+          ),
+          SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: .9,
+          ),
+          SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 1.2,
+          ),
+          SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 1.0,
+          ),
+        ],
+        mainAxisCountList: [1, 1, 2, 3],
+      ),
+    );
+  }
+
+  Widget usedFixedPartAspectRatio() {
+    final widthNotifier = ValueNotifier(200.0);
+    final fixedHeight = 50.0;
+    return ValueListenableBuilder(
+      valueListenable: widthNotifier,
+      builder: (_, width, __) {
+        return Column(
+          children: [
+            Container(
+              height: fixedHeight,
+              color: Colors.red,
+            ),
+            Expanded(
+              child: SizedBox(
+                width: width,
+                child: GridView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: 1,
+                  itemBuilder: (_, int index) {
+                    return LayoutBuilder(
+                      builder: (_, constraints) {
+                        print(constraints);
+                        return Column(
+                          children: [
+                            Expanded(child: Center(child: Placeholder())),
+                            // AspectRatio(
+                            //   aspectRatio: 1.0,
+                            //   child: Container(
+                            //     color: Colors.purple,
+                            //   ),
+                            // ),
+                            Container(
+                              height: fixedHeight,
+                              color: Colors.primaries[index % Colors.primaries.length],
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  gridDelegate: SliverGridDelegateWithFixedPartAspectRatio(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 5.0,
+                    crossAxisSpacing: 5.0,
+                    childPartAspectRatio: 1.0,
+                    mainAxisPartExtent: fixedHeight,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 150.0,
+              child: Slider(
+                value: width,
+                min: 100.0,
+                max: 500.0,
+                onChanged: (value) => widthNotifier.value = value,
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

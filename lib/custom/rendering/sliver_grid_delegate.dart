@@ -144,3 +144,69 @@ class SliverGridMultipleTileLayout extends SliverGridLayout {
     return scrollOffset + layout.mainAxisStride * rowCount;
   }
 }
+
+/// 经常遇到由一个固定比例Box和一个固定高度Box组成的Item, 然后就要反向算出[childAspectRatio]。
+/// 现在只需设置[childPartAspectRatio]固定比例, [mainAxisPartExtent]固定高度即可。
+class SliverGridDelegateWithFixedPartAspectRatio extends SliverGridDelegate {
+  const SliverGridDelegateWithFixedPartAspectRatio({
+    this.crossAxisCount = 1,
+    this.mainAxisSpacing = 0.0,
+    this.crossAxisSpacing = 0.0,
+    this.childPartAspectRatio = 1.0,
+    this.mainAxisPartExtent = 0.0,
+  })  : assert(crossAxisCount != null && crossAxisCount > 0),
+        assert(mainAxisSpacing != null && mainAxisSpacing >= 0),
+        assert(crossAxisSpacing != null && crossAxisSpacing >= 0),
+        assert(childPartAspectRatio != null && childPartAspectRatio > 0),
+        assert(mainAxisPartExtent != null && mainAxisPartExtent >= 0);
+
+  final int crossAxisCount;
+
+  final double mainAxisSpacing;
+
+  final double crossAxisSpacing;
+
+  final double childPartAspectRatio;
+
+  final double mainAxisPartExtent;
+
+  bool _debugAssertIsValid() {
+    assert(crossAxisCount > 0);
+    assert(mainAxisSpacing >= 0.0);
+    assert(crossAxisSpacing >= 0.0);
+    assert(childPartAspectRatio > 0.0);
+    assert(mainAxisPartExtent >= 0.0);
+    return true;
+  }
+
+  @override
+  SliverGridLayout getLayout(SliverConstraints constraints) {
+    assert(_debugAssertIsValid());
+    final double usableCrossAxisExtent = math.max(
+      0.0,
+      constraints.crossAxisExtent - crossAxisSpacing * (crossAxisCount - 1),
+    );
+    final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount;
+    print('----------------------');
+    print(childCrossAxisExtent);
+    final double childMainAxisExtent = mainAxisPartExtent + (childCrossAxisExtent / childPartAspectRatio);
+    print(childMainAxisExtent);
+    return SliverGridRegularTileLayout(
+      crossAxisCount: crossAxisCount,
+      mainAxisStride: childMainAxisExtent + mainAxisSpacing,
+      crossAxisStride: childCrossAxisExtent + crossAxisSpacing,
+      childMainAxisExtent: childMainAxisExtent,
+      childCrossAxisExtent: childCrossAxisExtent,
+      reverseCrossAxis: axisDirectionIsReversed(constraints.crossAxisDirection),
+    );
+  }
+
+  @override
+  bool shouldRelayout(SliverGridDelegateWithFixedPartAspectRatio oldDelegate) {
+    return oldDelegate.crossAxisCount != crossAxisCount ||
+        oldDelegate.mainAxisSpacing != mainAxisSpacing ||
+        oldDelegate.crossAxisSpacing != crossAxisSpacing ||
+        oldDelegate.childPartAspectRatio != childPartAspectRatio ||
+        oldDelegate.mainAxisPartExtent != mainAxisPartExtent;
+  }
+}
