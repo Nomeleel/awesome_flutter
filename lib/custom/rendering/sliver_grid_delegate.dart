@@ -187,10 +187,7 @@ class SliverGridDelegateWithFixedPartAspectRatio extends SliverGridDelegate {
       constraints.crossAxisExtent - crossAxisSpacing * (crossAxisCount - 1),
     );
     final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount;
-    print('----------------------');
-    print(childCrossAxisExtent);
     final double childMainAxisExtent = mainAxisPartExtent + (childCrossAxisExtent / childPartAspectRatio);
-    print(childMainAxisExtent);
     return SliverGridRegularTileLayout(
       crossAxisCount: crossAxisCount,
       mainAxisStride: childMainAxisExtent + mainAxisSpacing,

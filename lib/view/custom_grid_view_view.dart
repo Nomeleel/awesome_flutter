@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -16,7 +14,7 @@ class CustomGridViewView extends StatelessWidget {
     return ScaffoldView(
       title: 'Custom Grid View View',
       body: TabView(
-        tabs: ['Stack', 'Absorb Stack'],
+        tabs: ['Mult Fixed Cross Count', 'Fixed Part Aspect Ratio'],
         children: [
           usedMultipleFixedCrossAxisCount(),
           usedFixedPartAspectRatio(),
@@ -88,65 +86,65 @@ class CustomGridViewView extends StatelessWidget {
   Widget usedFixedPartAspectRatio() {
     final widthNotifier = ValueNotifier(200.0);
     final fixedHeight = 50.0;
-    return ValueListenableBuilder(
-      valueListenable: widthNotifier,
-      builder: (_, width, __) {
-        return Column(
-          children: [
-            Container(
-              height: fixedHeight,
-              color: Colors.red,
-            ),
-            Expanded(
-              child: SizedBox(
-                width: width,
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: 1,
-                  itemBuilder: (_, int index) {
-                    return LayoutBuilder(
-                      builder: (_, constraints) {
-                        print(constraints);
-                        return Column(
-                          children: [
-                            Expanded(child: Center(child: Placeholder())),
-                            // AspectRatio(
-                            //   aspectRatio: 1.0,
-                            //   child: Container(
-                            //     color: Colors.purple,
-                            //   ),
-                            // ),
-                            Container(
-                              height: fixedHeight,
-                              color: Colors.primaries[index % Colors.primaries.length],
-                            ),
-                          ],
+    final fixedItem = (index) => Container(
+          height: fixedHeight,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.primaries[index % Colors.primaries.length],
+            border: Border.all(color: Colors.black),
+          ),
+          child: Text('A' * 77, style: TextStyle(fontSize: fixedHeight)),
+        );
+    return Stack(
+      children: [
+        SingleChildScrollView(child: ListBody(children: List.generate(77, fixedItem))),
+        ValueListenableBuilder(
+          valueListenable: widthNotifier,
+          builder: (_, width, __) {
+            return Column(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    width: width,
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: 7,
+                      itemBuilder: (_, int index) {
+                        return LayoutBuilder(
+                          builder: (_, constraints) {
+                            return Column(
+                              children: [
+                                Expanded(child: Container(color: Colors.purple, child: Placeholder())),
+                                fixedItem(index),
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  gridDelegate: SliverGridDelegateWithFixedPartAspectRatio(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 5.0,
-                    crossAxisSpacing: 5.0,
-                    childPartAspectRatio: 1.0,
-                    mainAxisPartExtent: fixedHeight,
+                      gridDelegate: SliverGridDelegateWithFixedPartAspectRatio(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 5.0,
+                        crossAxisSpacing: 5.0,
+                        childPartAspectRatio: 1.0,
+                        mainAxisPartExtent: fixedHeight,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              height: 150.0,
-              child: Slider(
-                value: width,
-                min: 100.0,
-                max: 500.0,
-                onChanged: (value) => widthNotifier.value = value,
-              ),
-            )
-          ],
-        );
-      },
+                Container(
+                  height: 100.0,
+                  child: Slider(
+                    value: width,
+                    min: 50.0,
+                    max: 500.0,
+                    onChanged: (value) => widthNotifier.value = value,
+                  ),
+                )
+              ],
+            );
+          },
+        )
+      ],
     );
   }
 }
