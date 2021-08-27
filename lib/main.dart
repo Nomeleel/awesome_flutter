@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'configure/configure_nonweb.dart' if (dart.library.html) 'configure/configure_web.dart';
+// import 'configure/configure_nonweb.dart' if (dart.library.html) 'configure/configure_web.dart';
 import 'layout/layout.dart';
 import 'model/app_store_card_data.dart';
 import 'route/view_routes.dart';
@@ -18,7 +18,7 @@ import 'widget/combine_list_view.dart';
 import 'wrapper/image_wraper.dart';
 
 void main() {
-  configureApp();
+  // configureApp();
   runApp(MyApp());
 }
 
