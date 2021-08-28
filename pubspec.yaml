@@ -29,9 +29,9 @@ dependencies:
   animations: ^1.0.0+5
   webview_flutter: 2.0.4
   image_gallery_saver: 1.2.2
-  shelf: ^0.7.9
+  # shelf: ^0.7.9
   adaptive_breakpoints: 0.0.3
-  image: ^3.0.2
+  # image: ^3.0.2
 
 dev_dependencies:
   flutter_test:
