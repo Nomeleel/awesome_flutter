@@ -24,22 +24,20 @@ class VerticalTurnBackListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldView(
-      body: ListView.separated(
-        padding: padding,
-        scrollDirection: Axis.horizontal,
-        itemCount: (itemCount / turnBackCount).ceil(),
-        separatorBuilder: (context, index) {
-          return turnBackSeparated?.call(context, index) ?? SizedBox.shrink();
-        },
-        itemBuilder: (context, index) {
-          final startIndex = index * turnBackCount;
-          final curItemCount = min(itemCount - startIndex, turnBackCount);
-          return Column(
-            children: List.generate(curItemCount, (i) => itemBuilder(context, startIndex + i)),
-          );
-        },
-      ),
+    return ListView.separated(
+      padding: padding,
+      scrollDirection: Axis.horizontal,
+      itemCount: (itemCount / turnBackCount).ceil(),
+      separatorBuilder: (context, index) {
+        return turnBackSeparated?.call(context, index) ?? SizedBox.shrink();
+      },
+      itemBuilder: (context, index) {
+        final startIndex = index * turnBackCount;
+        final curItemCount = min(itemCount - startIndex, turnBackCount);
+        return Column(
+          children: List.generate(curItemCount, (i) => itemBuilder(context, startIndex + i)),
+        );
+      },
     );
   }
 }
