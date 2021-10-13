@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
@@ -56,6 +59,27 @@ class CustomScrollViewTestView extends StatelessWidget {
           padding: padding,
           sliver: _buildGridView().buildChildLayout(context),
         ),
+        // Test computeMaxScrollOffset
+        SliverLayoutBuilder(builder: (sliverContext, sliverConstraints) {
+          final SliverGrid sliverGrid = _buildGridView().buildChildLayout(context);
+          final screenWidth = MediaQuery.of(context).size.width;
+          print('--------------------');
+
+          print(sliverGrid.estimateMaxScrollOffset(sliverConstraints, 0, itemCount - 1, 0, 0));
+
+          final SliverGridDelegateWithFixedCrossAxisCount gridDelegate = _getGridDelegate();
+
+          print(gridDelegate.getLayout(sliverConstraints).computeMaxScrollOffset(itemCount));
+
+          final fakeSliverConstraints = SliverConstraintsExtension.empty.copyWith(crossAxisExtent: screenWidth);
+          print(gridDelegate.getLayout(fakeSliverConstraints).computeMaxScrollOffset(itemCount));
+
+          print(gridDelegate.computeMaxScrollOffset(childCount: itemCount, crossAxisExtent: screenWidth));
+
+          print('--------------------');
+
+          return sliverGrid;
+        }),
       ],
     );
   }
@@ -176,5 +200,42 @@ class _IndexItemState extends State<IndexItem> {
   Widget build(BuildContext context) {
     print('--------build: ${widget.index}---------');
     return Container(color: Colors.primaries[widget.index % Colors.primaries.length]);
+  }
+}
+
+extension SliverConstraintsExtension on SliverConstraints {
+  static SliverConstraints empty = const SliverConstraints(
+    axisDirection: AxisDirection.down,
+    growthDirection: GrowthDirection.forward,
+    userScrollDirection: ScrollDirection.forward,
+    scrollOffset: 0,
+    precedingScrollExtent: 0,
+    overlap: 0,
+    remainingPaintExtent: 0,
+    crossAxisExtent: 0,
+    crossAxisDirection: AxisDirection.down,
+    viewportMainAxisExtent: 0,
+    remainingCacheExtent: 0,
+    cacheOrigin: 0,
+  );
+}
+
+extension SliverGridDelegateWithFixedCrossAxisCountExtension on SliverGridDelegateWithFixedCrossAxisCount {
+  double computeMaxScrollOffset({
+    int childCount = 0,
+    double crossAxisExtent = 0,
+    AxisDirection crossAxisDirection = AxisDirection.down,
+  }) {
+    final constraints = SliverConstraintsExtension.empty.copyWith(
+      crossAxisExtent: crossAxisExtent,
+      crossAxisDirection: crossAxisDirection,
+    );
+    return computeMaxScrollOffsetWithConstraints(constraints, childCount: childCount);
+  }
+}
+
+extension on SliverGridDelegate {
+  double computeMaxScrollOffsetWithConstraints(SliverConstraints constraints, {int childCount = 0}) {
+    return this.getLayout(constraints).computeMaxScrollOffset(childCount);
   }
 }
