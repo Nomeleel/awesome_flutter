@@ -139,23 +139,23 @@ class CustomLengthLimitingTextInputFormatter extends LengthLimitingTextInputForm
   }
 
   static String truncatedText(String text, int maxLength) {
-    int length = 0;
     bool hasMerge = false;
     for (int i = 0; i < text.characters.length; i++) {
       final String current = text.characters.elementAt(i);
       if (current.length <= 1 && current.codeUnits.first < 128) {
         if (hasMerge) {
           hasMerge = false;
-          if (length == maxLength) return text.characters.getRange(0, i + 1).string;
         } else {
           hasMerge = true;
-          length++;
+          maxLength--;
+          continue;
         }
       } else {
         hasMerge = false;
-        length++;
-        if (length == maxLength) return text.characters.getRange(0, i + 1).string;
+        maxLength--;
       }
+
+      if (maxLength == 0) return text.characters.getRange(0, i + 1).string;
     }
 
     return text;
