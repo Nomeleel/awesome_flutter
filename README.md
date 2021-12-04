@@ -30,7 +30,7 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 | [Fireworks](#fireworks) | Everything can be painted. Use CustomPainter to draw a firework. |
 | [Custom Grid View](#customgridview) | Implement irregular GridView layout through custom delegate. |
 | [Surround Square View](#surroundsquareview) | Try to customize the RenderObject to achieve the effect. |
-
+| [Follow View](#followview) | Try use ScrollController(Listenable) driver Painter. |
 
 **Next, let the picture dance.**
 
@@ -223,6 +223,14 @@ If the initial background color and the pinned background color after scrolling 
 
 <div align="center">
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/surround_square.gif" width="30%"/>
+</div>
+
+## FollowView
+
+[Web demo for follow view](https://nomeleel.github.io/awesome_flutter/#/follow_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/follow_view.gif" width="30%"/>
 </div>
 
 ## Found issues in Flutter
