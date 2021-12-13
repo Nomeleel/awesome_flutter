@@ -16,16 +16,16 @@ class _FocusableActionDetectorTestViewState extends State<FocusableActionDetecto
 }
 
 // 推荐使用KeyboardListener
-class FadButton4 extends StatelessWidget {
+class FadButton4 extends StatelessWidget with FocusMixin {
   const FadButton4({Key key, @required this.child}) : super(key: key);
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget focusNodeBuilder(BuildContext context, FocusNode focusNode) {
     final show = ValueNotifier(false);
     final toggleShow = () => show.value = !show.value;
     return RawKeyboardListener(
-      focusNode: FocusNode(),
+      focusNode: focusNode,
       onKey: (rawKeyEvent) {
         if (rawKeyEvent is RawKeyDownEvent) {
           if (rawKeyEvent.logicalKey == LogicalKeyboardKey.keyR) {
@@ -60,16 +60,16 @@ class FadButton4 extends StatelessWidget {
   }
 }
 
-class FadButton3 extends StatelessWidget {
+class FadButton3 extends StatelessWidget with FocusMixin {
   const FadButton3({Key key, @required this.child}) : super(key: key);
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget focusNodeBuilder(BuildContext context, FocusNode focusNode) {
     final show = ValueNotifier(false);
     final toggleShow = () => show.value = !show.value;
     return KeyboardListener(
-      focusNode: FocusNode(),
+      focusNode: focusNode,
       onKeyEvent: (keyEvent) {
         if (keyEvent is KeyDownEvent) {
           if (keyEvent.logicalKey == LogicalKeyboardKey.keyY) {
@@ -116,7 +116,7 @@ class FadButton2 extends StatefulWidget {
   State<FadButton2> createState() => _FadButton2State();
 }
 
-class _FadButton2State extends State<FadButton2> {
+class _FadButton2State extends State<FadButton2> with FocusMixin {
   final show = ValueNotifier(false);
 
   @override
@@ -140,8 +140,8 @@ class _FadButton2State extends State<FadButton2> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget focusNodeBuilder(BuildContext context, FocusNode focusNode) {
+    final child = GestureDetector(
       onTap: _toggleShow,
       child: Row(children: <Widget>[
         Container(
@@ -161,6 +161,11 @@ class _FadButton2State extends State<FadButton2> {
           },
         ),
       ]),
+    );
+
+    return Focus(
+      focusNode: focusNode,
+      child: child,
     );
   }
 
@@ -306,4 +311,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
     );
   }
+}
+
+mixin FocusMixin {
+  Widget build(BuildContext context) {
+    final FocusNode focusNode = FocusNode();
+    final focused = ValueNotifier(false);
+    focusNode.addListener(() => focused.value = focusNode.hasFocus);
+    return ValueListenableBuilder(
+      valueListenable: focused,
+      builder: (BuildContext context, bool focused, Widget child) {
+        return Opacity(
+          opacity: focused ? .7 : 1.0,
+          child: child,
+        );
+      },
+      child: focusNodeBuilder(context, focusNode),
+    );
+  }
+
+  Widget focusNodeBuilder(BuildContext context, FocusNode focusNode);
 }
