@@ -9,12 +9,12 @@ import StoreKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     // platform view in flutter.
-    weak var registrar = self.registrar(forPlugin: "ios-platform-view")
-    let factory = FLNativeViewFactory(messenger: registrar!.messenger())
-    self.registrar(forPlugin: "<ios-platform-view>")!.register(
-        factory,
-        withId: "<ios-platform-view-type>"
-    )
+    // weak var registrar = self.registrar(forPlugin: "ios-platform-view")
+    // let factory = FLNativeViewFactory(messenger: registrar!.messenger())
+    // self.registrar(forPlugin: "<ios-platform-view>")!.register(
+    //     factory,
+    //     withId: "<ios-platform-view-type>"
+    // )
     
     // Platform Channel -> Method Channel
     GeneratedPluginRegistrant.register(with: self)
