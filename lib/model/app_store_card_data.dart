@@ -6,8 +6,8 @@ class AppStoreCardData {
   const AppStoreCardData({
     this.imagePath,
     this.videoPath,
-    this.descriptionMode,
-    this.descriptionData,
+    required this.descriptionMode,
+    required this.descriptionData,
     this.detailViewRouteName,
   });
 
@@ -28,9 +28,9 @@ class AppStoreCardData {
         descriptionData = AppStoreCardDescriptionData.simple(name),
         detailViewRouteName = name;
 
-  final String imagePath;
-  final String videoPath;
+  final String? imagePath;
+  final String? videoPath;
   final AppStoreCardDescriptionMode descriptionMode;
   final AppStoreCardDescriptionData descriptionData;
-  final String detailViewRouteName;
+  final String? detailViewRouteName;
 }

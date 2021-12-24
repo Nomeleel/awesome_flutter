@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FocusableActionDetectorTestView extends StatefulWidget {
-  FocusableActionDetectorTestView({Key key}) : super(key: key);
+  FocusableActionDetectorTestView({Key? key}) : super(key: key);
 
   @override
   _FocusableActionDetectorTestViewState createState() => _FocusableActionDetectorTestViewState();
@@ -17,7 +17,7 @@ class _FocusableActionDetectorTestViewState extends State<FocusableActionDetecto
 
 // 推荐使用KeyboardListener
 class FadButton4 extends StatelessWidget with FocusMixin {
-  const FadButton4({Key key, @required this.child}) : super(key: key);
+  const FadButton4({Key? key, required this.child}) : super(key: key);
   final Widget child;
 
   @override
@@ -44,7 +44,7 @@ class FadButton4 extends StatelessWidget with FocusMixin {
             ),
             ValueListenableBuilder(
               valueListenable: show,
-              builder: (BuildContext context, bool show, Widget child) {
+              builder: (BuildContext context, bool show, Widget? child) {
                 return Container(
                   width: 30,
                   height: 30,
@@ -61,7 +61,7 @@ class FadButton4 extends StatelessWidget with FocusMixin {
 }
 
 class FadButton3 extends StatelessWidget with FocusMixin {
-  const FadButton3({Key key, @required this.child}) : super(key: key);
+  const FadButton3({Key? key, required this.child}) : super(key: key);
   final Widget child;
 
   @override
@@ -88,7 +88,7 @@ class FadButton3 extends StatelessWidget with FocusMixin {
             ),
             ValueListenableBuilder(
               valueListenable: show,
-              builder: (BuildContext context, bool show, Widget child) {
+              builder: (BuildContext context, bool show, Widget? child) {
                 return Container(
                   width: 30,
                   height: 30,
@@ -106,8 +106,8 @@ class FadButton3 extends StatelessWidget with FocusMixin {
 
 class FadButton2 extends StatefulWidget {
   const FadButton2({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -151,7 +151,7 @@ class _FadButton2State extends State<FadButton2> with FocusMixin {
         ),
         ValueListenableBuilder(
           valueListenable: show,
-          builder: (BuildContext context, bool show, Widget child) {
+          builder: (BuildContext context, bool show, Widget? child) {
             return Container(
               width: 30,
               height: 30,
@@ -179,9 +179,9 @@ class _FadButton2State extends State<FadButton2> with FocusMixin {
 // From https://api.flutter.dev/flutter/widgets/FocusableActionDetector-class.html#widgets.FocusableActionDetector.1
 class FadButton extends StatefulWidget {
   const FadButton({
-    Key key,
-    @required this.onPressed,
-    @required this.child,
+    Key? key,
+    required this.onPressed,
+    required this.child,
   }) : super(key: key);
 
   final VoidCallback onPressed;
@@ -195,20 +195,12 @@ class _FadButtonState extends State<FadButton> {
   bool _focused = false;
   bool _hovering = false;
   bool _on = false;
-  Map<Type, Action<Intent>> _actionMap;
+  late Map<Type, Action<Intent>> _actionMap = <Type, Action<Intent>>{
+    ActivateIntent: CallbackAction<Intent>(onInvoke: (Intent intent) => _toggleState()),
+  };
   final Map<ShortcutActivator, Intent> _shortcutMap = const <ShortcutActivator, Intent>{
     SingleActivator(LogicalKeyboardKey.keyX): ActivateIntent(),
   };
-
-  @override
-  void initState() {
-    super.initState();
-    _actionMap = <Type, Action<Intent>>{
-      ActivateIntent: CallbackAction<Intent>(
-        onInvoke: (Intent intent) => _toggleState(),
-      ),
-    };
-  }
 
   Color get color {
     Color baseColor = Colors.lightBlue;
@@ -269,7 +261,7 @@ class _FadButtonState extends State<FadButton> {
 }
 
 class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key key}) : super(key: key);
+  const MyStatefulWidget({Key? key}) : super(key: key);
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
@@ -320,7 +312,7 @@ mixin FocusMixin {
     focusNode.addListener(() => focused.value = focusNode.hasFocus);
     return ValueListenableBuilder(
       valueListenable: focused,
-      builder: (BuildContext context, bool focused, Widget child) {
+      builder: (BuildContext context, bool focused, Widget? child) {
         return Opacity(
           opacity: focused ? .7 : 1.0,
           child: child,

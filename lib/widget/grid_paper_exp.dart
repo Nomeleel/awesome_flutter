@@ -2,16 +2,16 @@ import 'package:flutter/widgets.dart';
 
 class _GridPaperExpPainter extends CustomPainter {
   const _GridPaperExpPainter({
-    this.color,
-    this.strokeWidth,
-    this.interval,
-    this.divisions,
-    this.subdivisions,
+    required this.color,
+    required this.strokeWidth,
+    required this.interval,
+    required this.divisions,
+    required this.subdivisions,
   });
 
   final Color color;
   final double strokeWidth;
-  final double interval;
+  final double? interval;
   final int divisions;
   final int subdivisions;
 
@@ -54,13 +54,13 @@ class _GridPaperExpPainter extends CustomPainter {
 /// Increase the [strokeWidth] property, limited to 1 pixel in GridPaper, this widget can customize the this width.
 class GridPaperExp extends GridPaper {
   const GridPaperExp({
-    Key key,
-    color = const Color(0xFF9C27B0),
+    Key? key,
+    Color color = const Color(0xFF9C27B0),
     this.strokeWidth = 1.0,
-    interval,
-    divisions = 2,
-    subdivisions = 5,
-    child,
+    double interval = 100.0,
+    int divisions = 2,
+    int subdivisions = 5,
+    Widget? child,
   }): assert(strokeWidth > 0, 'The "strokeWidth" property must be greater than zero. If the width is set to zero, the width will be set to the default value of Paint.'),
       super(
         key: key,

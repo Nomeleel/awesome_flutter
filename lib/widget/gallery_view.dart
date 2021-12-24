@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView.builder({
-    Key key,
+    Key? key,
     this.minPreRow = 2,
     this.maxPreRow = 5,
     this.duration = const Duration(milliseconds: 300),
     this.itemCount,
-    @required this.itemBuilder,
+    required this.itemBuilder,
   }) : super(key: key);
 
   final int minPreRow;
   final int maxPreRow;
   final Duration duration;
-  final int itemCount;
+  final int? itemCount;
   final IndexedWidgetBuilder itemBuilder;
 
   @override

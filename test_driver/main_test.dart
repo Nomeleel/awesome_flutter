@@ -7,16 +7,14 @@ void main() {
     final minusCountBtn = find.byValueKey('minus_count_btn');
     final listCountText = find.byValueKey('list_count_text');
 
-    FlutterDriver driver;
+    late FlutterDriver driver;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
     });
 
     tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
+      driver.close();
     });
 
     test('test list count add and minus', () async {

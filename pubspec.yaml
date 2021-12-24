@@ -15,33 +15,30 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  animations: ^1.0.0+5
-  webview_flutter: 2.0.4
-  image_gallery_saver: 1.2.2
-  # shelf: ^0.7.9
-  adaptive_breakpoints: 0.0.3
-  # image: ^3.0.2
+  cupertino_icons: 1.0.4
+  animations: 2.0.2
+  webview_flutter: 3.0.0
+  image_gallery_saver: 1.7.1
+  adaptive_breakpoints: 0.1.1
+  image: 3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # flutter_driver:
-  #   sdk: flutter
+  flutter_driver:
+    sdk: flutter
   test: any
   widget_scan:
     path: ../widget_scan
   peanut: any
+  shelf: 1.2.0
 
 
 # For information on the generic Dart part of this file, see the

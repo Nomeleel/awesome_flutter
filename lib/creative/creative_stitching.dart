@@ -10,7 +10,7 @@ typedef DecodeImageProvider = Future<ui.Image> Function(dynamic image);
 Future<List<ByteData>> creativeStitchingByAsset(
   String mainAsset,
   List<String> multipleAssetsList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
@@ -25,7 +25,7 @@ Future<List<ByteData>> creativeStitchingByAsset(
 Future<List<ByteData>> creativeStitchingByFile(
   File mainImageFile,
   List<File> multipleImageList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
@@ -39,7 +39,7 @@ Future<List<ByteData>> creativeStitchingByFile(
 Future<List<ByteData>> creativeStitchingByFilePath(
   String mainImageFilePath,
   List<String> multipleImagePathList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
@@ -54,10 +54,10 @@ Future<List<ByteData>> _creativeStitching(
     DecodeImageProvider decodeImageProvider,
     dynamic mainImageFile,
     List<dynamic> multipleImageList,
-    Rect mainImageCropRect,
+    Rect? mainImageCropRect,
     int rowCount,
     int colCount) async {
-  List<ByteData> byteDataList = List<ByteData>();
+  List<ByteData> byteDataList = <ByteData>[];
 
   // TODO(Nomeleel): Image size should be limited.
   ui.Image mainImage = await decodeImageProvider(mainImageFile);
@@ -130,7 +130,7 @@ Future<List<ByteData>> _creativeStitching(
 
   for (int i = 0, index = 0; i < finalCount; i++) {
     bool isRepeat = doubleImageCount-- <= 0;
-    byteDataList.add(await getStitchingImage(i, index, isRepeat));
+    byteDataList.add((await getStitchingImage(i, index, isRepeat))!);
     index += isRepeat ? 1 : 2;
   }
 
@@ -145,7 +145,7 @@ Rect _getDefaultCropRect(ui.Image image) {
 
 List<Rect> _getAverageSplitRectList(Rect rect, int rowCount, int colCount) {
   double length = rect.width / math.max(rowCount, colCount);
-  List<Rect> rectList = List<Rect>();
+  List<Rect> rectList = <Rect>[];
   for (double i = 0; i < rowCount; i++) {
     for (double j = 0; j < colCount; j++) {
       rectList.add(Rect.fromLTWH(

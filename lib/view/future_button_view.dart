@@ -2,10 +2,9 @@ import 'package:awesome_flutter/widget/future_button.dart';
 import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class FutureButtonView extends StatefulWidget {
-  const FutureButtonView({Key key}) : super(key: key);
+  const FutureButtonView({Key? key}) : super(key: key);
 
   @override
   _FutureButtonViewState createState() => _FutureButtonViewState();
@@ -31,7 +30,6 @@ class _FutureButtonViewState extends State<FutureButtonView> {
   }
 
   void callback([dynamic value]) {
-    // TODO add Snack message.
     print('Finish...');
   }
 

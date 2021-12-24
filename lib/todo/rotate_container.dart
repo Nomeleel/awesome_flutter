@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// 含有子节点的Widget应用RotatedBox后，子节点要进一步校对调整角度。
 /// 就像TabBar改为垂直显示后，每个Tab必须回正旋转水平显示，才能达到TabBar垂直布局的目的。
@@ -9,10 +8,10 @@ import 'package:flutter/widgets.dart';
 // 好像带有Children的Widget都没有什么继承等约束
 class RotateContainer extends StatelessWidget with RotatedBoxMixin{
   const RotateContainer({
-    Key key,
-    @required this.quarterTurns,
-    this.child,
-    this.children,
+    Key? key,
+    required this.quarterTurns,
+    required this.child,
+    required this.children,
   }) : super(key: key);
 
   final int quarterTurns;
@@ -22,7 +21,7 @@ class RotateContainer extends StatelessWidget with RotatedBoxMixin{
   @override
   Widget build(BuildContext context) {
     // 这里还不知道怎么组装children
-    final rotatedChildren = rotateChildren(children, quarterTurns);
+    // final rotatedChildren = rotateChildren(children, quarterTurns);
     return rotatedBox(child, quarterTurns);
   }
 }

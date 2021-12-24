@@ -1,12 +1,11 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class SliverGridDelegateWithMultipleFixedCrossAxisCount extends SliverGridDelegate {
   const SliverGridDelegateWithMultipleFixedCrossAxisCount({
-    @required this.gridDelegateList,
-    @required this.mainAxisCountList,
+    required this.gridDelegateList,
+    required this.mainAxisCountList,
   }) : assert(gridDelegateList.length == mainAxisCountList.length);
 
   final List<SliverGridDelegateWithFixedCrossAxisCount> gridDelegateList;
@@ -25,7 +24,7 @@ class SliverGridDelegateWithMultipleFixedCrossAxisCount extends SliverGridDelega
     );
   }
 
-  SliverGridLayout getSliverGridLayout(
+  SliverGridRegularTileLayout getSliverGridLayout(
     SliverConstraints constraints,
     SliverGridDelegateWithFixedCrossAxisCount delegate,
   ) {
@@ -52,8 +51,8 @@ class SliverGridDelegateWithMultipleFixedCrossAxisCount extends SliverGridDelega
 // ignore: must_be_immutable
 class SliverGridMultipleTileLayout extends SliverGridLayout {
   SliverGridMultipleTileLayout({
-    @required this.layoutList,
-    @required this.mainAxisCountList,
+    required this.layoutList,
+    required this.mainAxisCountList,
   }) : assert(layoutList.length == mainAxisCountList.length) {
     groupCountList = getGroupCountList();
     scrollOffsetList = getScrollOffsetList();
@@ -62,8 +61,8 @@ class SliverGridMultipleTileLayout extends SliverGridLayout {
   final List<SliverGridRegularTileLayout> layoutList;
   final List<int> mainAxisCountList;
 
-  List<int> groupCountList;
-  List<double> scrollOffsetList;
+  late List<int> groupCountList;
+  late List<double> scrollOffsetList;
 
   List<int> getGroupCountList() {
     List<int> countList = [0];
@@ -154,11 +153,11 @@ class SliverGridDelegateWithFixedPartAspectRatio extends SliverGridDelegate {
     this.crossAxisSpacing = 0.0,
     this.childPartAspectRatio = 1.0,
     this.mainAxisPartExtent = 0.0,
-  })  : assert(crossAxisCount != null && crossAxisCount > 0),
-        assert(mainAxisSpacing != null && mainAxisSpacing >= 0),
-        assert(crossAxisSpacing != null && crossAxisSpacing >= 0),
-        assert(childPartAspectRatio != null && childPartAspectRatio > 0),
-        assert(mainAxisPartExtent != null && mainAxisPartExtent >= 0);
+  })  : assert(crossAxisCount > 0),
+        assert(mainAxisSpacing >= 0),
+        assert(crossAxisSpacing >= 0),
+        assert(childPartAspectRatio > 0),
+        assert(mainAxisPartExtent >= 0);
 
   final int crossAxisCount;
 

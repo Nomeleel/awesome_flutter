@@ -6,7 +6,7 @@ import '../widget/scaffold_view.dart';
 
 // 为child外围添加间距，而大小不算入间距，使child按照自己的大小去应用布局，完全不考虑间距。
 class FakePaddingView extends StatelessWidget {
-  const FakePaddingView({Key key}) : super(key: key);
+  const FakePaddingView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,9 @@ class FakePaddingView extends StatelessWidget {
 
 class FakePadding extends SingleChildRenderObjectWidget {
   const FakePadding({
-    Key key,
+    Key? key,
     this.padding = EdgeInsets.zero,
-    Widget child,
+    required Widget child,
   }) : super(key: key, child: child);
 
   final EdgeInsetsGeometry padding;
@@ -56,12 +56,12 @@ class FakePadding extends SingleChildRenderObjectWidget {
 }
 
 class RenderFakePadding extends RenderProxyBox {
-  RenderFakePadding({this.padding});
+  RenderFakePadding({required this.padding});
 
   EdgeInsetsGeometry padding;
 
   @override
-  bool hitTest(BoxHitTestResult result, {Offset position}) {
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
     print(position);
     return super.hitTest(result, position: position);
   }

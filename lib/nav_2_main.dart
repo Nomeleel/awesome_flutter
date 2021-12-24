@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
 class MyRouteParser extends RouteInformationParser<String> {
   @override
   Future<String> parseRouteInformation(RouteInformation routeInformation) {
-    return SynchronousFuture(routeInformation.location);
+    return SynchronousFuture(routeInformation.location!);
   }
 
   @override
@@ -155,8 +155,8 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
 
 class MyPage extends Page {
   const MyPage({
-    LocalKey key,
-    String name,
+    LocalKey? key,
+    String? name,
   }) : super(
           key: key,
           name: name,
@@ -166,14 +166,14 @@ class MyPage extends Page {
     return MaterialPageRoute(
       settings: this,
       builder: (BuildContext context) {
-        return name == '/' ? MyHomePage() : MyItemPage(title: name);
+        return name == '/' ? MyHomePage() : MyItemPage(title: name ?? '');
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -187,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Home'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: Text('Go'),
           onPressed: () {
             MyRouteDelegate.of(context).push('Route/1');
@@ -199,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class MyItemPage extends StatefulWidget {
-  MyItemPage({Key key, this.title}) : super(key: key);
+  MyItemPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 

@@ -10,11 +10,11 @@ typedef DecodeImageProvider = Future<image.Image> Function(dynamic image);
 Future<List<File>> creativeStitchingByFile(
   File mainImageFile,
   List<File> multipleImageList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
-  DecodeImageProvider decodeImageProvider = (file) async => image.decodeImage(await file.readAsBytes());
+  DecodeImageProvider decodeImageProvider = (file) async => image.decodeImage(await file.readAsBytes())!;
 
   return _creativeStitching(
       decodeImageProvider, mainImageFile, multipleImageList, mainImageCropRect, rowCount, colCount);
@@ -23,13 +23,13 @@ Future<List<File>> creativeStitchingByFile(
 Future<List<File>> creativeStitchingByFilePath(
   String mainImageFilePath,
   List<String> multipleImagePathList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
   DecodeImageProvider decodeImageProvider = (filePath) async {
     var bytes = await File(filePath).readAsBytes();
-    return image.decodeImage(bytes);
+    return image.decodeImage(bytes)!;
   };
 
   return _creativeStitching(
@@ -37,7 +37,7 @@ Future<List<File>> creativeStitchingByFilePath(
 }
 
 Future<List<File>> _creativeStitching(DecodeImageProvider decodeImageProvider, dynamic mainImageFile,
-    List multipleImageList, Rect mainImageCropRect, int rowCount, int colCount) async {
+    List multipleImageList, Rect? mainImageCropRect, int rowCount, int colCount) async {
   List<File> byteDataList = <File>[];
 
   String targetFilePath = '/data/user/0/com.example.isolate_test/cache/test2.jpg';
@@ -77,7 +77,7 @@ Future<File> getStitchingImage(
 ) async {
   DecodeImageProvider decodeImageProvider = (filePath) async {
     var bytes = await File(filePath).readAsBytes();
-    return image.decodeImage(bytes);
+    return image.decodeImage(bytes)!;
   };
 
   image.Image topImage = await decodeImageProvider(multipleImageList[finalImageIndex]);

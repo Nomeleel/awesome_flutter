@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class FlutterDriverTestView extends StatefulWidget {
-  FlutterDriverTestView({Key key}) : super(key: key);
+  FlutterDriverTestView({Key? key}) : super(key: key);
 
   @override
   _FlutterDriverTestViewState createState() => _FlutterDriverTestViewState();
 }
 
 class _FlutterDriverTestViewState extends State<FlutterDriverTestView> {
-  int _listCount;
-
-  @override
-  void initState() {
-    super.initState();
-    _listCount = 0;
-  }
+  int _listCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +24,7 @@ class _FlutterDriverTestViewState extends State<FlutterDriverTestView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                RaisedButton(
+                ElevatedButton(
                   key: ValueKey('add_count_btn'),
                   onPressed: () => changeListCount(1),
                   child: const Text('Add'),
@@ -40,7 +33,7 @@ class _FlutterDriverTestViewState extends State<FlutterDriverTestView> {
                   'List Count: $_listCount',
                   key: ValueKey('list_count_text'),
                 ),
-                RaisedButton(
+                ElevatedButton(
                   key: ValueKey('minus_count_btn'),
                   onPressed: _listCount == 0 ? null : () => changeListCount(-1),
                   child: const Text('Minus'),

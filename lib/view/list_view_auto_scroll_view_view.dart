@@ -2,27 +2,18 @@ import 'dart:math';
 
 import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ListViewAutoScrollViewView extends StatefulWidget {
-  const ListViewAutoScrollViewView({Key key}) : super(key: key);
+  const ListViewAutoScrollViewView({Key? key}) : super(key: key);
 
   @override
   _ListViewAutoScrollViewViewState createState() => _ListViewAutoScrollViewViewState();
 }
 
 class _ListViewAutoScrollViewViewState extends State<ListViewAutoScrollViewView> {
-  TextEditingController _textEditingController;
-  ScrollController _controller;
-  List<GlobalKey> _globalKeyList;
-
-  @override
-  void initState() {
-    super.initState();
-    _textEditingController = TextEditingController();
-    _controller = ScrollController();
-    _globalKeyList = [];
-  }
+  final TextEditingController _textEditingController = TextEditingController();
+  final ScrollController _controller = ScrollController();
+  final List<GlobalKey> _globalKeyList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +32,7 @@ class _ListViewAutoScrollViewViewState extends State<ListViewAutoScrollViewView>
                   ),
                 ),
                 Expanded(
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: scrollListView,
                     child: Text('Go'),
                   ),
@@ -91,11 +82,11 @@ class _ListViewAutoScrollViewViewState extends State<ListViewAutoScrollViewView>
     //if (isScrollable) return 0.0;
     double center = 0.0;
     for (int i = 0; i < index; i++) {
-      center += _globalKeyList[i].currentContext.size.height;
+      center += _globalKeyList[i].currentContext!.size!.height;
     }
-    center += _globalKeyList[index].currentContext.size.height / 2;
+    center += _globalKeyList[index].currentContext!.size!.height / 2;
     print(center);
-    return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent) as double;
+    return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent);
   }
 
   double centeredScrollOffset(int index) {

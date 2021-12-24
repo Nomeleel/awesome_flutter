@@ -8,7 +8,7 @@ import '../widget/scaffold_view.dart';
 /// 对于弹性布局中的Widget也应当进行缩放
 /// Widget的大小数据也会看似失效，只会依赖于父布局大小约束
 class FittedBoxTextView extends StatelessWidget {
-  const FittedBoxTextView({Key key}) : super(key: key);
+  const FittedBoxTextView({Key? key}) : super(key: key);
 
   List<Widget> get widgetList => [
     Text('这行字会被进行缩放, 设置字体大小无效', style: TextStyle(fontSize: 1.0)),

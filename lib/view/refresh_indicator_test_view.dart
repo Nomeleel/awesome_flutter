@@ -1,11 +1,10 @@
 import 'package:awesome_flutter/widget/colorful_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
 
 class RefreshIndicatorTestView extends StatefulWidget {
-  const RefreshIndicatorTestView({Key key}) : super(key: key);
+  const RefreshIndicatorTestView({Key? key}) : super(key: key);
 
   @override
   _RefreshIndicatorTestViewState createState() => _RefreshIndicatorTestViewState();

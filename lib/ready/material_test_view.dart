@@ -3,7 +3,7 @@ import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 
 class MaterialTestView extends StatelessWidget {
-  const MaterialTestView({Key key}) : super(key: key);
+  const MaterialTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

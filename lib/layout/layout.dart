@@ -4,7 +4,7 @@ import '../widget/absorb_stack.dart';
 import 'adaptive.dart';
 
 class Layout extends StatelessWidget {
-  const Layout({Key key, this.child}) : super(key: key);
+  const Layout({Key? key, required this.child}) : super(key: key);
   final Widget child;
   @override
   Widget build(BuildContext context) {

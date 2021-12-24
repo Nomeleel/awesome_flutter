@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../custom/rendering/sliver_grid_delegate.dart';
 import '../widget/auto_switch_widget.dart';
@@ -7,7 +6,7 @@ import '../widget/scaffold_view.dart';
 import '../widget/tab_view.dart';
 
 class CustomGridViewView extends StatelessWidget {
-  const CustomGridViewView({Key key}) : super(key: key);
+  const CustomGridViewView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +99,7 @@ class CustomGridViewView extends StatelessWidget {
         SingleChildScrollView(child: ListBody(children: List.generate(77, fixedItem))),
         ValueListenableBuilder(
           valueListenable: widthNotifier,
-          builder: (_, width, __) {
+          builder: (_, double width, __) {
             return Column(
               children: [
                 Expanded(

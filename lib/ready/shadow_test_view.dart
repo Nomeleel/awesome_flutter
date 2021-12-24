@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../widget/scaffold_view.dart';
 
 class ShadowTestView extends StatelessWidget {
-  const ShadowTestView({Key key}) : super(key: key);
+  const ShadowTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ShadowTestView extends StatelessWidget {
             PhysicalModel(
               color: Colors.grey,
               elevation: 10.0,
-              shadowColor: Colors.red[900],
+              shadowColor: Colors.red[900]!,
               clipBehavior: Clip.hardEdge,
               borderRadius: _borderRadius(),
               child: _container(),

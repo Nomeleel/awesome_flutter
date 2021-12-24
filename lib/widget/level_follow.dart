@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 class LevelFollow extends StatelessWidget {
   const LevelFollow.builder({
-    Key key,
+    Key? key,
     this.level = 1,
-    this.itemCount,
+    this.itemCount = 7,
     this.levelPanelHeight = 220.0,
     this.itemHeight = 200.0,
-    @required this.itemBuilder,
+    required this.itemBuilder,
     this.viewportFraction = 0.8,
   }) : super(key: key);
 
@@ -55,7 +55,7 @@ class LevelFollow extends StatelessWidget {
 
 class ArcIndicatorPainter extends CustomPainter {
   const ArcIndicatorPainter({
-    this.repaint,
+    required this.repaint,
     this.level = 1,
     this.maxLevel = 7,
   }) : super(repaint: repaint);
@@ -75,7 +75,7 @@ class ArcIndicatorPainter extends CustomPainter {
     double overflow = 0;
     if (repaint.offset < 0) overflow = repaint.offset;
     if (repaint.offset > repaint.position.maxScrollExtent) overflow = repaint.offset - repaint.position.maxScrollExtent;
-    return repaint.page + overflow / 500.0;
+    return repaint.page! + overflow / 500.0;
   }
 
   @override
@@ -148,11 +148,11 @@ class ArcIndicatorPainter extends CustomPainter {
     );
 
     // arc forward line
-    if (repaint.page > level - 1) {
+    if (repaint.page! > level - 1) {
       canvas.drawArc(
         Rect.fromCircle(center: Offset.zero, radius: radius),
         startAngle + _sweepAngle(level - 1),
-        _sweepAngle(repaint.page - level + 1),
+        _sweepAngle(repaint.page! - level + 1),
         false,
         Paint()
           ..color = Colors.yellowAccent.shade700
@@ -163,8 +163,8 @@ class ArcIndicatorPainter extends CustomPainter {
     }
 
     // indicator point
-    if (repaint.page.floor() == repaint.page) {
-      final angle = startAngle + _sweepAngle(repaint.page);
+    if (repaint.page!.floor() == repaint.page) {
+      final angle = startAngle + _sweepAngle(repaint.page!);
       canvas.drawCircle(
         Offset(cos(angle) * radius, sin(angle) * radius),
         7.0,

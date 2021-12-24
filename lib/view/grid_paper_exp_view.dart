@@ -1,25 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/grid_paper_exp.dart';
 
 class GridPaperExpView extends StatefulWidget {
-  const GridPaperExpView({Key key}) : super(key: key);
+  const GridPaperExpView({Key? key}) : super(key: key);
 
   @override
   GridPaperExpViewState createState() => GridPaperExpViewState();
 }
 
 class GridPaperExpViewState extends State<GridPaperExpView> {
-  double _lineWidth;
-
-  @override
-  void initState() {
-    _lineWidth = 1.0;
-
-    super.initState();
-  }
+  double _lineWidth = 1.0;
 
 // buu
   @override
@@ -42,6 +34,7 @@ class GridPaperExpViewState extends State<GridPaperExpView> {
                   strokeWidth: _lineWidth,
                   divisions: 3,
                   subdivisions: 3,
+                  interval: MediaQuery.of(context).size.width - 20,
                 ),
               ),
             ),

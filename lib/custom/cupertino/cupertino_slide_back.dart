@@ -3,14 +3,17 @@ import 'package:flutter/widgets.dart';
 /// Cupertino style slide back widget.
 class CupertinoSlideBack extends StatelessWidget {
   /// const constructor.
-  const CupertinoSlideBack({Key key, this.child, this.onBackCallBack})
-      : super(key: key);
+  const CupertinoSlideBack({
+    Key? key,
+    required this.child,
+    this.onBackCallBack,
+  }) : super(key: key);
 
   /// The [child] contained by this widget.
   final Widget child;
 
   /// Callback before back, then pop up page.
-  final void Function() onBackCallBack;
+  final void Function()? onBackCallBack;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class CupertinoSlideBack extends StatelessWidget {
         }
       },
       onHorizontalDragUpdate: (DragUpdateDetails details) {
-        if (isCanBack && details.primaryDelta < 0) {
+        if (isCanBack && (details.primaryDelta ?? 0) < 0) {
           isCanBack = false;
         }
       },
@@ -43,9 +46,7 @@ class CupertinoSlideBack extends StatelessWidget {
       },
       onHorizontalDragEnd: (DragEndDetails details) {
         if (isCanBack) {
-          if (onBackCallBack != null) {
-            onBackCallBack();
-          }
+          onBackCallBack?.call();
           Navigator.of(context).pop();
         }
         isCanBack = false;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import '../custom/animation/gesture_scale_transition.dart';
 import '../custom/clipper/padding_radius_rect_clipper.dart';
@@ -9,51 +8,48 @@ import '../helper/helper.dart';
 
 class AppStoreCard extends StatelessWidget {
   const AppStoreCard({
-    @required Key key,
+    required Key key,
     this.elevation,
     this.padding,
     this.radius,
-    @required this.showBackgroundWidget,
+    required this.showBackgroundWidget,
     this.showForegroundWidget,
     this.detailWidget,
     this.isAlwayShow = true,
-  })  : assert(key != null,
-            'This key will be used as the Hero\'s tag. It must be unique and cannot be null.'),
-        super(key: key);
+  }) : super(key: key);
 
-  final double elevation;
-  final EdgeInsetsGeometry padding;
-  final BorderRadiusGeometry radius;
+  final double? elevation;
+  final EdgeInsetsGeometry? padding;
+  final BorderRadiusGeometry? radius;
   final Widget showBackgroundWidget;
-  final Widget showForegroundWidget;
-  final Widget detailWidget;
+  final Widget? showForegroundWidget;
+  final Widget? detailWidget;
   final bool isAlwayShow;
 
-  EdgeInsets get edgeInsets => EdgeInsetsGeometryHelper.getEdgeInsets(padding);
-  BorderRadius get borderRadius =>
-      BorderRadiusGeometryHelper.getBorderRadius(radius);
+  EdgeInsets get edgeInsets => EdgeInsetsGeometryHelper.getEdgeInsets(padding!);
+  BorderRadius get borderRadius => BorderRadiusGeometryHelper.getBorderRadius(radius!);
 
   @override
   Widget build(BuildContext context) {
     return GestureScaleTransition(
       callBack: () => openDetailView(context),
       child: Hero(
-        tag: key,
+        tag: key!,
         child: buildCard(),
       ),
     );
   }
 
   Widget buildCard() {
-    List<Widget> widgetList = List<Widget>();
+    List<Widget> widgetList = <Widget>[];
 
     // build background elevation.
-    if (elevation != null && elevation > 0) {
+    if (elevation != null && elevation! > 0) {
       widgetList.add(Positioned.fill(
         child: Card(
           elevation: elevation,
           shape: RoundedRectangleBorder(
-            borderRadius: radius,
+            borderRadius: radius!,
           ),
           margin: padding,
           clipBehavior: Clip.antiAlias,
@@ -62,7 +58,7 @@ class AppStoreCard extends StatelessWidget {
     }
 
     // build background foreground widget.
-    var clipWidget = (Widget child, {EdgeInsets currentEdgeInsets}) {
+    var clipWidget = (Widget child, {EdgeInsets? currentEdgeInsets}) {
       return ClipRRect(
         clipper: PRRectClipper(
           padding: currentEdgeInsets ?? edgeInsets,
@@ -85,10 +81,10 @@ class AppStoreCard extends StatelessWidget {
       bottom: edgeInsets.bottom,
       child: borderRadius != BorderRadius.zero
           ? clipWidget(
-              showForegroundWidget,
+              showForegroundWidget!,
               currentEdgeInsets: EdgeInsets.zero,
             )
-          : showForegroundWidget,
+          : showForegroundWidget!,
     ));
 
     return Stack(children: widgetList);
@@ -108,7 +104,7 @@ class AppStoreCard extends StatelessWidget {
                       if (showForegroundWidget != null)
                         Positioned.fill(
                           top: edgeInsets.top,
-                          child: showForegroundWidget,
+                          child: showForegroundWidget!,
                         )
                     ],
                   ),
@@ -128,19 +124,15 @@ class AppStoreCard extends StatelessWidget {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (BuildContext context, Animation animation,
-            Animation secondaryAnimation) {
+        pageBuilder: (BuildContext context, Animation animation, Animation secondaryAnimation) {
           return CupertinoSlideBack(
             child: Hero(
-              tag: key,
+              tag: key!,
               child: detailView(context),
             ),
             onBackCallBack: () {
               if (isAlwayShow) {
-                SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[
-                  SystemUiOverlay.top,
-                  SystemUiOverlay.bottom
-                ]);
+                SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[SystemUiOverlay.top, SystemUiOverlay.bottom]);
               }
             },
           );

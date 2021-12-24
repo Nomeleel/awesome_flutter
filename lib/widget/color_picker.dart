@@ -7,51 +7,39 @@ import '../wrapper/cupertino_slider_wrapper.dart';
 
 class ColorPicker extends StatefulWidget {
   const ColorPicker({
-    Key key,
+    Key? key,
     this.color,
     this.onColorChanged,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
 
-  final ValueChanged<Color> onColorChanged;
+  final ValueChanged<Color?>? onColorChanged;
 
   @override
   _ColorPickerState createState() => _ColorPickerState();
 }
 
 class _ColorPickerState extends State<ColorPicker> with SingleTickerProviderStateMixin {
-  int _groupValue;
-  TabController _tabController;
+  int _groupValue = 0;
+  late TabController _tabController = TabController(length: 2, initialIndex: _groupValue, vsync: this)
+    ..addListener(() => setState(() => _groupValue = _tabController.index));
 
-  List<Color> _randomCorlors;
-  int _selectedIndex;
+  List<Color> _randomCorlors = <Color>[];
+  int _selectedIndex = -1;
 
-  Color _color;
+  Color? _color;
 
   @override
   void initState() {
     super.initState();
-
-    _groupValue = 0;
-    _tabController = TabController(
-      length: 2,
-      initialIndex: _groupValue,
-      vsync: this,
-    )..addListener(() {
-        setState(() {
-          _groupValue = _tabController.index;
-        });
-      });
-
     initRandomColor();
   }
 
   void initRandomColor() {
     _color = _color ?? widget.color ?? const Color(0xff000000);
     _selectedIndex = -1;
-    _randomCorlors = List<Color>.generate(
-        14, (int index) => Color(Random().nextInt(0xffffffff)));
+    _randomCorlors = List<Color>.generate(14, (int index) => Color(Random().nextInt(0xffffffff)));
   }
 
   @override
@@ -92,7 +80,7 @@ class _ColorPickerState extends State<ColorPicker> with SingleTickerProviderStat
     );
   }
 
-  Widget colorCell({int index, bool isNormal = true}) {
+  Widget colorCell({int? index, bool isNormal = true}) {
     return GestureDetector(
       child: Container(
         margin: const EdgeInsets.all(5),
@@ -109,9 +97,9 @@ class _ColorPickerState extends State<ColorPicker> with SingleTickerProviderStat
       ),
       onTap: () {
         if (isNormal) {
-          widget.onColorChanged(_randomCorlors[index]);
+          widget.onColorChanged?.call(_randomCorlors[index!]);
           setState(() {
-            _selectedIndex = index;
+            _selectedIndex = index!;
             _color = _randomCorlors[index];
           });
         } else {
@@ -133,15 +121,15 @@ class _ColorPickerState extends State<ColorPicker> with SingleTickerProviderStat
     );
   }
 
-  Widget colorSliderItem(int initValue, Color itemColor, Color Function(int) colorWithItem) {
+  Widget colorSliderItem(int? initValue, Color itemColor, Color? Function(int) colorWithItem) {
     return CupertinoSliderWrapper(
-      value: initValue.toDouble(),
+      value: (initValue ?? 0).toDouble(),
       min: 0.0,
       max: 255.0,
       activeColor: itemColor,
       onChanged: (double value) {
         _color = colorWithItem(value.toInt());
-        widget.onColorChanged(_color);
+        widget.onColorChanged?.call(_color);
       },
     );
   }
@@ -152,14 +140,10 @@ class _ColorPickerState extends State<ColorPicker> with SingleTickerProviderStat
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          colorSliderItem(
-            _color.red, Colors.red, (int value) => _color.withRed(value)),
-          colorSliderItem(
-            _color.green, Colors.green, (int value) => _color.withGreen(value)),
-          colorSliderItem(
-            _color.blue, Colors.blue, (int value) => _color.withBlue(value)),
-          colorSliderItem(
-            _color.alpha, Colors.white, (int value) => _color.withAlpha(value)),
+          colorSliderItem(_color?.red, Colors.red, (int value) => _color?.withRed(value)),
+          colorSliderItem(_color?.green, Colors.green, (int value) => _color?.withGreen(value)),
+          colorSliderItem(_color?.blue, Colors.blue, (int value) => _color?.withBlue(value)),
+          colorSliderItem(_color?.alpha, Colors.white, (int value) => _color?.withAlpha(value)),
         ],
       ),
     );

@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart' hide TabBar, Tab, TabBarView;
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart' hide TabBar, Tab, TabBarView;
 
-import '../todo/tab_bar.dart';
+// import '../todo/tab_bar.dart';
+
+// TODO(Nomeleel): 替换新的Tab
 
 class TabView extends StatefulWidget {
-  const TabView({Key key, @required this.tabs, @required this.children})
+  const TabView({Key? key, required this.tabs, required this.children})
       : assert(tabs.length == children.length),
         super(key: key);
 
@@ -16,19 +18,8 @@ class TabView extends StatefulWidget {
 }
 
 class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
-  TabController _controller;
-  List<Widget> _tabs;
-  @override
-  void initState() {
-    super.initState();
-
-    _tabs = widget.tabs.map((tab) => Tab(text: tab)).toList();
-
-    _controller = TabController(
-      length: _tabs.length,
-      vsync: this,
-    );
-  }
+  late TabController _controller = TabController(length: _tabs.length, vsync: this);
+  late List<Widget> _tabs = widget.tabs.map<Widget>((tab) => Tab(text: tab)).toList();
 
   @override
   Widget build(BuildContext context) {

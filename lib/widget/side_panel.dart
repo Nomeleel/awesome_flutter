@@ -2,38 +2,35 @@ import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class SidePanel extends StatefulWidget {
   const SidePanel({
-    Key key,
+    Key? key,
     this.orientation = SidePanelOrientation.end,
     this.mainAxisHeight,
-    this.child,
+    required this.child,
     this.onSwitched,
   }) : super(key: key);
 
-  final SidePanelOrientation orientation;
+  final SidePanelOrientation? orientation;
 
-  final double mainAxisHeight;
+  final double? mainAxisHeight;
 
   final Widget child;
 
-  final void Function(bool) onSwitched;
+  final void Function(bool)? onSwitched;
 
   @override
   _SidePanelState createState() => _SidePanelState();
 
-  static _SidePanelState of(BuildContext context) {
-    _SidePanelState stack;
+  static _SidePanelState? of(BuildContext context) {
+    _SidePanelState? stack;
     context.visitChildElements((Element element) {
       // Find stack.
-      MultiChildRenderObjectElement stackElemrnt =
-          element as MultiChildRenderObjectElement;
+      MultiChildRenderObjectElement? stackElemrnt = element as MultiChildRenderObjectElement?;
       stackElemrnt?.visitChildren((Element element) {
         if (element is StatefulElement && element.state is _SidePanelState) {
-          stack = element.state;
+          stack = element.state as _SidePanelState;
           return;
         }
       });
@@ -43,17 +40,7 @@ class SidePanel extends StatefulWidget {
 }
 
 class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-  }
+  late AnimationController _controller = AnimationController(duration: const Duration(milliseconds: 300), vsync: this);
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +50,15 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
     final double mainAxisHeight = widget.mainAxisHeight ?? windowSideMin;
 
     final bool isPortrait = size.width < size.height;
-    final bool isEnd = (widget.orientation ?? SidePanelOrientation.end) ==
-        SidePanelOrientation.end;
+    final bool isEnd = (widget.orientation ?? SidePanelOrientation.end) == SidePanelOrientation.end;
 
     return PositionedTransition(
       rect: RelativeRectTween(
         begin: RelativeRect.fromLTRB(
-          isPortrait ? 0 : isEnd ? windowSideMaxLave : -mainAxisHeight,
-          !isPortrait ? 0 : isEnd ? windowSideMaxLave : -mainAxisHeight,
-          isPortrait ? 0 : !isEnd ? windowSideMaxLave : -mainAxisHeight,
-          !isPortrait ? 0 : !isEnd ? windowSideMaxLave : -mainAxisHeight,
+          isPortrait ? 0 : (isEnd ? windowSideMaxLave : -mainAxisHeight),
+          !isPortrait ? 0 : (isEnd ? windowSideMaxLave : -mainAxisHeight),
+          isPortrait ? 0 : (!isEnd ? windowSideMaxLave : -mainAxisHeight),
+          !isPortrait ? 0 : (!isEnd ? windowSideMaxLave : -mainAxisHeight),
         ),
         end: RelativeRect.fromLTRB(
           !isPortrait && isEnd ? windowSideMaxLave - mainAxisHeight : 0,
@@ -110,9 +96,7 @@ class _SidePanelState extends State<SidePanel> with TickerProviderStateMixin {
 
   void switchPanel() {
     bool isOpen = _controller.status != AnimationStatus.completed;
-    if (widget.onSwitched != null) {
-      widget.onSwitched(isOpen);
-    }
+    widget.onSwitched?.call(isOpen);
     isOpen ? _controller.forward() : _controller.reverse();
   }
 }

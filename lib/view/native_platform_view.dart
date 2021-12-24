@@ -6,14 +6,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import '../mixin/unsupported_platform_placeholder_mixin.dart';
 import '../util/platforms.dart';
 import '../widget/scaffold_view.dart';
 
 class NativePlatformView extends StatefulWidget {
-  const NativePlatformView({Key key}) : super(key: key);
+  const NativePlatformView({Key? key}) : super(key: key);
 
   @override
   _NativePlatformViewState createState() => _NativePlatformViewState();
@@ -45,7 +44,7 @@ class _NativePlatformViewState extends State<NativePlatformView> with Unsupporte
   @override
   Widget builder(BuildContext context) => mainView(context);
 
-  Widget mainView(BuildContext context, [String title]) {
+  Widget mainView(BuildContext context, [String? title]) {
     return ScaffoldView(
       title: title ?? 'Native Platform View',
       body: Center(
@@ -60,6 +59,7 @@ class _NativePlatformViewState extends State<NativePlatformView> with Unsupporte
               'Current Platform: ${Platforms.currentPlatform}',
               style: Theme.of(context).textTheme.headline5,
             ),
+            // TODO(Nomeleel): 貌似坏掉了ios
             navToButton(context),
             if (Platform.isIOS) openAppStoreProductView(),
             if (Platform.isAndroid) openAndroidShareView(),
@@ -84,7 +84,7 @@ class _NativePlatformViewState extends State<NativePlatformView> with Unsupporte
   Widget openAppStoreProductView() {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateColor.resolveWith((states) => Colors.grey[100]),
+        backgroundColor: MaterialStateColor.resolveWith((states) => Colors.grey[100]!),
         foregroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
       ),
       child: const Text('Open WeChat of app product view in iOS view'),
@@ -97,7 +97,7 @@ class _NativePlatformViewState extends State<NativePlatformView> with Unsupporte
 
   Widget openAndroidShareView() {
     return ElevatedButton(
-      style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.green[700])),
+      style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.green[700]!)),
       child: const Text('Open Android Share View'),
       onPressed: () async {
         await _methodChannel.invokeMethod<int>('openShareView', '😊This is text from Flutter view.😊');
@@ -123,7 +123,7 @@ class _NativePlatformViewState extends State<NativePlatformView> with Unsupporte
 
 // ignore: must_be_immutable
 class AndroidViewHybridComposition extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
-  AndroidViewHybridComposition({Key key}) : super(key: key);
+  AndroidViewHybridComposition({Key? key}) : super(key: key);
 
   @override
   int get supportedPlatforms => Platforms.android;
@@ -138,7 +138,7 @@ class AndroidViewHybridComposition extends StatelessWidget with UnsupportedPlatf
       viewType: viewType,
       surfaceFactory: (BuildContext context, PlatformViewController controller) {
         return AndroidViewSurface(
-          controller: controller,
+          controller: controller as AndroidViewController,
           gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
           hitTestBehavior: PlatformViewHitTestBehavior.opaque,
         );
@@ -161,7 +161,7 @@ class AndroidViewHybridComposition extends StatelessWidget with UnsupportedPlatf
 @Deprecated('推荐使用AndroidViewHybridComposition')
 // ignore: must_be_immutable
 class AndroidViewVirtualDisplay extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
-  AndroidViewVirtualDisplay({Key key}) : super(key: key);
+  AndroidViewVirtualDisplay({Key? key}) : super(key: key);
 
   @override
   int get supportedPlatforms => Platforms.android;
@@ -183,7 +183,7 @@ class AndroidViewVirtualDisplay extends StatelessWidget with UnsupportedPlatform
 
 // ignore: must_be_immutable
 class IosView extends StatelessWidget with UnsupportedPlatformPlaceholderMixin {
-  IosView({Key key}) : super(key: key);
+  IosView({Key? key}) : super(key: key);
 
   @override
   int get supportedPlatforms => Platforms.ios;

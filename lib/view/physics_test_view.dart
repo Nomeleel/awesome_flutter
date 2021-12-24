@@ -2,10 +2,9 @@ import 'dart:math' as math;
 
 import '../widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class PhysicsTestView extends StatefulWidget {
-  const PhysicsTestView({Key key}) : super(key: key);
+  const PhysicsTestView({Key? key}) : super(key: key);
 
   @override
   _PhysicsTestViewState createState() => _PhysicsTestViewState();
@@ -33,10 +32,10 @@ class _PhysicsTestViewState extends State<PhysicsTestView> {
 }
 
 class FastScrollPhysics extends ScrollPhysics {
-  const FastScrollPhysics({ ScrollPhysics parent }) : super(parent: parent);
+  const FastScrollPhysics({ ScrollPhysics? parent }) : super(parent: parent);
 
   @override
-  FastScrollPhysics applyTo(ScrollPhysics ancestor) {
+  FastScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return FastScrollPhysics(parent: buildParent(ancestor));
   }
 
@@ -54,15 +53,14 @@ class FastScrollPhysics extends ScrollPhysics {
   }
 
   @override
-  Simulation createBallisticSimulation(ScrollMetrics position, double velocity) {
+  Simulation? createBallisticSimulation(ScrollMetrics position, double velocity) {
     final Tolerance tolerance = this.tolerance;
     if (position.outOfRange) {
-      double end;
+      double end = 0;
       if (position.pixels > position.maxScrollExtent)
         end = position.maxScrollExtent;
       if (position.pixels < position.minScrollExtent)
         end = position.minScrollExtent;
-      assert(end != null);
       return ScrollSpringSimulation(
         spring,
         position.pixels,
@@ -91,8 +89,8 @@ class FastScrollPhysics extends ScrollPhysics {
 class FastScrollSimulation extends Simulation {
   /// Creates a scroll physics simulation that matches Android scrolling.
   FastScrollSimulation({
-    @required this.position,
-    @required this.velocity,
+    required this.position,
+    required this.velocity,
     this.friction = 0.015,
     Tolerance tolerance = Tolerance.defaultTolerance,
   }) : assert(_flingVelocityPenetration(0.0) == _initialVelocityPenetration),
@@ -113,8 +111,8 @@ class FastScrollSimulation extends Simulation {
   /// The more friction the particle experiences, the sooner it stops.
   final double friction;
 
-  double _duration;
-  double _distance;
+  late double _duration;
+  late double _distance;
 
   // See DECELERATION_RATE.
   static final double _kDecelerationRate = math.log(0.78) / math.log(0.9);

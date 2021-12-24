@@ -6,15 +6,16 @@ import 'package:flutter/services.dart';
 import '../creative/creative_stitching.dart';
 import '../custom/animation/gesture_scale_transition.dart';
 
+// TODO(Nomeleel): 不是正方形了
 class CreativeStitchingView extends StatefulWidget {
-  const CreativeStitchingView({Key key}) : super(key: key);
+  const CreativeStitchingView({Key? key}) : super(key: key);
 
   @override
   _CreativeStitchingViewState createState() => _CreativeStitchingViewState();
 }
 
 class _CreativeStitchingViewState extends State<CreativeStitchingView> {
-  List<ByteData> _byteDataList;
+  List<ByteData>? _byteDataList;
 // 布局问题
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
               padding: EdgeInsets.only(top: 100),
               child: _byteDataList == null
                   ? defText('Please click this button')
-                  : _byteDataList.length == 0
+                  : _byteDataList!.length == 0
                       ? CircularProgressIndicator(
                           backgroundColor: Colors.white,
                         )
@@ -51,10 +52,10 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
                         ),
             ),
             if (_byteDataList == null)
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () async {
                   setState(() {
-                    _byteDataList = List<ByteData>();
+                    _byteDataList = <ByteData>[];
                   });
                   String mainImageAsset = 'assets/images/BaoErJie.jpg';
                   List<String> multipleImageList = List.generate(15, (index) => 'assets/images/SaoSiMing.jpg')
@@ -68,13 +69,13 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
                 },
                 child: defText('Go'),
               ),
-            if (_byteDataList != null && _byteDataList.length > 0)
-              RaisedButton(
+            if (_byteDataList?.isNotEmpty ?? false)
+              ElevatedButton(
                 onPressed: () async {
                   // Only test for Android.
                   final String pathPrefix = '/storage/emulated/0/Download/${DateTime.now().minute}_';
-                  for (int i = 0; i < _byteDataList.length; i++) {
-                    await File('$pathPrefix$i.png').writeAsBytes(_byteDataList[i].buffer.asUint8List());
+                  for (int i = 0; i < _byteDataList!.length; i++) {
+                    await File('$pathPrefix$i.png').writeAsBytes(_byteDataList![i].buffer.asUint8List());
                   }
                   print('Save finish...');
                 },
@@ -87,8 +88,8 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
   }
 
   List<Widget> imageList() {
-    List<Widget> imageList = List<Widget>();
-    final detailViewList = _byteDataList
+    List<Widget> imageList = <Widget>[];
+    final detailViewList = _byteDataList!
         .map<Widget>(
           (item) => ListView(
             physics: const BouncingScrollPhysics(),
@@ -105,10 +106,10 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
         )
         .toList();
 
-    for (int i = 0; i < _byteDataList.length; i++) {
+    for (int i = 0; i < _byteDataList!.length; i++) {
       imageList.add(GestureDetector(
         child: Image.memory(
-          _byteDataList[i].buffer.asUint8List(),
+          _byteDataList![i].buffer.asUint8List(),
           fit: BoxFit.cover,
         ),
         onTap: () {

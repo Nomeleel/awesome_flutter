@@ -1,27 +1,17 @@
 import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AnimationTestView extends StatefulWidget {
-  const AnimationTestView({Key key}) : super(key: key);
+  const AnimationTestView({Key? key}) : super(key: key);
 
   @override
   _AnimationTestViewState createState() => _AnimationTestViewState();
 }
 
 class _AnimationTestViewState extends State<AnimationTestView> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  late AnimationController _controller = AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
   double _height = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-  }
 
   @override
   void dispose() {
@@ -133,6 +123,7 @@ class _AnimationTestViewState extends State<AnimationTestView> with SingleTicker
     );
   }
 
+  /*
   Widget _timeTransitionContainer(double time, String tag) {
     print('-------_timeTransitionContainer: $tag ---');
     return ScaleTransition(
@@ -142,13 +133,14 @@ class _AnimationTestViewState extends State<AnimationTestView> with SingleTicker
       child: time < _controller.value ? SizedBox.shrink() : _gif(),
     );
   }
+  */
 
   Widget _timeContainer(double time, String tag) {
     print('-------_timeContainer: $tag ---');
     return AnimatedBuilder(
       animation: _controller,
-      builder: (BuildContext context, Widget child) {
-        return time > _controller.value ? SizedBox.shrink() : child;
+      builder: (BuildContext context, Widget? child) {
+        return time > _controller.value ? SizedBox.shrink() : child!;
       },
       child: _gif(),
     );

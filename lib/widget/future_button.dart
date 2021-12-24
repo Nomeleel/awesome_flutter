@@ -3,7 +3,13 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 class FutureButton3 extends StatelessWidget {
-  FutureButton3({Key key, this.child, this.activityIndicator, this.future, this.callBack}) : super(key: key);
+  FutureButton3({
+    Key? key,
+    required this.child,
+    required this.activityIndicator,
+    required this.future,
+    this.callBack,
+  }) : super(key: key);
 
   final Widget child;
 
@@ -11,7 +17,7 @@ class FutureButton3 extends StatelessWidget {
 
   final Function future;
 
-  final Function callBack;
+  final Function? callBack;
 
   final ValueNotifier<bool> active = ValueNotifier<bool>(false);
 
@@ -19,7 +25,7 @@ class FutureButton3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: active,
-      builder: (BuildContext context, bool value, Widget child) {
+      builder: (BuildContext context, bool value, Widget? child) {
         return value ? activityIndicator : futureButton();
       },
     );
@@ -38,9 +44,14 @@ class FutureButton3 extends StatelessWidget {
   }
 }
 
-
 class FutureButton2 extends StatelessWidget {
-  FutureButton2({Key key, this.child, this.activityIndicator, this.future, this.callBack}) : super(key: key);
+  FutureButton2({
+    Key? key,
+    required this.child,
+    required this.activityIndicator,
+    required this.future,
+    this.callBack,
+  }) : super(key: key);
 
   final Widget child;
 
@@ -48,7 +59,7 @@ class FutureButton2 extends StatelessWidget {
 
   final Function future;
 
-  final Function callBack;
+  final Function? callBack;
 
   final StreamController<bool> _controller = StreamController();
 
@@ -57,7 +68,7 @@ class FutureButton2 extends StatelessWidget {
     return StreamBuilder<bool>(
       stream: _controller.stream,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.active && !snapshot.data) {
+        if (snapshot.connectionState == ConnectionState.active && !(snapshot.data ?? false)) {
           return activityIndicator;
         } else {
           return futureButton();
@@ -80,7 +91,13 @@ class FutureButton2 extends StatelessWidget {
 }
 
 class FutureButton extends StatefulWidget {
-  FutureButton({Key key, this.child, this.activityIndicator, this.future, this.callBack}) : super(key: key);
+  FutureButton({
+    Key? key,
+    required this.child,
+    required this.activityIndicator,
+    required this.future,
+    this.callBack,
+  }) : super(key: key);
 
   final Widget child;
 
@@ -88,7 +105,7 @@ class FutureButton extends StatefulWidget {
 
   final Function future;
 
-  final Function callBack;
+  final Function? callBack;
 
   @override
   _XFutureButtonState createState() => _XFutureButtonState();

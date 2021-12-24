@@ -1,10 +1,9 @@
 import 'package:awesome_flutter/widget/gallery_view.dart';
 import 'package:flutter/material.dart';
 import '../widget/scaffold_view.dart';
-import 'package:flutter/widgets.dart';
 
 class GalleryViewTestView extends StatelessWidget {
-  const GalleryViewTestView({Key key}) : super(key: key);
+  const GalleryViewTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

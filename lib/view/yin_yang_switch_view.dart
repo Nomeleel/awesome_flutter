@@ -5,7 +5,7 @@ import '../custom/animation/rolling_transition.dart';
 import '../custom/clipper/magatama_clipper.dart';
 
 class YinYangSwitchView extends StatefulWidget {
-  const YinYangSwitchView({Key key}) : super(key: key);
+  const YinYangSwitchView({Key? key}) : super(key: key);
 
   @override
   YinYangSwitchViewState createState() => YinYangSwitchViewState();
@@ -13,17 +13,15 @@ class YinYangSwitchView extends StatefulWidget {
 
 class YinYangSwitchViewState extends State<YinYangSwitchView> with TickerProviderStateMixin {
   // TODO size关联设置
-  AnimationController controller;
-  Color color;
+  late AnimationController controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+  Color color = Colors.white;
 
   @override
   void initState() {
-    controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
-    Animation<Color> animation = ColorTween(begin: Colors.white, end: Colors.black).animate(controller);
+    Animation<Color?> animation = ColorTween(begin: Colors.white, end: Colors.black).animate(controller);
     controller.addListener(() {
-      setState(() => color = animation.value);
+      setState(() => color = animation.value!);
     });
-    color = Colors.white;
 
     super.initState();
   }

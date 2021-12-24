@@ -1,15 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
 import '../widget/surround_square.dart';
 
-//TODO 后期将用RenderObject实现。
-//TODO 嵌套循环的方式可以当成加载动画来实现(下次一定)
+// TODO(Nomeleel): 当前不可用
 class SurroundSquareView extends StatefulWidget {
-  const SurroundSquareView({Key key}) : super(key: key);
+  const SurroundSquareView({Key? key}) : super(key: key);
 
   @override
   _SurroundSquareViewState createState() => _SurroundSquareViewState();
@@ -20,22 +18,20 @@ class _SurroundSquareViewState extends State<SurroundSquareView> with SingleTick
   final double min = 0.01;
   final double max = 20.0;
 
-  double childAspectRatio;
-  List<Widget> children;
+  double childAspectRatio = 1.0;
+  List<Widget> children = <Widget>[];
 
-  AnimationController animationController;
+  late AnimationController animationController = AnimationController(
+    lowerBound: min,
+    upperBound: max,
+    duration: duration,
+    vsync: this,
+  )..drive(CurveTween(curve: Curves.slowMiddle));
 
   @override
   void initState() {
     super.initState();
     reset();
-
-    animationController = AnimationController(
-      lowerBound: min,
-      upperBound: max,
-      duration: duration,
-      vsync: this,
-    )..drive(CurveTween(curve: Curves.slowMiddle));
 
     animationController.addListener(() {
       setState(() {
@@ -141,7 +137,7 @@ class _SurroundSquareViewState extends State<SurroundSquareView> with SingleTick
     );
   }
 
-  List positionedList(double squareLength, [double offset = 20.0]) {
+  List<Widget> positionedList(double squareLength, [double offset = 20.0]) {
     squareLength -= offset * 2.0;
     final double unit = squareLength / (childAspectRatio + 1.0).toDouble();
     return positionedSurround(unit, offset)..addAll(positionedCenter(math.min(unit, unit * childAspectRatio) + offset));

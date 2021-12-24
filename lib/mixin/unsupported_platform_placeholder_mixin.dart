@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../util/platforms.dart';
 
 mixin UnsupportedPlatformPlaceholderMixin {
-  int _platforms;
+  late int? _platforms;
   bool get isSupportedPlatform => Platforms.containsCurrentPlatform(
       _platforms ?? setPlatform(supported: supportedPlatforms, unSupported: unSupportedPlatforms));
 
@@ -37,7 +37,7 @@ mixin UnsupportedPlatformPlaceholderMixin {
                 fontSize: 45.0,
               ),
             ),
-            for (var item in Platforms.platformsParse(_platforms))
+            for (var item in Platforms.platformsParse(_platforms!))
               Text(
                 '😊$item😊',
                 style: TextStyle(

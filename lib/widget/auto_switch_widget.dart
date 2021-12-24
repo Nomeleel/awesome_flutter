@@ -2,10 +2,10 @@ import 'package:flutter/widgets.dart';
 
 class AutoSwitchWidget extends StatefulWidget {
   AutoSwitchWidget({
-    Key key,
-    @required this.initWidget,
-    @required this.widgetMap,
-    @required this.widgetSwitch,
+    Key? key,
+    required this.initWidget,
+    required this.widgetMap,
+    required this.widgetSwitch,
   }) : super(key: key);
 
   final String initWidget;
@@ -17,15 +17,15 @@ class AutoSwitchWidget extends StatefulWidget {
 }
 
 class _AutoSwitchWidgetState extends State<AutoSwitchWidget> {
-  Widget _widget;
+  Widget? _widget;
 
   @override
   void initState() {
     super.initState();
 
     _widget = widget.widgetMap[widget.initWidget];
-    WidgetsBinding.instance.addPostFrameCallback((d) {
-      final widgetKey = widget.widgetSwitch(context.size);
+    WidgetsBinding.instance?.addPostFrameCallback((d) {
+      final widgetKey = widget.widgetSwitch(context.size!);
       if (widgetKey != widget.initWidget && widget.widgetMap.containsKey(widgetKey)) {
         setState(() {
           _widget = widget.widgetMap[widgetKey];
@@ -35,5 +35,5 @@ class _AutoSwitchWidgetState extends State<AutoSwitchWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => _widget;
+  Widget build(BuildContext context) => _widget!;
 }

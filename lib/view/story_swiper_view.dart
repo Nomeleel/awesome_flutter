@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/story_swiper.dart';
 
 class StorySwiperView extends StatefulWidget {
-  const StorySwiperView({Key key}) : super(key: key);
+  const StorySwiperView({Key? key}) : super(key: key);
 
   @override
   _StorySwiperViewState createState() => _StorySwiperViewState();
@@ -24,7 +23,7 @@ class _StorySwiperViewState extends State<StorySwiperView> {
         children: [
           ValueListenableBuilder<int>(
             valueListenable: index,
-            builder: (BuildContext context, int value, Widget child) {
+            builder: (BuildContext context, int value, Widget? child) {
               return Text(
                 'Index: $value',
                 style: Theme.of(context).textTheme.headline5,
@@ -46,10 +45,11 @@ class _StorySwiperViewState extends State<StorySwiperView> {
               onTap: (e) {
                 print('-----tap------');
                 print(e);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Tap: $e'),
-                  duration: const Duration(milliseconds: 2000),
-                ));
+                // TODO(Nomeleel): hero error
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //   content: Text('Tap: $e'),
+                //   duration: const Duration(milliseconds: 2000),
+                // ));
               },
               onPageChanged: (e) {
                 print('-----page----');

@@ -2,7 +2,7 @@ import '../route/view_routes.dart';
 import 'package:flutter/material.dart';
 
 class SearchDelegateTestView extends StatelessWidget {
-  const SearchDelegateTestView({Key key}) : super(key: key);
+  const SearchDelegateTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class SearchDelegateTestView extends StatelessWidget {
 
 class CustomSearchHintDelegate extends SearchDelegate<String> {
   CustomSearchHintDelegate({
-    @required String hintText,
+    required String hintText,
   }) : super(
           searchFieldLabel: hintText,
           keyboardType: TextInputType.text,
@@ -91,7 +91,7 @@ class CustomSearchHintDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     return ListView.separated(
-      padding: EdgeInsets.only(top: 7, bottom: MediaQuery.maybeOf(context)?.padding?.bottom ?? 0),
+      padding: EdgeInsets.only(top: 7, bottom: MediaQuery.maybeOf(context)?.padding.bottom ?? 0),
       itemCount: query.length,
       itemBuilder: (context, index) {
         final label = '$query-$index';

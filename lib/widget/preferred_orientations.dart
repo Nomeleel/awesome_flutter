@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class PreferredOrientations extends StatefulWidget {
-  const PreferredOrientations({Key key, this.child, this.orientations}) : super(key: key);
+  const PreferredOrientations({Key? key, required this.child, required this.orientations}) : super(key: key);
 
   final Widget child;
 

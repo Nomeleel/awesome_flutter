@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
 
 class PositionedNotInStackView extends StatelessWidget {
-  const PositionedNotInStackView({Key key}) : super(key: key);
+  const PositionedNotInStackView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,7 @@ class PositionedNotInStackView extends StatelessWidget {
 }
 
 class PositionedWrap extends StatelessWidget {
-  const PositionedWrap({Key key, this.child}) : super(key: key);
+  const PositionedWrap({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 

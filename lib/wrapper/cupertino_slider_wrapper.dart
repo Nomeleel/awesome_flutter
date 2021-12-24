@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class CupertinoSliderWrapper extends StatefulWidget {
   const CupertinoSliderWrapper({
-    Key key,
-    @required this.value,
-    @required this.onChanged,
+    Key? key,
+    required this.value,
+    required this.onChanged,
     this.onChangeStart,
     this.onChangeEnd,
     this.min = 0.0,
@@ -31,19 +31,19 @@ class CupertinoSliderWrapper extends StatefulWidget {
 
   final double value;
 
-  final ValueChanged<double> onChanged;
+  final ValueChanged<double>? onChanged;
 
-  final ValueChanged<double> onChangeStart;
+  final ValueChanged<double>? onChangeStart;
 
-  final ValueChanged<double> onChangeEnd;
+  final ValueChanged<double>? onChangeEnd;
 
   final double min;
 
   final double max;
 
-  final int divisions;
+  final int? divisions;
 
-  final Color activeColor;
+  final Color? activeColor;
 
   final Color thumbColor;
 
@@ -52,14 +52,8 @@ class CupertinoSliderWrapper extends StatefulWidget {
 }
 
 class _CupertinoSliderWrapperState extends State<CupertinoSliderWrapper> {
-  double _value;
-  
-  @override
-  void initState() {
-    _value = widget.value;
-    super.initState();
-  }
-  
+  late double _value = widget.value;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoSlider(
@@ -68,7 +62,7 @@ class _CupertinoSliderWrapperState extends State<CupertinoSliderWrapper> {
       max: widget.max,
       activeColor: widget.activeColor,
       onChanged: (double value) {
-        widget.onChanged(value);
+        widget.onChanged?.call(value);
         setState(() {
           _value = value;
         });

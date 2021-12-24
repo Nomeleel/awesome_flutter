@@ -3,21 +3,14 @@ import 'package:flutter/material.dart';
 import '../widget/colorful_list_view.dart';
 
 class NestedScrollViewWithHeaderView extends StatefulWidget {
-  const NestedScrollViewWithHeaderView({Key key}) : super(key: key);
+  const NestedScrollViewWithHeaderView({Key? key}) : super(key: key);
 
   @override
   _NestedScrollViewWithHeaderViewState createState() => _NestedScrollViewWithHeaderViewState();
 }
 
 class _NestedScrollViewWithHeaderViewState extends State<NestedScrollViewWithHeaderView> with TickerProviderStateMixin {
-  TabController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = TabController(length: 2, vsync: this);
-  }
+  late TabController _controller = TabController(length: 2, vsync: this);
 
   @override
   Widget build(BuildContext context) {

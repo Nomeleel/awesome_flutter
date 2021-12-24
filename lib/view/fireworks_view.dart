@@ -3,23 +3,17 @@ import 'package:flutter/material.dart';
 import '../custom/painter/fireworks_painter.dart';
 
 class FireworksView extends StatefulWidget {
-  const FireworksView({Key key}) : super(key: key);
+  const FireworksView({Key? key}) : super(key: key);
 
   @override
   _FireworksViewState createState() => _FireworksViewState();
 }
 
 class _FireworksViewState extends State<FireworksView> with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    animationController = AnimationController(
-      duration: const Duration(hours: 1),
-      vsync: this,
-    )..repeat();
-  }
+  late AnimationController animationController = AnimationController(
+    duration: const Duration(hours: 1),
+    vsync: this,
+  )..repeat();
 
   @override
   Widget build(BuildContext context) {

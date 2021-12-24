@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TabBarInitIndicatorImageView extends StatefulWidget {
-  TabBarInitIndicatorImageView({Key key}) : super(key: key);
+  TabBarInitIndicatorImageView({Key? key}) : super(key: key);
 
   @override
   _TabBarInitIndicatorImageViewState createState() => _TabBarInitIndicatorImageViewState();

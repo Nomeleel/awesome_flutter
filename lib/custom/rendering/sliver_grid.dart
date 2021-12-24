@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 /// Creates grid layouts with a fixed number of tiles in the cross axis.
@@ -30,14 +29,14 @@ class SliverGridDelegateWithCrossAxisCountFixedThree extends SliverGridDelegate 
   /// `crossAxisSpacing` arguments must not be negative. The `crossAxisCount`
   /// and `childAspectRatio` arguments must be greater than zero.
   const SliverGridDelegateWithCrossAxisCountFixedThree({
-    @required this.totalCount,
+    required this.totalCount,
     this.mainAxisSpacing = 0.0,
     this.crossAxisSpacing = 0.0,
     this.childAspectRatio = 1.0,
-  }) : assert(totalCount != null && totalCount >= 0),
-       assert(mainAxisSpacing != null && mainAxisSpacing >= 0),
-       assert(crossAxisSpacing != null && crossAxisSpacing >= 0),
-       assert(childAspectRatio != null && childAspectRatio > 0);
+  }) : assert(totalCount >= 0),
+       assert(mainAxisSpacing >= 0),
+       assert(crossAxisSpacing >= 0),
+       assert(childAspectRatio > 0);
 
   final int totalCount;
 
@@ -110,18 +109,17 @@ class SliverGridMaxThreeTileLayout extends SliverGridLayout {
   /// All of the arguments must not be null and must not be negative. The
   /// `crossAxisCount` argument must be greater than zero.
   const SliverGridMaxThreeTileLayout({
-    @required this.totalCount,
-    @required this.mainAxisStride,
-    @required this.crossAxisStride,
-    @required this.childMainAxisExtent,
-    @required this.childCrossAxisExtent,
-    @required this.reverseCrossAxis,
-  }) : assert(totalCount != null && totalCount > 0),
-       assert(mainAxisStride != null && mainAxisStride >= 0),
-       assert(crossAxisStride != null && crossAxisStride >= 0),
-       assert(childMainAxisExtent != null && childMainAxisExtent >= 0),
-       assert(childCrossAxisExtent != null && childCrossAxisExtent >= 0),
-       assert(reverseCrossAxis != null);
+    required this.totalCount,
+    required this.mainAxisStride,
+    required this.crossAxisStride,
+    required this.childMainAxisExtent,
+    required this.childCrossAxisExtent,
+    required this.reverseCrossAxis,
+  }) : assert(totalCount > 0),
+       assert(mainAxisStride >= 0),
+       assert(crossAxisStride >= 0),
+       assert(childMainAxisExtent >= 0),
+       assert(childCrossAxisExtent >= 0);
 
   final int totalCount;
 
@@ -159,7 +157,7 @@ class SliverGridMaxThreeTileLayout extends SliverGridLayout {
 
   @override
   int getMinChildIndexForScrollOffset(double scrollOffset) {
-    return mainAxisStride > 0.0 ? crossAxisCount * (scrollOffset ~/ mainAxisStride) : 0;;
+    return mainAxisStride > 0.0 ? crossAxisCount * (scrollOffset ~/ mainAxisStride) : 0;
   }
 
   @override
@@ -197,7 +195,6 @@ class SliverGridMaxThreeTileLayout extends SliverGridLayout {
 
   @override
   double computeMaxScrollOffset(int childCount) {
-    assert(childCount != null);
     final int mainAxisCount = ((childCount - 1) ~/ crossAxisCount) + 1;
     final double mainAxisSpacing = mainAxisStride - childMainAxisExtent;
     return mainAxisStride * mainAxisCount - mainAxisSpacing;

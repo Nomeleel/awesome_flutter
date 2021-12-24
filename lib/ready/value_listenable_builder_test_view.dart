@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ValueListenableBuilderTestView extends StatelessWidget {
-  const ValueListenableBuilderTestView({Key key}) : super(key: key);
+  const ValueListenableBuilderTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class ValueListenableBuilderTestView extends StatelessWidget {
           children: <Widget>[
             ValueListenableBuilder(
               valueListenable: person,
-              builder: (BuildContext context, Person value, Widget child) {
+              builder: (BuildContext context, Person value, Widget? child) {
                 return Column(
                   children: [
                     Text('Id: ${value.id}', style: Theme.of(context).textTheme.headline5),
@@ -31,7 +30,7 @@ class ValueListenableBuilderTestView extends StatelessWidget {
             const Text('You have pushed the button this many times:'),
             ValueListenableBuilder(
               valueListenable: counter,
-              builder: (BuildContext context, int value, Widget child) {
+              builder: (BuildContext context, int value, Widget? child) {
                 return Text(
                   '$value',
                   style: Theme.of(context).textTheme.headline4,
@@ -63,9 +62,9 @@ class Person {
 
   int age;
 
-  Person({this.id, this.name, this.age});
+  Person({required this.id, required this.name, required this.age});
 
-  Person copyWith({int age}) {
+  Person copyWith({int? age}) {
     return Person(
       id: id,
       name: name,

@@ -1,11 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class ListViewJumpPositionView extends StatefulWidget {
-  const ListViewJumpPositionView({Key key}) : super(key: key);
+  const ListViewJumpPositionView({Key? key}) : super(key: key);
 
   @override
   _ListViewJumpPositionViewState createState() => _ListViewJumpPositionViewState();
@@ -62,7 +60,7 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
           margin: EdgeInsets.all(7.7),
           color: Colors.primaries[index % Colors.primaries.length],
           alignment: Alignment.center,
-          child: RaisedButton(
+          child: ElevatedButton(
             child: const Text('Go'),
             onPressed: () => jump(context),
           ),
@@ -72,7 +70,7 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
     );
   }
 
-  SliverList targetSliverList([Key key]) {
+  SliverList targetSliverList([Key? key]) {
     return SliverList(
       key: _globalKey,
       delegate: SliverChildBuilderDelegate(
@@ -88,12 +86,12 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
 
   // 这种方式只支持从上跳转到下面， 因为如果锚点在滚动视图上面，位置就会算的不对
   void jump(BuildContext context) {
-    ScrollableState scrollableState = Scrollable.of(context);
+    ScrollableState? scrollableState = Scrollable.of(context);
     if (scrollableState != null) {
       double offset =
-          getVectorY(_globalKey.currentContext) - getVectorY(scrollableState.context) + scrollableState.position.pixels;
+          getVectorY(_globalKey.currentContext!) - getVectorY(scrollableState.context) + scrollableState.position.pixels;
       print(offset);
-      scrollableState?.position?.animateTo(
+      scrollableState.position.animateTo(
         math.min(offset, scrollableState.position.maxScrollExtent),
         duration: Duration(milliseconds: 200),
         curve: Curves.easeIn,
@@ -102,15 +100,15 @@ class _ListViewJumpPositionViewState extends State<ListViewJumpPositionView> {
   }
 
   double getVectorY(BuildContext context) {
-    return context.findRenderObject().getTransformTo(null).getTranslation().y;
+    return context.findRenderObject()!.getTransformTo(null).getTranslation().y;
   }
 }
 
 class _SliverDelegate extends SliverPersistentHeaderDelegate {
   _SliverDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
   });
 
   final double minHeight;

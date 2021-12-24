@@ -1,17 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class AppStoreCardDescription extends StatelessWidget {
   const AppStoreCardDescription({
-    Key key,
+    Key? key,
     this.mode = AppStoreCardDescriptionMode.classic,
     this.data,
   }) : super(key: key);
 
   final AppStoreCardDescriptionMode mode;
-  final AppStoreCardDescriptionData data;
+  final AppStoreCardDescriptionData? data;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +45,9 @@ class AppStoreCardDescription extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          subText(data.label ?? ''),
+          subText(data?.label ?? ''),
           Text(
-            data.title ?? '',
+            data?.title ?? '',
             style: TextStyle(
               decoration: TextDecoration.none,
               color: Colors.black,
@@ -57,7 +56,7 @@ class AppStoreCardDescription extends StatelessWidget {
             ),
           ),
           Spacer(),
-          subText(data.info ?? ''),
+          subText(data?.info ?? ''),
         ],
       ),
     );
@@ -67,7 +66,7 @@ class AppStoreCardDescription extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: Text(
-        data.title ?? '',
+        data?.title ?? '',
         style: TextStyle(
           decoration: TextDecoration.none,
           color: Colors.black,
@@ -129,7 +128,7 @@ class AppStoreCardDescriptionData {
         title = dataStr,
         info = dataStr;
 
-  final String title;
-  final String label;
-  final String info;
+  final String? title;
+  final String? label;
+  final String? info;
 }

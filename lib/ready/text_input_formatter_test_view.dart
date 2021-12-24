@@ -2,12 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
 
 class TextInputFormatterTestView extends StatelessWidget {
-  const TextInputFormatterTestView({Key key}) : super(key: key);
+  const TextInputFormatterTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class TextInputFormatterTestView extends StatelessWidget {
           ),
           ValueListenableBuilder(
             valueListenable: controller,
-            builder: (BuildContext context, TextEditingValue value, Widget child) {
+            builder: (BuildContext context, TextEditingValue value, Widget? child) {
               return Text(
                 'Text length: ${controller.text.characters.length}\n'
                 'merge length: ${CustomLengthLimitingTextInputFormatter.mergedTextLength(controller.text)}',
@@ -42,8 +41,8 @@ class TextInputFormatterTestView extends StatelessWidget {
 
 class CustomLengthLimitingTextInputFormatter extends LengthLimitingTextInputFormatter {
   CustomLengthLimitingTextInputFormatter(
-    int maxLength, {
-    MaxLengthEnforcement maxLengthEnforcement,
+    int? maxLength, {
+    MaxLengthEnforcement? maxLengthEnforcement,
   }) : super(maxLength, maxLengthEnforcement: maxLengthEnforcement);
 
   @override
@@ -51,7 +50,7 @@ class CustomLengthLimitingTextInputFormatter extends LengthLimitingTextInputForm
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final int maxLength = this.maxLength;
+    final int? maxLength = this.maxLength;
     final int mergedLength = mergedTextLength(newValue.text);
 
     if (maxLength == null || maxLength == -1 || mergedLength <= maxLength) {

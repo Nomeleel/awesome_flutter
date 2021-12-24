@@ -2,26 +2,16 @@ import 'dart:ui';
 
 import '../widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TraceRedPathTestView extends StatefulWidget {
-  const TraceRedPathTestView({Key key}) : super(key: key);
+  const TraceRedPathTestView({Key? key}) : super(key: key);
 
   @override
   _TraceRedPathTestViewState createState() => _TraceRedPathTestViewState();
 }
 
 class _TraceRedPathTestViewState extends State<TraceRedPathTestView> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
-  }
+  late AnimationController _controller = AnimationController(duration: const Duration(seconds: 3), vsync: this);
 
   @override
   void dispose() {
@@ -119,7 +109,7 @@ class TraceRedPathPainter extends CustomPainter {
   final AnimationController repaint;
   final PathMetric pathMetric;
 
-  TraceRedPathPainter({this.repaint})
+  TraceRedPathPainter({required this.repaint})
       : pathMetric = (Path()
               ..addRRect(
                 RRect.fromRectAndRadius(
@@ -154,7 +144,7 @@ class TraceRedPathClipper extends CustomClipper<Path> {
   final Size size;
   final PathMetric pathMetric;
 
-  TraceRedPathClipper({this.reclip, this.size})
+  TraceRedPathClipper({required this.reclip, required this.size})
       : pathMetric = (Path()
               ..addRRect(
                 RRect.fromRectAndRadius(

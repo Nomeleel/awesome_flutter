@@ -1,10 +1,9 @@
 import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:awesome_flutter/widget/tab_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class InteractiveViewerTestView extends StatefulWidget {
-  const InteractiveViewerTestView({Key key}) : super(key: key);
+  const InteractiveViewerTestView({Key? key}) : super(key: key);
 
   @override
   _InteractiveViewerTestViewState createState() => _InteractiveViewerTestViewState();
@@ -30,26 +29,27 @@ class _InteractiveViewerTestViewState extends State<InteractiveViewerTestView> {
 }
 
 class InteractiveViewerTestConstrained extends StatelessWidget {
-  const InteractiveViewerTestConstrained({Key key}) : super(key: key);
+  const InteractiveViewerTestConstrained({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> constrained = ValueNotifier<bool>(true);
     return ValueListenableBuilder(
       valueListenable: constrained,
-      builder: (BuildContext context, bool value, Widget child) {
+      builder: (BuildContext context, bool value, Widget? child) {
         return Column(
           children: [
             Expanded(
               child: InteractiveViewer(
                 constrained: constrained.value,
-                child: child,
+                child: child!,
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 77.77),
-              child: FloatingActionButton(
-                child: Icon(constrained.value ? Icons.fullscreen : Icons.fullscreen_exit),
+              child: IconButton(
+                icon: Icon(constrained.value ? Icons.fullscreen : Icons.fullscreen_exit),
+                color: Colors.blue,
                 onPressed: () {
                   constrained.value = !constrained.value;
                 },
@@ -64,7 +64,7 @@ class InteractiveViewerTestConstrained extends StatelessWidget {
 }
 
 class InteractiveViewerTestScale extends StatelessWidget {
-  const InteractiveViewerTestScale({Key key}) : super(key: key);
+  const InteractiveViewerTestScale({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

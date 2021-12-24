@@ -1,14 +1,12 @@
 // Copy
 import 'dart:math' as math;
-import 'dart:ui';
 
-import 'package:awesome_flutter/widget/scaffold_view.dart';
+// import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 
 class MatrixTestView extends StatefulWidget {
-  MatrixTestView({Key key}) : super(key: key);
+  MatrixTestView({Key? key}) : super(key: key);
 
   @override
   _MatrixTestViewState createState() => _MatrixTestViewState();
@@ -17,7 +15,10 @@ class MatrixTestView extends StatefulWidget {
 class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProviderStateMixin {
   Offset _currentDraggingOffset = Offset.zero;
   double _lastOffsetDy = 0.0;
-  AnimationController _animationController;
+  late AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 500),
+  );
 
   void _onDragEnd(DragEndDetails details) {
     _lastOffsetDy = _currentDraggingOffset.dy;
@@ -34,7 +35,7 @@ class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProvid
   }
 
   void _onDragUpdate(DragUpdateDetails details) {
-    _lastOffsetDy += details.primaryDelta;
+    _lastOffsetDy += details.primaryDelta ?? 0;
     if (_lastOffsetDy < -180) {
       _lastOffsetDy = -180.0;
     }
@@ -47,12 +48,6 @@ class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProvid
   }
 
   @override
-  void initState() {
-    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
@@ -60,7 +55,6 @@ class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final rotationRequired = false;
     timeDilation = 1.0;
     return Center(
       child: Container(
@@ -82,7 +76,7 @@ class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProvid
                 onVerticalDragUpdate: _onDragUpdate,
                 child: Stack(
                   children: [
-                    if (!displayBack) 
+                    if (!displayBack)
                       Transform(
                         alignment: Alignment.center,
                         transform: Matrix4.identity()
@@ -101,7 +95,7 @@ class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProvid
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: RotatedBox(
-                              quarterTurns: rotationRequired ? -1 : 0,
+                              quarterTurns: 0,
                               child: Column(
                                 children: [
                                   const SizedBox(
@@ -282,14 +276,9 @@ class _MatrixTestViewState extends State<MatrixTestView> with SingleTickerProvid
   }
 }
 
+/*
 class _MatrixTestViewState2 extends State<MatrixTestView> {
-  ValueNotifier<double> rotate;
-
-  @override
-  void initState() {
-    super.initState();
-    rotate = ValueNotifier(0.0);
-  }
+  ValueNotifier<double> rotate = ValueNotifier(0.0);
 
   @override
   Widget build(BuildContext context) {
@@ -348,3 +337,4 @@ class _MatrixTestViewState2 extends State<MatrixTestView> {
     );
   }
 }
+*/

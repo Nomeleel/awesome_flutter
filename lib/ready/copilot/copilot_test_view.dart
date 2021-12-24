@@ -1,3 +1,5 @@
+/* 仅供参考, 作为副本, 不去升级2.0
+
 import 'package:flutter/Widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -94,3 +96,4 @@ class _CopilotTestViewState extends State<CopilotTestView> {
     );
   }
 }
+*/

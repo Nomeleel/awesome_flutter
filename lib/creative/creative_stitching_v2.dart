@@ -9,11 +9,11 @@ typedef DecodeImageProvider = Future<image.Image> Function(dynamic image);
 Future<List<List<int>>> creativeStitchingByFile(
   File mainImageFile,
   List<File> multipleImageList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
-  DecodeImageProvider decodeImageProvider = (file) async => image.decodeImage(await file.readAsBytes());
+  DecodeImageProvider decodeImageProvider = (file) async => image.decodeImage(await file.readAsBytes())!;
 
   return _creativeStitching(
       decodeImageProvider, mainImageFile, multipleImageList, mainImageCropRect, rowCount, colCount);
@@ -22,18 +22,18 @@ Future<List<List<int>>> creativeStitchingByFile(
 Future<List<List<int>>> creativeStitchingByFilePath(
   String mainImageFilePath,
   List<String> multipleImagePathList, {
-  Rect mainImageCropRect,
+  Rect? mainImageCropRect,
   int rowCount = 3,
   int colCount = 3,
 }) async {
-  DecodeImageProvider decodeImageProvider = (filePath) async => image.decodeImage(await File(filePath).readAsBytes());
+  DecodeImageProvider decodeImageProvider = (filePath) async => image.decodeImage(await File(filePath).readAsBytes())!;
 
   return _creativeStitching(
       decodeImageProvider, mainImageFilePath, multipleImagePathList, mainImageCropRect, rowCount, colCount);
 }
 
 Future<List<List<int>>> _creativeStitching(DecodeImageProvider decodeImageProvider, dynamic mainImageFile,
-    List<dynamic> multipleImageList, Rect mainImageCropRect, int rowCount, int colCount) async {
+    List<dynamic> multipleImageList, Rect? mainImageCropRect, int rowCount, int colCount) async {
   List<List<int>> byteDataList = <List<int>>[];
 
   // TODO(Nomeleel): Image size should be limited.

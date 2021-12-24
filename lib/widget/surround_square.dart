@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 class SurroundSquare extends MultiChildRenderObjectWidget {
   SurroundSquare({
-    Key key,
+    Key? key,
     this.childAspectRatio = 2.0,
     List<Widget> children = const <Widget>[],
   }) : super(key: key, children: children);
@@ -60,7 +60,7 @@ class RenderSurroundSquare extends RenderStack {
     final double unit = squareLength / (childAspectRatio + 1.0).toDouble();
     final double allOffset = unit + offset;
 
-    RenderBox child = firstChild;
+    RenderBox? child = firstChild;
     int index = 0;
 
     while (child != null) {

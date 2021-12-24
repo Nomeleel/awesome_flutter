@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../widget/colorful_list_view.dart';
-import '../widget/sliver_app_bar_exp.dart';
+// import '../widget/sliver_app_bar_exp.dart';
 
 class SliverAppBarExpView extends StatelessWidget {
-  const SliverAppBarExpView({Key key}) : super(key: key);
+  const SliverAppBarExpView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +12,8 @@ class SliverAppBarExpView extends StatelessWidget {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
+            // TODO(Nomeleel): imp
+            /*
             SliverAppBarExp(
               expandedHeight: 430,
               pinned: true,
@@ -57,6 +59,7 @@ class SliverAppBarExpView extends StatelessWidget {
                 ),
               ),
             ),
+            */
           ];
         },
         body: const ColorfulListView(

@@ -4,7 +4,7 @@ import 'sliver_to_box_adapter.dart';
 
 class ColorfulListView extends StatelessWidget with SliverToBoxAdapterMixin {
   const ColorfulListView({
-    Key key,
+    Key? key,
     this.itemCount = 77,
     this.itemExtent = 77.77,
     this.itemTextStyle,
@@ -12,7 +12,7 @@ class ColorfulListView extends StatelessWidget with SliverToBoxAdapterMixin {
 
   final int itemCount;
   final double itemExtent;
-  final TextStyle itemTextStyle;
+  final TextStyle? itemTextStyle;
 
   @override
   ListView build(BuildContext context) {

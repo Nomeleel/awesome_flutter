@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 
 class AbsorbStack extends Stack {
   AbsorbStack({
-    Key key,
+    Key? key,
     AlignmentGeometry alignment = AlignmentDirectional.topStart,
-    TextDirection textDirection,
+    TextDirection? textDirection,
     StackFit sizing = StackFit.loose,
     this.absorbIndex = 0,
     List<Widget> children = const <Widget>[],
@@ -34,9 +34,9 @@ class AbsorbStack extends Stack {
 
 class RenderAbsorbStack extends RenderStack {
   RenderAbsorbStack({
-    List<RenderBox> children,
+    List<RenderBox>? children,
     AlignmentGeometry alignment = AlignmentDirectional.topStart,
-    TextDirection textDirection,
+    TextDirection? textDirection,
     int absorbIndex = 0,
   }) : _absorbIndex = absorbIndex,
        super(
@@ -49,8 +49,8 @@ class RenderAbsorbStack extends RenderStack {
   int get absorbIndex => _absorbIndex;
   set absorbIndex(value) => _absorbIndex = value;
 
-  RenderBox _childAtIndex() {
-    RenderBox child = firstChild;
+  RenderBox? _childAtIndex() {
+    RenderBox? child = firstChild;
     int i = 0;
     while (child != null && i < _absorbIndex) {
       final StackParentData childParentData = child.parentData as StackParentData;
@@ -62,17 +62,16 @@ class RenderAbsorbStack extends RenderStack {
   }
 
   @override
-  bool hitTestChildren(BoxHitTestResult result, {Offset position }) {
-    if (firstChild == null || _absorbIndex == null)
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position }) {
+    if (firstChild == null)
       return false;
-    assert(position != null);
-    RenderBox child = lastChild;
+    RenderBox? child = lastChild;
     while (child != null) {
       final StackParentData childParentData = child.parentData as StackParentData;
       final bool isHit = addWithPaintOffset(result, child, position, childParentData: childParentData);
       if (isHit) {
         // 为指定的子组件添加命中检测
-        final RenderBox absorbChild = _childAtIndex();
+        final RenderBox? absorbChild = _childAtIndex();
         if (absorbChild.hashCode != child.hashCode) {
           addWithPaintOffset(result, absorbChild, position);
         }
@@ -84,14 +83,13 @@ class RenderAbsorbStack extends RenderStack {
     return false;
   }
 
-  bool addWithPaintOffset(BoxHitTestResult result, RenderBox child, Offset position, {StackParentData childParentData}) {
-    childParentData ??= child.parentData as StackParentData;
+  bool addWithPaintOffset(BoxHitTestResult result, RenderBox? child, Offset position, {StackParentData? childParentData}) {
+    childParentData ??= child?.parentData as StackParentData;
     return result.addWithPaintOffset(
       offset: childParentData.offset,
       position: position,
       hitTest: (BoxHitTestResult result, Offset transformed) {
-        assert(transformed == position - childParentData.offset);
-        return child.hitTest(result, position: transformed);
+        return child?.hitTest(result, position: transformed) ?? false;
       },
     );
   }

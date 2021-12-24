@@ -37,9 +37,9 @@ class MyApp extends StatelessWidget {
       routes: viewRoutes,
       onGenerateRoute: (RouteSettings settings) {
         final WidgetBuilder builder = (BuildContext context) {
-          final String pageName = kIsWeb ? settings.name.substring(1) : findSimilarPageName(settings.name);
+          final String pageName = kIsWeb ? settings.name!.substring(1) : findSimilarPageName(settings.name!);
           return Layout(
-            child: viewRoutes.containsKey(pageName) ? viewRoutes[pageName](context) : const MyHomePage(),
+            child: viewRoutes.containsKey(pageName) ? viewRoutes[pageName]!(context) : const MyHomePage(),
           );
         };
 
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   getData() {
     rootBundle.loadString('assets/data/CardDataList.json').then(
       (value) {
-        if (value?.isNotEmpty ?? false) {
+        if (value.isNotEmpty) {
           json.decode(value)['cardDataList']?.forEach((item) {
             _cardDataList.add(AppStoreCardData.fromMap(item));
           });
@@ -137,12 +137,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         vertical: 10,
       ),
       radius: BorderRadius.circular(20),
-      showBackgroundWidget: (data.imagePath?.isNotEmpty ?? false) ? ImageWraper.path(data.imagePath) : placeholder(),
+      showBackgroundWidget: (data.imagePath?.isNotEmpty ?? false) ? ImageWraper.path(data.imagePath!) : placeholder(),
       showForegroundWidget: AppStoreCardDescription(
         mode: data.descriptionMode,
         data: data.descriptionData,
       ),
-      detailWidget: viewRoutes[data.detailViewRouteName](context),
+      detailWidget: viewRoutes[data.detailViewRouteName]!(context),
       isAlwayShow: data.descriptionMode == AppStoreCardDescriptionMode.classic,
     );
   }

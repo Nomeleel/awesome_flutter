@@ -5,7 +5,7 @@ import '../widget/fake_overflow_box.dart';
 import '../widget/scaffold_view.dart';
 
 class FakeOverflowBoxView extends StatelessWidget {
-  const FakeOverflowBoxView({Key key}) : super(key: key);
+  const FakeOverflowBoxView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

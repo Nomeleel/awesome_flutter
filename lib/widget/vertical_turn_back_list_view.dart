@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,17 +7,17 @@ import 'package:flutter/widgets.dart';
 /// 水平折回的可以用grid view代替
 class VerticalTurnBackListView extends StatelessWidget {
   const VerticalTurnBackListView.builder({
-    Key key,
-    @required this.turnBackCount,
+    Key? key,
+    required this.turnBackCount,
     this.padding = EdgeInsets.zero,
     this.turnBackSeparated,
-    @required this.itemCount,
-    @required this.itemBuilder,
+    required this.itemCount,
+    required this.itemBuilder,
   }) : super(key: key);
 
   final int turnBackCount;
   final EdgeInsets padding;
-  final IndexedWidgetBuilder turnBackSeparated;
+  final IndexedWidgetBuilder? turnBackSeparated;
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
 

@@ -3,12 +3,12 @@ import 'package:flutter/widgets.dart';
 
 class FakeOverflowBox extends SingleChildRenderObjectWidget {
   const FakeOverflowBox({
-    Key key,
+    Key? key,
     this.fakeHeight,
-    Widget child,
+    required Widget child,
   }) : super(key: key, child: child);
 
-  final double fakeHeight;
+  final double? fakeHeight;
 
   @override
   RenderObject createRenderObject(BuildContext context) => RenderFakeOverflowBox(fakeHeight: fakeHeight);
@@ -20,21 +20,21 @@ class FakeOverflowBox extends SingleChildRenderObjectWidget {
 }
 
 class RenderFakeOverflowBox extends RenderProxyBox {
-  RenderFakeOverflowBox({this.fakeHeight});
+  RenderFakeOverflowBox({required this.fakeHeight});
 
-  double fakeHeight;
+  double? fakeHeight;
 
   @override
   void performLayout() {
-    child.layout(constraints);
+    child?.layout(constraints);
     size = Size(constraints.maxWidth, fakeHeight ?? constraints.maxHeight);
   }
 }
 
 class SliverFakeOverflow extends SingleChildRenderObjectWidget {
   const SliverFakeOverflow({
-    Key key,
-    Widget child,
+    Key? key,
+    required Widget child,
   }) : super(key: key, child: child);
 
   @override
@@ -49,7 +49,7 @@ class RenderSliverFakeOverflow extends RenderSliverSingleBoxAdapter {
       return;
     }
     final SliverConstraints constraints = this.constraints;
-    child.layout(constraints.asBoxConstraints(), parentUsesSize: true);
+    child!.layout(constraints.asBoxConstraints(), parentUsesSize: true);
     final double childExtent = 120.0;
     // switch (constraints.axis) {
     //   case Axis.horizontal:
@@ -74,6 +74,6 @@ class RenderSliverFakeOverflow extends RenderSliverSingleBoxAdapter {
       hitTestExtent: paintedChildSize,
       hasVisualOverflow: childExtent > constraints.remainingPaintExtent || constraints.scrollOffset > 0.0,
     );
-    setChildParentData(child, constraints, geometry);
+    setChildParentData(child!, constraints, geometry!);
   }
 }

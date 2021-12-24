@@ -9,20 +9,19 @@ class RollingTransition extends AnimatedWidget{
   ///
   /// The [controller] argument must not be null.
   const RollingTransition({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.rollingVector,
     this.rollingTurns = 1.0,
     this.alignment = Alignment.center,
-    this.child,
-  }) : assert(controller != null),
-       super(key: key, listenable: controller);
+    required this.child,
+  }) : super(key: key, listenable: controller);
 
   /// The animation that controls the rolling of the child.
   final AnimationController controller;
 
   /// The animation that rolling vector of the child.
-  final Vector3 rollingVector;
+  final Vector3? rollingVector;
 
   /// The animation that the rolling turns of the child.
   ///

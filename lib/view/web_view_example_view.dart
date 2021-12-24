@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../mixin/unsupported_platform_placeholder_mixin.dart';
 
 String separator = "😊";
 
+// TODO(Nomeleel): 适配最新版本
 class WebViewExampleView extends StatefulWidget {
-  const WebViewExampleView({Key key, this.initialUrl = 'https://flutter.cn/'}) : super(key: key);
+  const WebViewExampleView({Key? key, this.initialUrl = 'https://flutter.cn/'}) : super(key: key);
 
   final String initialUrl;
 
@@ -23,9 +22,9 @@ class WebViewExampleView extends StatefulWidget {
 class _WebViewExampleViewState extends State<WebViewExampleView> with UnsupportedPlatformPlaceholderMixin {
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
-  ValueNotifier changed;
+  final ValueNotifier changed = ValueNotifier('Web View Example View');
 
-  ValueNotifier<double> progress;
+  final ValueNotifier<double> progress = ValueNotifier(.0);
 
   @override
   void initState() {
@@ -33,9 +32,6 @@ class _WebViewExampleViewState extends State<WebViewExampleView> with Unsupporte
     setPlatform(supported: 3);
 
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-
-    progress = ValueNotifier(.0);
-    changed = ValueNotifier('Web View Example View');
   }
 
   @override
@@ -63,11 +59,11 @@ class _WebViewExampleViewState extends State<WebViewExampleView> with Unsupporte
   }
 
   Widget topTitle() {
-    return WebViewChangedFutureBuilder<String>(
+    return WebViewChangedFutureBuilder<String?>(
       controller: _controller.future,
       changed: changed,
       future: (WebViewController controller) => controller.getTitle(),
-      builder: (BuildContext context, String title, Widget child) => Text(title),
+      builder: (BuildContext context, String? title, Widget? child) => Text(title ?? ''),
     );
   }
 
@@ -123,12 +119,12 @@ class _WebViewExampleViewState extends State<WebViewExampleView> with Unsupporte
     );
   }
 
-  Widget linearProgressIndicator() {
+  PreferredSize linearProgressIndicator() {
     return PreferredSize(
       preferredSize: Size.fromHeight(2.0),
       child: ValueListenableBuilder(
         valueListenable: progress,
-        builder: (BuildContext context, double value, Widget child) => LinearProgressIndicator(
+        builder: (BuildContext context, double value, Widget? child) => LinearProgressIndicator(
           value: value,
           valueColor: AlwaysStoppedAnimation(
             ColorTween(
@@ -211,7 +207,7 @@ class _WebViewExampleViewState extends State<WebViewExampleView> with Unsupporte
     print('Page onPageFinished: $url');
 
     // Update Nav Bar.
-    WebViewNavigationBar.of().update(await _controller.future);
+    WebViewNavigationBar.of()?.update(await _controller.future);
 
     // changeed
     changed.value = url;
@@ -219,22 +215,22 @@ class _WebViewExampleViewState extends State<WebViewExampleView> with Unsupporte
 }
 
 class WebViewNavigationBar extends StatefulWidget {
-  const WebViewNavigationBar({Key key, this.controller}) : super(key: key);
+  const WebViewNavigationBar({Key? key, this.controller}) : super(key: key);
 
   static final globalKey = GlobalKey<_WebViewNavigationBarState>();
 
-  final WebViewController controller;
+  final WebViewController? controller;
 
   @override
   _WebViewNavigationBarState createState() => _WebViewNavigationBarState();
 
-  static _WebViewNavigationBarState of() => globalKey.currentState;
+  static _WebViewNavigationBarState? of() => globalKey.currentState;
 }
 
 class _WebViewNavigationBarState extends State<WebViewNavigationBar> {
-  WebViewController _webViewController;
-  bool _canGoBack;
-  bool _canGoForward;
+  WebViewController? _webViewController;
+  bool _canGoBack = false;
+  bool _canGoForward = false;
 
   @override
   void initState() {
@@ -243,7 +239,7 @@ class _WebViewNavigationBarState extends State<WebViewNavigationBar> {
     changedWithController(widget.controller);
   }
 
-  void changedWithController(WebViewController controller) async {
+  void changedWithController(WebViewController? controller) async {
     if (controller != null) {
       _webViewController = controller;
       _canGoBack = await controller.canGoBack();
@@ -266,15 +262,15 @@ class _WebViewNavigationBarState extends State<WebViewNavigationBar> {
         children: <Widget>[
           IconButton(
             icon: const Icon(Icons.arrow_back_ios),
-            onPressed: _canGoBack ? _webViewController.goBack : null,
+            onPressed: _canGoBack ? _webViewController?.goBack : null,
           ),
           IconButton(
             icon: const Icon(Icons.arrow_forward_ios),
-            onPressed: _canGoForward ? _webViewController.goForward : null,
+            onPressed: _canGoForward ? _webViewController?.goForward : null,
           ),
           IconButton(
             icon: const Icon(Icons.replay),
-            onPressed: _webViewController.reload,
+            onPressed: _webViewController?.reload,
           ),
         ],
       ),
@@ -289,7 +285,7 @@ class _WebViewNavigationBarState extends State<WebViewNavigationBar> {
 }
 
 class MenuPanel extends StatelessWidget {
-  const MenuPanel({@required this.controller});
+  const MenuPanel({required this.controller});
 
   final WebViewController controller;
 
@@ -356,11 +352,11 @@ class MenuPanel extends StatelessWidget {
   }
 
   void addCache() async {
-    await controller.evaluateJavascript('caches.open("Add cache test"); localStorage["testLocalStorage"] = "Test";');
+    await controller.runJavascript('caches.open("Add cache test"); localStorage["testLocalStorage"] = "Test";');
   }
 
   Future<void> showCaches() async {
-    await controller.evaluateJavascript('caches.keys()'
+    await controller.runJavascript('caches.keys()'
         '.then((cacheKeys) => JSON.stringify({"cacheKeys" : cacheKeys, "localStorage" : localStorage}))'
         '.then((caches) => Dialog.postMessage("Caches$separator" + caches))');
   }
@@ -390,15 +386,15 @@ class MenuPanel extends StatelessWidget {
   }
 
   Future<void> toastScript(String script) async {
-    await controller.evaluateJavascript('Toaster.postMessage($script);');
+    await controller.runJavascript('Toaster.postMessage($script);');
   }
 
   Future<void> showScriptDialog(String title, String script) async {
-    await controller.evaluateJavascript('Dialog.postMessage("$title$separator" + ($script));');
+    await controller.runJavascript('Dialog.postMessage("$title$separator" + ($script));');
   }
 
-  Future<void> showDialog(String title, String content) async {
-    await controller.evaluateJavascript('Dialog.postMessage("$title$separator$content");');
+  Future<void> showDialog(String title, String? content) async {
+    await controller.runJavascript('Dialog.postMessage("$title$separator$content");');
   }
 }
 
@@ -407,12 +403,12 @@ class ActionItem extends StatelessWidget {
     this.iconData,
     this.label,
     this.action, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final IconData iconData;
   final String label;
-  final Function action;
+  final void Function() action;
 
   @override
   Widget build(BuildContext context) {
@@ -442,14 +438,14 @@ class ActionItem extends StatelessWidget {
 
 class WebViewControllerBuilder extends StatelessWidget {
   const WebViewControllerBuilder({
-    @required this.controller,
-    @required this.builder,
+    required this.controller,
+    required this.builder,
     this.placeholdBuilder,
   });
 
   final Future<WebViewController> controller;
   final Widget Function(BuildContext context, WebViewController controller) builder;
-  final WidgetBuilder placeholdBuilder;
+  final WidgetBuilder? placeholdBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -457,7 +453,7 @@ class WebViewControllerBuilder extends StatelessWidget {
       future: controller,
       builder: (BuildContext context, AsyncSnapshot<WebViewController> controller) {
         if (controller.hasData) {
-          return builder(context, controller.data);
+          return builder(context, controller.data!);
         }
         return placeholdBuilder?.call(context) ?? SizedBox();
       },
@@ -467,10 +463,10 @@ class WebViewControllerBuilder extends StatelessWidget {
 
 class WebViewChangedFutureBuilder<T> extends StatelessWidget {
   WebViewChangedFutureBuilder({
-    @required this.controller,
-    @required this.changed,
-    @required this.future,
-    @required this.builder,
+    required this.controller,
+    required this.changed,
+    required this.future,
+    required this.builder,
     this.child,
   }) : this.initialData = changed.value;
 
@@ -479,7 +475,7 @@ class WebViewChangedFutureBuilder<T> extends StatelessWidget {
   final T initialData;
   final Future<T> Function(WebViewController controller) future;
   final ValueWidgetBuilder<T> builder;
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -493,13 +489,13 @@ class WebViewChangedFutureBuilder<T> extends StatelessWidget {
   Widget listenableBuilder(BuildContext context, WebViewController controller) {
     return ValueListenableBuilder(
       valueListenable: changed,
-      builder: (BuildContext context, dynamic value, Widget child) {
+      builder: (BuildContext context, dynamic value, Widget? child) {
         return FutureBuilder<T>(
           future: future(controller),
           initialData: initialData,
           builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
             if (snapshot.hasData) {
-              return builder(context, snapshot.data, child);
+              return builder(context, snapshot.data!, child);
             }
             return placeholdBuilder(context);
           },

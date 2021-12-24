@@ -1,15 +1,12 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/scaffold_view.dart';
 import '../widget/sliver_to_box_adapter.dart';
 import '../widget/tab_view.dart';
 
 class CustomScrollViewTestView extends StatelessWidget {
-  const CustomScrollViewTestView({Key key}) : super(key: key);
+  const CustomScrollViewTestView({Key? key}) : super(key: key);
 
   final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 22.0);
   final int itemCount = 77;
@@ -61,7 +58,7 @@ class CustomScrollViewTestView extends StatelessWidget {
         ),
         // Test computeMaxScrollOffset
         SliverLayoutBuilder(builder: (sliverContext, sliverConstraints) {
-          final SliverGrid sliverGrid = _buildGridView().buildChildLayout(context);
+          final SliverGrid sliverGrid = _buildGridView().buildChildLayout(context) as SliverGrid;
           final screenWidth = MediaQuery.of(context).size.width;
           print('--------------------');
 
@@ -106,7 +103,7 @@ class CustomScrollViewTestView extends StatelessWidget {
     );
   }
 
-  SliverGridDelegate _getGridDelegate() {
+  SliverGridDelegateWithFixedCrossAxisCount _getGridDelegate() {
     return const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 3,
       mainAxisSpacing: 7.0,
@@ -187,7 +184,7 @@ class FixedSliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate
 }
 
 class IndexItem extends StatefulWidget {
-  const IndexItem({Key key, this.index}) : super(key: key);
+  const IndexItem({Key? key, required this.index}) : super(key: key);
 
   final int index;
 

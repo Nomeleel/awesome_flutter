@@ -8,29 +8,22 @@ import '../widget/scaffold_view.dart';
 import '../widget/tab_view.dart';
 
 class AbsorbStackView extends StatefulWidget {
-  const AbsorbStackView({Key key}) : super(key: key);
+  const AbsorbStackView({Key? key}) : super(key: key);
 
   @override
   _AbsorbStackViewState createState() => _AbsorbStackViewState();
 }
 
 class _AbsorbStackViewState extends State<AbsorbStackView> {
-  List<Widget> _children;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _children = [
-      const ColorfulListView(),
-      BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-        child: Container(
-          color: Colors.white.withOpacity(.2),
-        ),
+  late List<Widget> _children = [
+    const ColorfulListView(),
+    BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      child: Container(
+        color: Colors.white.withOpacity(.2),
       ),
-    ];
-  }
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {

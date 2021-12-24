@@ -1,10 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NavToListViewAutoScrollView extends StatelessWidget {
-  const NavToListViewAutoScrollView({Key key}) : super(key: key);
+  const NavToListViewAutoScrollView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class NavToListViewAutoScrollView extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                     return ListViewAutoScrollView(
@@ -42,7 +41,7 @@ class NavToListViewAutoScrollView extends StatelessWidget {
 }
 
 class ListViewAutoScrollView extends StatefulWidget {
-  const ListViewAutoScrollView({Key key, this.index}) : super(key: key);
+  const ListViewAutoScrollView({Key? key, required this.index}) : super(key: key);
 
   final int index;
 
@@ -51,15 +50,13 @@ class ListViewAutoScrollView extends StatefulWidget {
 }
 
 class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
-  ScrollController _controller;
-  List<GlobalKey> _globalKeyList;
+  ScrollController _controller = ScrollController();
+  List<GlobalKey> _globalKeyList = [];
 
   @override
   void initState() {
     super.initState();
-    _controller = ScrollController();
-    _globalKeyList = [];
-    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPersistentFrameCallback((timeStamp) {
       print('-------------------WidgetsBinding-------------------');
       scrollListView();
     });
@@ -68,7 +65,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
   @override
   Widget build(BuildContext context) {
     print('-------------------build-------------------');
-    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPersistentFrameCallback((timeStamp) {
       //print('-------------------WidgetsBinding build-------------------');
       //scrollListView();
     });
@@ -111,11 +108,11 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
     //if (isScrollable) return 0.0;
     double center = 0.0;
     for (int i = 0; i < index; i++) {
-      center += _globalKeyList[i].currentContext.size.height;
+      center += _globalKeyList[i].currentContext!.size!.height;
     }
-    center += _globalKeyList[index].currentContext.size.height / 2;
+    center += _globalKeyList[index].currentContext!.size!.height / 2;
     print(center);
-    return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent) as double;
+    return (center - viewportWidth / 2.0).clamp(minExtent, maxExtent);
   }
 
   double centeredScrollOffset(int index) {

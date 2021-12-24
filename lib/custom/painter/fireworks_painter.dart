@@ -14,10 +14,10 @@ class FireworksPainter extends CustomPainter {
 
   final AnimationController repaint;
 
-  List<Fireworks> fireworksList = <Fireworks>[];
+  late List<Fireworks> fireworksList = <Fireworks>[];
 
-  Size canvasSize;
-  Offset get sourcePosition => Offset(canvasSize.width / 2, canvasSize.height);
+  Size? canvasSize;
+  Offset get sourcePosition => canvasSize != null ? Offset(canvasSize!.width / 2, canvasSize!.height) : Offset.zero;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -79,7 +79,7 @@ class FireworksPainter extends CustomPainter {
   }
 
   Fireworks addFireworks() {
-    final Offset targetPosition = Offset(random(0, canvasSize.width), random(0, canvasSize.height / 2));
+    final Offset targetPosition = Offset(random(0, canvasSize!.width), random(0, canvasSize!.height / 2));
     return Fireworks(
       Trajectory(sourcePosition, targetPosition),
       List<Particle>.generate(100, (_) => Particle(targetPosition)),

@@ -2,12 +2,12 @@ import 'package:flutter/widgets.dart';
 
 class CombineListView extends StatefulWidget {
   const CombineListView({
-    Key key,
-    @required this.list,
-    @required this.combineList,
+    Key? key,
+    required this.list,
+    required this.combineList,
     this.combineLoopSize = 1,
-    @required this.itemBuilder,
-    @required this.combineItemBuilder,
+    required this.itemBuilder,
+    required this.combineItemBuilder,
     this.loadMore,
     this.primary,
   }) : super(key: key);
@@ -20,26 +20,25 @@ class CombineListView extends StatefulWidget {
   final IndexedWidgetBuilder itemBuilder;
   final IndexedWidgetBuilder combineItemBuilder;
 
-  final Function loadMore;
+  final Function? loadMore;
 
-  final bool primary;
+  final bool? primary;
 
   @override
   _CombineListViewState createState() => _CombineListViewState();
 }
 
 class _CombineListViewState extends State<CombineListView> {
-  ScrollController _controller;
-  List _list;
+  ScrollController _controller = ScrollController();
+  List _list = [];
 
-  bool get isCombine => (widget.combineList?.isNotEmpty ?? false) && widget.combineItemBuilder != null;
+  bool get isCombine => widget.combineList.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
     _list = []..addAll(widget.list);
 
-    _controller = ScrollController();
     if (widget.loadMore != null) {
       _controller
         ..removeListener(listener)
@@ -50,7 +49,7 @@ class _CombineListViewState extends State<CombineListView> {
   void listener() {
     if (_controller.offset == _controller.position.maxScrollExtent) {
       setState(() {
-        widget.loadMore();
+        widget.loadMore!();
       });
     }
   }

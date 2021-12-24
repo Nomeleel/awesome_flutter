@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class TextExpansion extends StatefulWidget {
-  const TextExpansion(this.text, this.maxLines, {Key key, this.maxWidth, this.style, this.expansionWidget})
+  const TextExpansion(this.text, this.maxLines, {Key? key, this.maxWidth, required this.style, this.expansionWidget})
       : super(key: key);
 
   final String text;
   final int maxLines;
   final TextStyle style;
-  final double maxWidth;
-  final Widget expansionWidget;
+  final double? maxWidth;
+  final Widget? expansionWidget;
 
   @override
   TextExpansionState createState() => TextExpansionState();
@@ -17,7 +17,7 @@ class TextExpansion extends StatefulWidget {
 
 class TextExpansionState extends State<TextExpansion> {
   bool _expand = false;
-  bool _didExceedMaxLines;
+  bool? _didExceedMaxLines;
 
   @override
   void didChangeDependencies() {
@@ -43,7 +43,7 @@ class TextExpansionState extends State<TextExpansion> {
 
   @override
   Widget build(BuildContext context) {
-    if (_didExceedMaxLines) {
+    if (_didExceedMaxLines!) {
       if (_expand) {
         return switchWidget(text());
       } else {
@@ -56,7 +56,7 @@ class TextExpansionState extends State<TextExpansion> {
               Positioned(
                 bottom: 0.0,
                 right: 0.0,
-                child: switchWidget(widget.expansionWidget),
+                child: switchWidget(widget.expansionWidget!),
               )
             ],
           );
@@ -67,7 +67,7 @@ class TextExpansionState extends State<TextExpansion> {
     }
   }
 
-  Text text([int maxLines]) {
+  Text text([int? maxLines]) {
     return Text(
       widget.text,
       maxLines: maxLines,

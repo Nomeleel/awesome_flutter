@@ -5,9 +5,9 @@ import 'package:animations/animations.dart';
 class ClosedAlwaysWrapper{
 
   const ClosedAlwaysWrapper({
-    @required this.closedWidget,
-    @required this.openWidget,
-    this.limitOpenWidgetHeight,
+    required this.closedWidget,
+    required this.openWidget,
+    required this.limitOpenWidgetHeight,
   });
 
   final Widget closedWidget;

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widget/colorful_list_view.dart';
 import '../widget/scroll_view_jump_top.dart';
 
 class ScrollViewJumpTopView extends StatefulWidget {
-  const ScrollViewJumpTopView({Key key}) : super(key: key);
+  const ScrollViewJumpTopView({Key? key}) : super(key: key);
 
   @override
   _ScrollViewJumpTopViewState createState() => _ScrollViewJumpTopViewState();

@@ -24,16 +24,16 @@ class StorySwiper extends StatefulWidget {
   final double paddingStart;
   final double verticalPadding;
 
-  final Widget endWidget;
+  final Widget? endWidget;
   final int limitLength;
 
-  final Function onPageChanged;
-  final Function onTap;
+  final Function? onPageChanged;
+  final Function? onTap;
 
   StorySwiper.builder(
-      {Key key,
-      @required this.widgetBuilder,
-      this.itemCount,
+      {Key? key,
+      required this.widgetBuilder,
+      required this.itemCount,
       this.visiblePageCount = 4,
       this.dx = 60,
       this.dy = 20,
@@ -42,7 +42,7 @@ class StorySwiper extends StatefulWidget {
       this.paddingStart = 32,
       this.verticalPadding = 8,
       this.endWidget,
-      this.limitLength,
+      required this.limitLength,
       this.onPageChanged,
       this.onTap})
       : super(key: key);
@@ -52,18 +52,17 @@ class StorySwiper extends StatefulWidget {
 }
 
 class _StorySwiperState extends State<StorySwiper> {
-  PageController _pageController;
-  double _pagePosition = 0;
+  final PageController _pageController = PageController();
+  double? _pagePosition = 0;
   List<Widget> _widgetList = [];
-  double itemWidth;
+  double itemWidth = 0;
   int _pageIndex = 0;
 
-  List numbers = [];
+  List<double> numbers = <double>[];
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _pageController.addListener(() {
       setState(() {
         _pagePosition = _pageController.page;
@@ -89,11 +88,9 @@ class _StorySwiperState extends State<StorySwiper> {
               if (notification is ScrollEndNotification && _pageIndex != _pageController.page) {
                 Future.delayed(Duration.zero, () {
                   _pageController.animateToPage(
-                    _pageController.page.round(),
+                    _pageController.page!.round(),
                     duration: Duration(
-                      milliseconds:
-                          ((_pageController.page - _pageController.page.round()).abs() * 2000)
-                              .floor(),
+                      milliseconds: ((_pageController.page! - _pageController.page!.round()).abs() * 2000).floor(),
                     ),
                     curve: Curves.easeInOut,
                   );
@@ -106,10 +103,10 @@ class _StorySwiperState extends State<StorySwiper> {
                   widget.onPageChanged != null &&
                   notification is ScrollUpdateNotification) {
                 final PageMetrics metrics = notification.metrics as PageMetrics;
-                final int currentPage = metrics.page.round();
+                final int currentPage = metrics.page!.round();
                 if (currentPage != _pageIndex) {
                   _pageIndex = currentPage;
-                  widget.onPageChanged(currentPage);
+                  widget.onPageChanged!(currentPage);
                 }
               }
               return true;
@@ -133,11 +130,11 @@ class _StorySwiperState extends State<StorySwiper> {
   }
 
   Widget _getPages() {
-    final List<Widget> pageList = [];
-    final int currentPageIndex = _pagePosition.floor();
+    final List<Positioned> pageList = [];
+    final int currentPageIndex = _pagePosition!.floor();
     final int lastPage = currentPageIndex + widget.visiblePageCount;
     final double width = MediaQuery.of(context).size.width;
-    final double delta = _pagePosition - currentPageIndex;
+    final double delta = _pagePosition! - currentPageIndex;
     double top = -widget.dy * delta + widget.verticalPadding;
     double start = -widget.dx * delta + widget.paddingStart;
 
@@ -161,7 +158,7 @@ class _StorySwiperState extends State<StorySwiper> {
     if (numbers.isEmpty && widget.itemCount != 0) {
       for (var j = 0; j < pageList.length; ++j) {
         Positioned pageItem = pageList[j];
-        numbers.add(pageItem.left);
+        numbers.add(pageItem.left ?? 0);
       }
     }
     return Stack(children: pageList.reversed.toList());
@@ -171,8 +168,8 @@ class _StorySwiperState extends State<StorySwiper> {
     return (1 - widget.depthFactor * (index - delta) / widget.visiblePageCount);
   }
 
-  Widget _getWidgetForValues(double top, double start, int index) {
-    Widget childWidget;
+  Positioned _getWidgetForValues(double top, double start, int index) {
+    Widget? childWidget;
     if (index < _widgetList.length) {
       childWidget = _widgetList[index];
     } else {
@@ -180,14 +177,14 @@ class _StorySwiperState extends State<StorySwiper> {
         childWidget = widget.widgetBuilder(index);
         _widgetList.insert(index, childWidget);
       } else if (widget.limitLength == index) {
-        childWidget = widget.endWidget;
+        childWidget = widget.endWidget!;
         _widgetList.insert(index, childWidget);
       }
     }
 
     if (widget.onTap != null) {
       childWidget = GestureDetector(
-        onTap: () => widget.onTap(index),
+        onTap: () => widget.onTap?.call(index),
         child: childWidget,
       );
     }

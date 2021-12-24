@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../widget/colorful_list_view.dart';
 
 class SliverAppBarTestView extends StatelessWidget {
-  const SliverAppBarTestView({Key key}) : super(key: key);
+  const SliverAppBarTestView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class SliverAppBarTestView extends StatelessWidget {
             forceElevated: true,
             backgroundColor: Colors.purple,
             foregroundColor: Colors.white,
-            brightness: Brightness.dark,
+            // brightness: Brightness.dark,
             collapsedHeight: null,
             expandedHeight: 430,
             floating: false,

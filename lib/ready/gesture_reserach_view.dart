@@ -1,23 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class GestureResearchView extends StatefulWidget {
-  GestureResearchView({Key key}) : super(key: key);
+  GestureResearchView({Key? key}) : super(key: key);
 
   @override
   _GestureResearchViewState createState() => _GestureResearchViewState();
 }
 
 class _GestureResearchViewState extends State<GestureResearchView> with SingleTickerProviderStateMixin {
-  TabController _controller;
-  @override
-  void initState() {
-    super.initState();
-    _controller = TabController(length: 3, vsync: this);
-  }
+  late TabController _controller = TabController(length: 3, vsync: this);
 
   @override
   Widget build(BuildContext context) {
@@ -55,23 +47,17 @@ class _GestureResearchViewState extends State<GestureResearchView> with SingleTi
 }
 
 class SubTabView extends StatefulWidget {
-  SubTabView({Key key}) : super(key: key);
+  SubTabView({Key? key}) : super(key: key);
 
   @override
   _SubTabViewState createState() => _SubTabViewState();
 }
 
 class _SubTabViewState extends State<SubTabView> with SingleTickerProviderStateMixin {
-  TabController _controller;
-  ScrollPhysics _physics;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TabController(length: 3, vsync: this);
-    _physics = BouncingScrollPhysics();
-    addListener();
-  }
+  late TabController _controller = TabController(length: 3, vsync: this)
+    ..removeListener(listener)
+    ..addListener(listener);
+  final ScrollPhysics _physics = BouncingScrollPhysics();
 
   void addListener() {
     _controller
@@ -146,10 +132,10 @@ class TabViewEagerGestureRecognizer extends EagerGestureRecognizer {
 
 // ignore: must_be_immutable
 class TabViewScrollPhysics extends ClampingScrollPhysics {
-  TabViewScrollPhysics({ScrollPhysics parent}) : super(parent: parent);
+  TabViewScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
 
   @override
-  TabViewScrollPhysics applyTo(ScrollPhysics ancestor) {
+  TabViewScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return TabViewScrollPhysics(parent: buildParent(ancestor));
   }
 
@@ -174,7 +160,7 @@ class TabViewScrollPhysics extends ClampingScrollPhysics {
 // 同时响应后，不同手势也会冲突
 // 滑动和点击事件都会响应tap事件，可以通过up和down中point位置得出，相同是点击，反之是滑动
 class GestureStack extends StatefulWidget {
-  GestureStack({Key key}) : super(key: key);
+  GestureStack({Key? key}) : super(key: key);
 
   @override
   _GestureStackState createState() => _GestureStackState();
@@ -235,6 +221,7 @@ class _GestureStackState extends State<GestureStack> {
   }
 }
 
+/*
 // 改写这里
 extension RenderStackHitTest on RenderStack {
   @override
@@ -242,10 +229,11 @@ extension RenderStackHitTest on RenderStack {
 
   bool defaultHitTestChildren(BoxHitTestResult result, {Offset position}) {}
 }
+*/
 
 // 研究层级页面(Stack)手势穿透问题
 class GestureStackTest extends StatefulWidget {
-  GestureStackTest({Key key}) : super(key: key);
+  GestureStackTest({Key? key}) : super(key: key);
 
   @override
   _GestureStackTestState createState() => _GestureStackTestState();

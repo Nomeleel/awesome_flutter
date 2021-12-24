@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Test extends StatefulWidget {
-  const Test({Key key}) : super(key: key);
+  const Test({Key? key}) : super(key: key);
 
   @override
   _TestState createState() => _TestState();
 }
 
 class _TestState extends State<Test> {
-  List _list;
+  List _list = <String>[];
 
-  ValueNotifier<int> _valueListenable;
-
-  @override
-  void initState() {
-    super.initState();
-    _list = <String>[];
-    _valueListenable = ValueNotifier<int>(_list.length);
-  }
+  late ValueNotifier<int> _valueListenable = ValueNotifier<int>(_list.length);
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +24,12 @@ class _TestState extends State<Test> {
           color: Colors.purple,
           child: ValueListenableBuilder(
             valueListenable: _valueListenable,
-            builder: (BuildContext context, int length, Widget child) {
+            builder: (BuildContext context, int length, Widget? child) {
               return Text('$length');
             },
           ),
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('Add'),
           onPressed: () {
             //_list = List.generate(_list.length + 1, (index) => '1');

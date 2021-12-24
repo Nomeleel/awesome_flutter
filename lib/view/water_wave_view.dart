@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../custom/clipper/wave_rect_clipper.dart';
 
 class WaterWaveView extends StatefulWidget {
-  const WaterWaveView({Key key}) : super(key: key);
+  const WaterWaveView({Key? key}) : super(key: key);
 
   @override
   WaterWaveViewState createState() => WaterWaveViewState();
@@ -29,11 +29,11 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
   double get remainHeight => (fullWaterHeight - animation.value) / unit;
   double updateWaterUnitHeight = 200;
 
-  AnimationController loopAnimationController;
-  AnimationController adjustWaterHeightController;
+  late AnimationController loopAnimationController;
+  late AnimationController adjustWaterHeightController;
 
-  Animation curve;
-  Animation animation;
+  late Animation<double> curve;
+  late Animation animation;
 
   @override
   void initState() {
@@ -92,13 +92,13 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   child: Icon(
                     Icons.add,
                     color: fullColor,
                     size: 24,
                   ),
-                  color: Colors.white,
+                  style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white)),
                   onPressed: () {
                     setAnimation(currentWaterHeight + updateWaterUnitHeight)..forward();
                   },
@@ -126,13 +126,13 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                 SizedBox(
                   height: 28,
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Icon(
                     Icons.remove,
                     color: fullColor,
                     size: 24,
                   ),
-                  color: Colors.white,
+                  style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white)),
                   onPressed: () {
                     setAnimation(currentWaterHeight - updateWaterUnitHeight)..forward();
                   },
@@ -217,8 +217,6 @@ class WaterWaveViewState extends State<WaterWaveView> with TickerProviderStateMi
                       child: RichText(
                         text: TextSpan(
                           style: TextStyle(
-                            // TODO 是否有版权
-                            fontFamily: 'Roboto',
                             fontWeight: FontWeight.w400,
                             fontSize: 25,
                             letterSpacing: 0.0,
