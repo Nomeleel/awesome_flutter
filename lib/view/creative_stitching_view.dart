@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import '../creative/creative_stitching.dart';
 import '../custom/animation/gesture_scale_transition.dart';
 
-// TODO(Nomeleel): 不是正方形了
 class CreativeStitchingView extends StatefulWidget {
   const CreativeStitchingView({Key? key}) : super(key: key);
 
@@ -16,17 +15,9 @@ class CreativeStitchingView extends StatefulWidget {
 
 class _CreativeStitchingViewState extends State<CreativeStitchingView> {
   List<ByteData>? _byteDataList;
-// 布局问题
+
   @override
   Widget build(BuildContext context) {
-    var defText = (text) => Text(
-          text,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            decoration: TextDecoration.none,
-          ),
-        );
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -37,23 +28,21 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
               padding: EdgeInsets.only(top: 100),
               child: _byteDataList == null
                   ? defText('Please click this button')
-                  : _byteDataList!.length == 0
-                      ? CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                        )
-                      : AspectRatio(
-                          aspectRatio: 1.0,
-                          child: GridView.count(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 5.0,
-                            crossAxisSpacing: 5.0,
-                            children: imageList(),
-                          ),
+                  : _byteDataList!.isEmpty
+                      ? CircularProgressIndicator(backgroundColor: Colors.white)
+                      : GridView.count(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 5.0,
+                          crossAxisSpacing: 5.0,
+                          children: imageList(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
                         ),
             ),
             if (_byteDataList == null)
               ElevatedButton(
-                onPressed: () async {
+                onPressed: () {
                   setState(() {
                     _byteDataList = <ByteData>[];
                   });
@@ -69,10 +58,9 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
                 },
                 child: defText('Go'),
               ),
-            if (_byteDataList?.isNotEmpty ?? false)
+            if ((_byteDataList?.isNotEmpty ?? false) && Platform.isAndroid)
               ElevatedButton(
                 onPressed: () async {
-                  // Only test for Android.
                   final String pathPrefix = '/storage/emulated/0/Download/${DateTime.now().minute}_';
                   for (int i = 0; i < _byteDataList!.length; i++) {
                     await File('$pathPrefix$i.png').writeAsBytes(_byteDataList![i].buffer.asUint8List());
@@ -86,6 +74,8 @@ class _CreativeStitchingViewState extends State<CreativeStitchingView> {
       ),
     );
   }
+
+  Text defText(text) => Text(text, style: Theme.of(context).textTheme.subtitle1);
 
   List<Widget> imageList() {
     List<Widget> imageList = <Widget>[];
