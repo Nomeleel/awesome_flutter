@@ -4,8 +4,6 @@ import '../widget/animated_scan.dart';
 import '../widget/scaffold_view.dart';
 
 class AnimatedScanView extends StatelessWidget {
-  final int itemCount = 9;
-
   const AnimatedScanView({Key? key}) : super(key: key);
 
   @override

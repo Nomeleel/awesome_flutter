@@ -4,8 +4,6 @@ import '../widget/level_follow.dart';
 import '../widget/scaffold_view.dart';
 
 class FollowView extends StatelessWidget {
-  final int itemCount = 9;
-
   const FollowView({Key? key}) : super(key: key);
 
   @override

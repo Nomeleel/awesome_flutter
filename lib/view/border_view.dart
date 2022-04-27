@@ -14,7 +14,7 @@ class BorderView extends StatelessWidget {
           height: 100,
           decoration: ShapeDecoration(
             color: Colors.black,
-            shape: SweepStadiumBorder(side: BorderSide(width: 30)),
+            shape: SweepStadiumBorder(side: BorderSide(width: 3)),
           ),
         ),
         Container(
@@ -22,7 +22,17 @@ class BorderView extends StatelessWidget {
           height: 100,
           decoration: ShapeDecoration(
             color: Colors.black,
-            shape: SweepStadiumBorder(side: BorderSide(width: 30), style: 2),
+            shape: SweepStadiumBorder(side: BorderSide(width: 3), style: 2),
+          ),
+        ),
+        ShaderMask(
+          shaderCallback: (bounds) => LinearGradient(colors: Colors.primaries).createShader(bounds),
+          child: Container(
+            width: 350,
+            height: 100,
+            decoration: ShapeDecoration(
+              shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 3)),
+            ),
           ),
         ),
       ],
