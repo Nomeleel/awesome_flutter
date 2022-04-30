@@ -1,3 +1,9 @@
+/// Copy from https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/tabs.dart
+
+/// 原: lib/todo/tab_bar.dart
+/// TabBar
+/// 添加[tabSpacing]、[tabDecoration]、[direction]
+
 // Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -193,18 +199,20 @@ class _IndicatorPainter extends CustomPainter {
     required this.tabKeys,
     required _IndicatorPainter? old,
     required this.indicatorPadding,
-  }) : assert(controller != null),
-       assert(indicator != null),
-       super(repaint: controller.animation) {
+    required this.spacing,
+    required this.normalDecoration,
+  }) : super(repaint: controller.animation) {
     if (old != null)
       saveTabOffsets(old._currentTabOffsets, old._currentTextDirection);
   }
 
   final TabController controller;
   final Decoration indicator;
+  final Decoration? normalDecoration;
   final TabBarIndicatorSize? indicatorSize;
   final EdgeInsetsGeometry indicatorPadding;
   final List<GlobalKey> tabKeys;
+  final double? spacing;
 
   // _currentTabOffsets and _currentTextDirection are set each time TabBar
   // layout is completed. These values can be null when TabBar contains no
@@ -214,6 +222,7 @@ class _IndicatorPainter extends CustomPainter {
 
   Rect? _currentRect;
   BoxPainter? _painter;
+  BoxPainter? _normalPainter;
   bool _needsPaint = false;
   void markNeedsPaint() {
     _needsPaint = true;
@@ -221,6 +230,7 @@ class _IndicatorPainter extends CustomPainter {
 
   void dispose() {
     _painter?.dispose();
+    _normalPainter?.dispose();
   }
 
   void saveTabOffsets(List<double>? tabOffsets, TextDirection? textDirection) {
@@ -266,7 +276,8 @@ class _IndicatorPainter extends CustomPainter {
     }
 
     final EdgeInsets insets = indicatorPadding.resolve(_currentTextDirection);
-    final Rect rect = Rect.fromLTWH(tabLeft, 0.0, tabRight - tabLeft, tabBarSize.height);
+    final spacing = this.spacing ?? 0.0;
+    final Rect rect = Rect.fromLTWH(tabLeft + spacing / 4, 0.0, tabRight - tabLeft - spacing / 2, tabBarSize.height);
 
     if (!(rect.size >= insets.collapsedSize)) {
       throw FlutterError(
@@ -280,6 +291,14 @@ class _IndicatorPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     _needsPaint = false;
+  
+    if (normalDecoration != null) {
+      _normalPainter ??= normalDecoration!.createBoxPainter(markNeedsPaint);
+      for (int i = 0; i < controller.length; i++) {
+        _printDecoration(_normalPainter!, canvas, indicatorRect(size, i));
+      }
+    }
+
     _painter ??= indicator.createBoxPainter(markNeedsPaint);
 
     final double index = controller.index.toDouble();
@@ -292,11 +311,16 @@ class _IndicatorPainter extends CustomPainter {
     _currentRect = Rect.lerp(fromRect, toRect, (value - from).abs());
     assert(_currentRect != null);
 
+    _printDecoration(_painter!, canvas, _currentRect!);
+  }
+
+  void _printDecoration(BoxPainter painter, Canvas canvas, Rect rect) {
     final ImageConfiguration configuration = ImageConfiguration(
-      size: _currentRect!.size,
+      size: rect.size,
       textDirection: _currentTextDirection,
     );
-    _painter!.paint(canvas, _currentRect!.topLeft, configuration);
+
+    painter.paint(canvas, rect.topLeft, configuration);
   }
 
   @override
@@ -306,7 +330,9 @@ class _IndicatorPainter extends CustomPainter {
         || indicator != old.indicator
         || tabKeys.length != old.tabKeys.length
         || (!listEquals(_currentTabOffsets, old._currentTabOffsets))
-        || _currentTextDirection != old._currentTextDirection;
+        || _currentTextDirection != old._currentTextDirection
+        || spacing != old.spacing
+        || normalDecoration != old.normalDecoration;
   }
 }
 
@@ -580,11 +606,10 @@ class TabBarExp extends StatefulWidget implements PreferredSizeWidget {
     this.enableFeedback,
     this.onTap,
     this.physics,
-  }) : assert(tabs != null),
-       assert(isScrollable != null),
-       assert(dragStartBehavior != null),
-       assert(indicator != null || (indicatorWeight != null && indicatorWeight > 0.0)),
-       assert(indicator != null || (indicatorPadding != null)),
+    this.tabDecoration,
+    this.tabSpacing,
+    this.direction = Axis.horizontal,
+  }) : assert(indicator != null || indicatorWeight > 0.0),
        super(key: key);
 
   /// Typically a list of two or more [Tab] widgets.
@@ -769,6 +794,16 @@ class TabBarExp extends StatefulWidget implements PreferredSizeWidget {
   /// Defaults to matching platform conventions.
   final ScrollPhysics? physics;
 
+  /// 可给未选中的Tab设置样式，而选中的Tab的样式在[indicator]中设置
+  final Decoration? tabDecoration;
+
+  /// 为Tab设置间距
+  /// 例子： 假设[tabSpacing]为'--', 最终显示效果为'-A--B--C-'
+  final double? tabSpacing;
+
+  // 指定TabBar的方向, 默认为水平
+  final Axis direction;
+
   /// A size whose height depends on if the tabs have both icons and text.
   ///
   /// [AppBar] uses this size to compute its own preferred size.
@@ -895,6 +930,8 @@ class _TabBarExpState extends State<TabBarExp> {
       indicatorPadding: widget.indicatorPadding,
       tabKeys: _tabKeys,
       old: _indicatorPainter,
+      spacing: widget.tabSpacing,
+      normalDecoration: widget.tabDecoration,
     );
   }
 
@@ -915,7 +952,10 @@ class _TabBarExpState extends State<TabBarExp> {
     } else if (widget.indicatorColor != oldWidget.indicatorColor ||
         widget.indicatorWeight != oldWidget.indicatorWeight ||
         widget.indicatorSize != oldWidget.indicatorSize ||
-        widget.indicator != oldWidget.indicator) {
+        widget.indicator != oldWidget.indicator || 
+        widget.tabSpacing != oldWidget.tabSpacing || 
+        widget.tabDecoration != oldWidget.tabSpacing ||
+        widget.direction != oldWidget.direction) {
       _initIndicatorPainter();
     }
 
@@ -1120,6 +1160,7 @@ class _TabBarExpState extends State<TabBarExp> {
     // the same share of the tab bar's overall width.
     final int tabCount = widget.tabs.length;
     for (int index = 0; index < tabCount; index += 1) {
+      // TODO(Nomeleel): 未裁切
       wrappedTabs[index] = InkWell(
         mouseCursor: widget.mouseCursor ?? SystemMouseCursors.click,
         onTap: () { _handleTap(index); },
@@ -1138,6 +1179,14 @@ class _TabBarExpState extends State<TabBarExp> {
           ),
         ),
       );
+
+      if (widget.direction == Axis.vertical) {
+        wrappedTabs[index] = RotatedBox(
+          quarterTurns: 3,
+          child: wrappedTabs[index],
+        );
+      }
+
       if (!widget.isScrollable)
         wrappedTabs[index] = Expanded(child: wrappedTabs[index]);
     }
@@ -1158,11 +1207,18 @@ class _TabBarExpState extends State<TabBarExp> {
       ),
     );
 
+    if (widget.direction == Axis.vertical) {
+      tabBar = RotatedBox(
+        quarterTurns: 1,
+        child: tabBar,
+      );
+    }
+
     if (widget.isScrollable) {
       _scrollController ??= _TabBarScrollController(this);
       tabBar = SingleChildScrollView(
         dragStartBehavior: widget.dragStartBehavior,
-        scrollDirection: Axis.horizontal,
+        scrollDirection: widget.direction,
         controller: _scrollController,
         padding: widget.padding,
         physics: widget.physics,
