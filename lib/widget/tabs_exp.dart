@@ -3,6 +3,9 @@
 /// 原: lib/todo/tab_bar.dart
 /// TabBar
 /// 添加[tabSpacing]、[tabDecoration]、[direction]
+/// 
+/// TabBarView
+/// 添加[scrollDirection]
 
 // Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -1257,6 +1260,7 @@ class TabBarViewExp extends StatefulWidget {
     Key? key,
     required this.children,
     this.controller,
+    this.scrollDirection = Axis.horizontal,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
   }) : super(key: key);
@@ -1272,6 +1276,11 @@ class TabBarViewExp extends StatefulWidget {
   /// Its length must match the length of the [TabBar.tabs]
   /// list, as well as the [controller]'s [TabController.length].
   final List<Widget> children;
+
+  /// The axis along which the tab bar view scrolls.
+  ///
+  /// Defaults to [Axis.horizontal].
+  final Axis scrollDirection;
 
   /// How the page view should respond to user input.
   ///
@@ -1459,6 +1468,7 @@ class _TabBarViewExpState extends State<TabBarViewExp> {
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
       child: PageView(
+        scrollDirection: widget.scrollDirection,
         dragStartBehavior: widget.dragStartBehavior,
         controller: _pageController,
         physics: widget.physics == null
