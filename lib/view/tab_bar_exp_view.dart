@@ -1,8 +1,7 @@
-// import 'package:flutter/material.dart' hide TabBar, Tab, TabBarView;
 import 'package:flutter/material.dart';
 
-// import '../todo/tab_bar.dart';
 import '../widget/scaffold_view.dart';
+import '../widget/tabs_exp.dart';
 
 class TabBarExpView extends StatefulWidget {
   const TabBarExpView({Key? key}) : super(key: key);
@@ -16,15 +15,6 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
   Axis _direction = Axis.vertical;
 
   @override
-  void initState() {
-    super.initState();
-    _controller = TabController(
-      length: 7,
-      vsync: this,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ScaffoldView(
       title: 'Tab Bar Exp View',
@@ -33,42 +23,34 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            //height: 30.0,
-            margin: EdgeInsets.all(7.7),
-            child: TabBar(
-              // direction: flipAxis(_direction),
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: TabBarExp(
+              direction: flipAxis(_direction),
               isScrollable: true,
               controller: _controller,
-              // tabSpacing: 10.0,
+              tabSpacing: 10.0,
               indicator: BoxDecoration(
                 color: Colors.purple.withOpacity(.7),
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              // tabDecoration: BoxDecoration(
-              //   color: Colors.grey.withOpacity(.2),
-              //   borderRadius: BorderRadius.circular(15.0),
-              // ),
-              tabs: [
-                for (int i = 1; i <= _controller.length; i++)
-                  Tab(
-                    text: List.filled(i, i).join(),
-                  ),
-              ],
+              tabDecoration: BoxDecoration(
+                color: Colors.grey.withOpacity(.2),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              tabs: List.generate(_controller.length, (index) => Tab(text: '${index + 1}' * (index + 1))),
             ),
           ),
           Expanded(
-            child: TabBarView(
-              // scrollDirection: flipAxis(_direction),
+            child: TabBarViewExp(
+              scrollDirection: flipAxis(_direction),
               physics: BouncingScrollPhysics(),
               controller: _controller,
-              children: [
-                for (int i = 0; i < _controller.length; i++)
-                  Container(
-                    color: Colors.primaries[i % Colors.primaries.length],
-                  )
-              ],
+              children: List.generate(
+                _controller.length,
+                (index) => Container(color: Colors.primaries[index % Colors.primaries.length]),
+              ),
             ),
-          )
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
