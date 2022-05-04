@@ -280,7 +280,7 @@ class _IndicatorPainter extends CustomPainter {
 
     final EdgeInsets insets = indicatorPadding.resolve(_currentTextDirection);
     final spacing = this.spacing ?? 0.0;
-    final Rect rect = Rect.fromLTWH(tabLeft + spacing / 4, 0.0, tabRight - tabLeft - spacing / 2, tabBarSize.height);
+    final Rect rect = Rect.fromLTWH(tabLeft + spacing / 2, 0.0, tabRight - tabLeft - spacing, tabBarSize.height);
 
     if (!(rect.size >= insets.collapsedSize)) {
       throw FlutterError(
@@ -1182,6 +1182,13 @@ class _TabBarExpState extends State<TabBarExp> {
           ),
         ),
       );
+
+      if (widget.tabSpacing != null || widget.tabSpacing! > 0.0) {
+        wrappedTabs[index] = Padding(
+          padding: EdgeInsets.symmetric(horizontal: widget.tabSpacing! / 2), 
+          child: wrappedTabs[index],
+        );
+      }
 
       if (widget.direction == Axis.vertical) {
         wrappedTabs[index] = RotatedBox(
