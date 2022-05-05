@@ -311,7 +311,18 @@ class _IndicatorPainter extends CustomPainter {
     final int to = (ltr ? from + 1 : from - 1).clamp(0, maxTabIndex);
     final Rect fromRect = indicatorRect(size, from);
     final Rect toRect = indicatorRect(size, to);
-    _currentRect = Rect.lerp(fromRect, toRect, (value - from).abs());
+    final double forward = (value - from).abs();
+    final noHalf = forward < .5;
+    final fastForward = forward * 2;
+
+    _currentRect = Rect.fromLTRB(
+      lerpDouble(fromRect.left, toRect.left, noHalf ? (ltr ? 0 : fastForward) : (ltr ? fastForward - 1 : 1))!,
+      lerpDouble(fromRect.top, toRect.top, forward)!,
+      lerpDouble(fromRect.right, toRect.right, noHalf ? (ltr ? fastForward : 0) : (ltr ? 1 : fastForward - 1))!,
+      lerpDouble(fromRect.bottom, toRect.bottom, forward)!,
+    );
+
+    // _currentRect = Rect.lerp(fromRect, toRect, (value - from).abs());
     assert(_currentRect != null);
 
     _printDecoration(_painter!, canvas, _currentRect!);
