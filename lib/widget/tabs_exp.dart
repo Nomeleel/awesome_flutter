@@ -204,6 +204,7 @@ class _IndicatorPainter extends CustomPainter {
     required this.indicatorPadding,
     required this.spacing,
     required this.normalDecoration,
+    required this.customIndicatorPainter,
   }) : super(repaint: controller.animation) {
     if (old != null)
       saveTabOffsets(old._currentTabOffsets, old._currentTextDirection);
@@ -216,6 +217,7 @@ class _IndicatorPainter extends CustomPainter {
   final EdgeInsetsGeometry indicatorPadding;
   final List<GlobalKey> tabKeys;
   final double? spacing;
+  final CustomIndicatorPainter? customIndicatorPainter;
 
   // _currentTabOffsets and _currentTextDirection are set each time TabBar
   // layout is completed. These values can be null when TabBar contains no
@@ -346,8 +348,13 @@ class _IndicatorPainter extends CustomPainter {
         || (!listEquals(_currentTabOffsets, old._currentTabOffsets))
         || _currentTextDirection != old._currentTextDirection
         || spacing != old.spacing
-        || normalDecoration != old.normalDecoration;
+        || normalDecoration != old.normalDecoration
+        || customIndicatorPainter != old.customIndicatorPainter;
   }
+}
+
+abstract class CustomIndicatorPainter {
+  Rect indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward);
 }
 
 class _ChangeAnimation extends Animation<double> with AnimationWithParentMixin<double> {
@@ -609,6 +616,7 @@ class TabBarExp extends StatefulWidget implements PreferredSizeWidget {
     this.indicatorPadding = EdgeInsets.zero,
     this.indicator,
     this.indicatorSize,
+    this.indicatorPainter,
     this.labelColor,
     this.labelStyle,
     this.labelPadding,
@@ -696,6 +704,10 @@ class TabBarExp extends StatefulWidget implements PreferredSizeWidget {
   /// [TabBarIndicatorSize.label], then the tab's bounds are only as wide as
   /// the tab widget itself.
   final Decoration? indicator;
+
+  /// [Decoration]可操作性太小, 且仅限于当前选中的[Tab] 
+  /// 借助[_IndicatorPainter]计算的信息, 可实现更有趣的[indicator]
+  final CustomIndicatorPainter? indicatorPainter;
 
   /// Whether this tab bar should automatically adjust the [indicatorColor].
   ///
@@ -946,6 +958,7 @@ class _TabBarExpState extends State<TabBarExp> {
       old: _indicatorPainter,
       spacing: widget.tabSpacing,
       normalDecoration: widget.tabDecoration,
+      customIndicatorPainter: widget.indicatorPainter,
     );
   }
 
@@ -969,7 +982,8 @@ class _TabBarExpState extends State<TabBarExp> {
         widget.indicator != oldWidget.indicator || 
         widget.tabSpacing != oldWidget.tabSpacing || 
         widget.tabDecoration != oldWidget.tabSpacing ||
-        widget.direction != oldWidget.direction) {
+        widget.direction != oldWidget.direction ||
+        widget.indicatorPainter != oldWidget.indicatorPainter) {
       _initIndicatorPainter();
     }
 
