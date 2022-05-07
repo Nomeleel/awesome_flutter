@@ -219,6 +219,8 @@ class _IndicatorPainter extends CustomPainter {
   final double? spacing;
   final CustomIndicatorPainter? customIndicatorPainter;
 
+  late CustomIndicatorPainter _indicatorPainter;
+
   // _currentTabOffsets and _currentTextDirection are set each time TabBar
   // layout is completed. These values can be null when TabBar contains no
   // tabs, since there are nothing to lay out.
@@ -297,10 +299,12 @@ class _IndicatorPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     _needsPaint = false;
   
+    _indicatorPainter = customIndicatorPainter ?? _NormalIndicatorPainter();
+
     if (normalDecoration != null) {
       _normalPainter ??= normalDecoration!.createBoxPainter(markNeedsPaint);
       for (int i = 0; i < controller.length; i++) {
-        _printDecoration(_normalPainter!, canvas, indicatorRect(size, i));
+        _printDecoration(canvas, _normalPainter!, indicatorRect(size, i));
       }
     }
 
@@ -314,29 +318,15 @@ class _IndicatorPainter extends CustomPainter {
     final Rect fromRect = indicatorRect(size, from);
     final Rect toRect = indicatorRect(size, to);
     final double forward = (value - from).abs();
-    final noHalf = forward < .5;
-    final fastForward = forward * 2;
-
-    _currentRect = Rect.fromLTRB(
-      lerpDouble(fromRect.left, toRect.left, noHalf ? (ltr ? 0 : fastForward) : (ltr ? fastForward - 1 : 1))!,
-      lerpDouble(fromRect.top, toRect.top, forward)!,
-      lerpDouble(fromRect.right, toRect.right, noHalf ? (ltr ? fastForward : 0) : (ltr ? 1 : fastForward - 1))!,
-      lerpDouble(fromRect.bottom, toRect.bottom, forward)!,
-    );
-
-    // _currentRect = Rect.lerp(fromRect, toRect, (value - from).abs());
+    
+    _currentRect = _indicatorPainter.indicatorRect(ltr, fromRect, toRect, forward);
     assert(_currentRect != null);
 
-    _printDecoration(_painter!, canvas, _currentRect!);
+    _printDecoration(canvas, _painter!, _currentRect!);
   }
 
-  void _printDecoration(BoxPainter painter, Canvas canvas, Rect rect) {
-    final ImageConfiguration configuration = ImageConfiguration(
-      size: rect.size,
-      textDirection: _currentTextDirection,
-    );
-
-    painter.paint(canvas, rect.topLeft, configuration);
+  void _printDecoration(Canvas canvas, BoxPainter painter, Rect rect) {
+    _indicatorPainter.paint(canvas, painter, rect, _currentTextDirection);
   }
 
   @override
@@ -354,7 +344,30 @@ class _IndicatorPainter extends CustomPainter {
 }
 
 abstract class CustomIndicatorPainter {
-  Rect indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward);
+  Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) => Rect.lerp(fromRect, toRect, forward);
+
+  void paint(Canvas canvas, BoxPainter painter, Rect rect, TextDirection? textDirection) {
+    final ImageConfiguration configuration = ImageConfiguration(size: rect.size, textDirection: textDirection);
+    painter.paint(canvas, rect.topLeft, configuration);
+  }
+}
+
+class _NormalIndicatorPainter extends CustomIndicatorPainter{}
+
+class EarthwormIndicatorPainter extends CustomIndicatorPainter{
+  
+  @override
+  Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) {
+    final noHalf = forward < .5;
+    final fastForward = forward * 2;
+
+    return Rect.fromLTRB(
+      lerpDouble(fromRect.left, toRect.left, noHalf ? (ltr ? 0 : fastForward) : (ltr ? fastForward - 1 : 1))!,
+      lerpDouble(fromRect.top, toRect.top, forward)!,
+      lerpDouble(fromRect.right, toRect.right, noHalf ? (ltr ? fastForward : 0) : (ltr ? 1 : fastForward - 1))!,
+      lerpDouble(fromRect.bottom, toRect.bottom, forward)!,
+    );
+  }
 }
 
 class _ChangeAnimation extends Animation<double> with AnimationWithParentMixin<double> {
