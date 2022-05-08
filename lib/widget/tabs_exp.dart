@@ -2,7 +2,7 @@
 
 /// 原: lib/todo/tab_bar.dart
 /// TabBar
-/// 添加[tabSpacing]、[tabDecoration]、[direction]
+/// 添加[tabSpacing]、[tabDecoration]、[direction]、[indicatorPainter]
 /// 
 /// TabBarView
 /// 添加[scrollDirection]
@@ -299,7 +299,7 @@ class _IndicatorPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     _needsPaint = false;
   
-    _indicatorPainter = customIndicatorPainter ?? _NormalIndicatorPainter();
+    _indicatorPainter = customIndicatorPainter ?? const _NormalIndicatorPainter();
 
     if (normalDecoration != null) {
       _normalPainter ??= normalDecoration!.createBoxPainter(markNeedsPaint);
@@ -343,7 +343,11 @@ class _IndicatorPainter extends CustomPainter {
   }
 }
 
+/// --------------------------------[CustomIndicatorPainter]--------------------------------{
+
 abstract class CustomIndicatorPainter {
+  const CustomIndicatorPainter();
+  
   Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) => Rect.lerp(fromRect, toRect, forward);
 
   void paint(Canvas canvas, BoxPainter painter, Rect rect, TextDirection? textDirection) {
@@ -352,10 +356,11 @@ abstract class CustomIndicatorPainter {
   }
 }
 
-class _NormalIndicatorPainter extends CustomIndicatorPainter{}
+class _NormalIndicatorPainter extends CustomIndicatorPainter{
+  const _NormalIndicatorPainter() : super();
+}
 
 class EarthwormIndicatorPainter extends CustomIndicatorPainter{
-  
   @override
   Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) {
     final noHalf = forward < .5;
@@ -369,6 +374,8 @@ class EarthwormIndicatorPainter extends CustomIndicatorPainter{
     );
   }
 }
+
+/// --------------------------------[CustomIndicatorPainter]--------------------------------}
 
 class _ChangeAnimation extends Animation<double> with AnimationWithParentMixin<double> {
   _ChangeAnimation(this.controller);
