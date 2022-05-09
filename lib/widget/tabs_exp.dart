@@ -361,10 +361,19 @@ class _NormalIndicatorPainter extends CustomIndicatorPainter{
 }
 
 class EarthwormIndicatorPainter extends CustomIndicatorPainter{
+  const EarthwormIndicatorPainter({this.width}) : assert(width != null && width > 0), super();
+
+  final double? width;
+
   @override
   Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) {
     final noHalf = forward < .5;
     final fastForward = forward * 2;
+
+    if (width != null) {
+      fromRect = Rect.fromCenter(center: fromRect.center, width: width!, height: fromRect.height);
+      toRect = Rect.fromCenter(center: toRect.center, width: width!, height: toRect.height);
+    }
 
     return Rect.fromLTRB(
       lerpDouble(fromRect.left, toRect.left, noHalf ? (ltr ? 0 : fastForward) : (ltr ? fastForward - 1 : 1))!,
