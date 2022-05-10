@@ -315,8 +315,8 @@ class _IndicatorPainter extends CustomPainter {
     final bool ltr = index > value;
     final int from = (ltr ? value.floor() : value.ceil()).clamp(0, maxTabIndex);
     final int to = (ltr ? from + 1 : from - 1).clamp(0, maxTabIndex);
-    final Rect fromRect = indicatorRect(size, from);
-    final Rect toRect = indicatorRect(size, to);
+    final Rect fromRect = _indicatorPainter.rectResize(indicatorRect(size, from));
+    final Rect toRect = _indicatorPainter.rectResize(indicatorRect(size, to));
     final double forward = (value - from).abs();
     
     _currentRect = _indicatorPainter.indicatorRect(ltr, fromRect, toRect, forward);
@@ -346,8 +346,28 @@ class _IndicatorPainter extends CustomPainter {
 /// --------------------------------[CustomIndicatorPainter]--------------------------------{
 
 abstract class CustomIndicatorPainter {
-  const CustomIndicatorPainter();
+  const CustomIndicatorPainter({
+    this.width,
+    this.height,
+  })  : assert(width == null || width > 0),
+        assert(height == null || height > 0),
+        super();
   
+  final double? width;
+  final double? height;
+
+  Rect rectResize(Rect rect) {
+    if (width != null || height != null) {
+      final height = this.height ?? rect.height;
+      return Rect.fromCenter(
+        center: rect.center.translate(0, (rect.height - height) / 2), 
+        width: this.width ?? rect.width, 
+        height: height,
+      );
+    }
+    return rect;
+  }
+
   Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) => Rect.lerp(fromRect, toRect, forward);
 
   void paint(Canvas canvas, BoxPainter painter, Rect rect, TextDirection? textDirection) {
@@ -361,19 +381,12 @@ class _NormalIndicatorPainter extends CustomIndicatorPainter{
 }
 
 class EarthwormIndicatorPainter extends CustomIndicatorPainter{
-  const EarthwormIndicatorPainter({this.width}) : assert(width != null && width > 0), super();
-
-  final double? width;
+  const EarthwormIndicatorPainter({double? width, double? height}) : super(width: width, height: height);
 
   @override
   Rect? indicatorRect(bool ltr, Rect fromRect, Rect toRect, double forward) {
     final noHalf = forward < .5;
     final fastForward = forward * 2;
-
-    if (width != null) {
-      fromRect = Rect.fromCenter(center: fromRect.center, width: width!, height: fromRect.height);
-      toRect = Rect.fromCenter(center: toRect.center, width: width!, height: toRect.height);
-    }
 
     return Rect.fromLTRB(
       lerpDouble(fromRect.left, toRect.left, noHalf ? (ltr ? 0 : fastForward) : (ltr ? fastForward - 1 : 1))!,
@@ -382,6 +395,10 @@ class EarthwormIndicatorPainter extends CustomIndicatorPainter{
       lerpDouble(fromRect.bottom, toRect.bottom, forward)!,
     );
   }
+}
+
+class UnderlineIndicatorPainter extends CustomIndicatorPainter{
+  const UnderlineIndicatorPainter({double? width, double? height}) : super(width: width, height: height);
 }
 
 /// --------------------------------[CustomIndicatorPainter]--------------------------------}
