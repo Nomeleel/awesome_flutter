@@ -1233,9 +1233,13 @@ class _TabBarExpState extends State<TabBarExp> {
     // then give all of the tabs equal flexibility so that they each occupy
     // the same share of the tab bar's overall width.
     final int tabCount = widget.tabs.length;
+    
+    T? getType<T>(dynamic type) => type is T ? type : null;
+
     for (int index = 0; index < tabCount; index += 1) {
-      // TODO(Nomeleel): 未裁切
       wrappedTabs[index] = InkWell(
+        borderRadius: getType<BorderRadius>(getType<BoxDecoration>(widget.tabDecoration)?.borderRadius),
+        customBorder: getType<ShapeDecoration>(widget.tabDecoration)?.shape,
         mouseCursor: widget.mouseCursor ?? SystemMouseCursors.click,
         onTap: () { _handleTap(index); },
         enableFeedback: widget.enableFeedback ?? true,
@@ -1255,6 +1259,7 @@ class _TabBarExpState extends State<TabBarExp> {
       );
 
       if (widget.tabSpacing != null || widget.tabSpacing! > 0.0) {
+        // TODO(Nomeleel): 竖版有问题
         wrappedTabs[index] = Padding(
           padding: EdgeInsets.symmetric(horizontal: widget.tabSpacing! / 2), 
           child: wrappedTabs[index],
