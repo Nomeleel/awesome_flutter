@@ -918,6 +918,8 @@ class _TabBarExpState extends State<TabBarExp> {
   late double _tabStripWidth;
   late List<GlobalKey> _tabKeys;
 
+  bool get isVertical => widget.direction == Axis.vertical;
+
   @override
   void initState() {
     super.initState();
@@ -1259,19 +1261,16 @@ class _TabBarExpState extends State<TabBarExp> {
       );
 
       if (widget.tabSpacing != null || widget.tabSpacing! > 0.0) {
-        // TODO(Nomeleel): 竖版有问题
         wrappedTabs[index] = Padding(
-          padding: EdgeInsets.symmetric(horizontal: widget.tabSpacing! / 2), 
+          padding: EdgeInsets.symmetric(
+            vertical: isVertical ? widget.tabSpacing! / 2 : 0,
+            horizontal: isVertical ? 0 : widget.tabSpacing! / 2,
+          ), 
           child: wrappedTabs[index],
         );
       }
 
-      if (widget.direction == Axis.vertical) {
-        wrappedTabs[index] = RotatedBox(
-          quarterTurns: 3,
-          child: wrappedTabs[index],
-        );
-      }
+      if (isVertical) wrappedTabs[index] = RotatedBox(quarterTurns: 3, child: wrappedTabs[index]);
 
       if (!widget.isScrollable)
         wrappedTabs[index] = Expanded(child: wrappedTabs[index]);
@@ -1293,12 +1292,7 @@ class _TabBarExpState extends State<TabBarExp> {
       ),
     );
 
-    if (widget.direction == Axis.vertical) {
-      tabBar = RotatedBox(
-        quarterTurns: 1,
-        child: tabBar,
-      );
-    }
+    if (isVertical) tabBar = RotatedBox(quarterTurns: 1,child: tabBar);
 
     if (widget.isScrollable) {
       _scrollController ??= _TabBarScrollController(this);
