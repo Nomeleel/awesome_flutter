@@ -24,7 +24,7 @@ class _AutoSwitchWidgetState extends State<AutoSwitchWidget> {
     super.initState();
 
     _widget = widget.widgetMap[widget.initWidget];
-    WidgetsBinding.instance?.addPostFrameCallback((d) {
+    WidgetsBinding.instance.addPostFrameCallback((d) {
       final widgetKey = widget.widgetSwitch(context.size!);
       if (widgetKey != widget.initWidget && widget.widgetMap.containsKey(widgetKey)) {
         setState(() {

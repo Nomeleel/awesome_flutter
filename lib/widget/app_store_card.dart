@@ -119,7 +119,7 @@ class AppStoreCard extends StatelessWidget {
 
   void openDetailView(BuildContext context) {
     if (isAlwayShow) {
-      SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: <SystemUiOverlay>[]);
     }
     Navigator.push(
       context,
@@ -132,7 +132,10 @@ class AppStoreCard extends StatelessWidget {
             ),
             onBackCallBack: () {
               if (isAlwayShow) {
-                SystemChrome.setEnabledSystemUIOverlays(<SystemUiOverlay>[SystemUiOverlay.top, SystemUiOverlay.bottom]);
+                SystemChrome.setEnabledSystemUIMode( 
+                  SystemUiMode.manual, 
+                  overlays: <SystemUiOverlay>[SystemUiOverlay.top, SystemUiOverlay.bottom],
+                );
               }
             },
           );

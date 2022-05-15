@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class BorderView extends StatelessWidget {
   const BorderView({Key? key}) : super(key: key);

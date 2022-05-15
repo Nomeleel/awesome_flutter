@@ -18,7 +18,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 const double _kTabHeight = 46.0;
 const double _kTextAndIconTabHeight = 72.0;
@@ -98,9 +97,7 @@ class _TabLabelBarRenderer extends RenderFlex {
     required TextDirection textDirection,
     required VerticalDirection verticalDirection,
     required this.onPerformLayout,
-  }) : assert(onPerformLayout != null),
-       assert(textDirection != null),
-       super(
+  }) : super(
          children: children,
          direction: direction,
          mainAxisSize: mainAxisSize,
@@ -489,7 +486,6 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
       // scenario, setting the actual dimension would cause a strange scroll
       // effect without this guard because the super call below would starts a
       // ballistic scroll activity.
-      assert(viewportDimension != null);
       _initialViewportDimensionWasZero = viewportDimension != 0.0;
       correctPixels(tabBar._initialScrollOffset(viewportDimension, minScrollExtent, maxScrollExtent));
       result = false;

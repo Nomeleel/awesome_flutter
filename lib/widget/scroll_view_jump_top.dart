@@ -28,7 +28,7 @@ class _ScrollViewJumpTopState extends State<ScrollViewJumpTop> with TickerProvid
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if ((_scrollableState = findScrollableState()) != null) {
         _isShowJumpTop.addListener(valueChangeListener);
         _scrollableState?.position

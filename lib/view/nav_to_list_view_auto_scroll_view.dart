@@ -56,7 +56,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPersistentFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
       print('-------------------WidgetsBinding-------------------');
       scrollListView();
     });
@@ -65,7 +65,7 @@ class _ListViewAutoScrollViewState extends State<ListViewAutoScrollView> {
   @override
   Widget build(BuildContext context) {
     print('-------------------build-------------------');
-    WidgetsBinding.instance?.addPersistentFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) {
       //print('-------------------WidgetsBinding build-------------------');
       //scrollListView();
     });
