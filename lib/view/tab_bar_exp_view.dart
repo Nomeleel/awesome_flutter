@@ -29,14 +29,17 @@ class _TabBarExpViewState extends State<TabBarExpView> with TickerProviderStateM
               isScrollable: true,
               controller: _controller,
               tabSpacing: 10.0,
-              indicator: BoxDecoration(
-                color: Colors.purple.withOpacity(.7),
-                borderRadius: BorderRadius.circular(15.0),
+              indicator: ShapeDecoration(
+                shape: StadiumBorder(),
+                gradient: LinearGradient(colors: Colors.primaries.sublist(3, 7)),
               ),
-              tabDecoration: BoxDecoration(
+              indicatorWeight: 10,
+              tabDecoration: ShapeDecoration(
+                shape: StadiumBorder(),
                 color: Colors.grey.withOpacity(.2),
-                borderRadius: BorderRadius.circular(15.0),
               ),
+              // indicatorPainter: const UnderlineIndicatorPainter(width: 20, height: 80),
+              indicatorPainter: const EarthwormIndicatorPainter(width: 30, height: 7),
               tabs: List.generate(_controller.length, (index) => Tab(text: '${index + 1}' * (index + 1))),
             ),
           ),
