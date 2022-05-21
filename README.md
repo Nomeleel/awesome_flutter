@@ -8,33 +8,13 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 [Web page for Awesome Flutter](https://nomeleel.github.io/awesome_flutter/)
 
-| Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Introduction | Note
-| :------: | ------ | ------ |
-| [App Store Card](#appstorecard) | Realize the animation of the Today tab page card of the Apple App Store. |
-| [Yin Yang Switch](#yinyangswitch) | Use clipper method to achieve irregular shapes. |
-| [Grid Paper Expansion](#gridpaperexpansion) | Expansion of flutter widget GridPaper. |
-| [Water Wave](#waterwave) | Combining mathematical trigonometric functions and physical waves to achieve a water wave effect. |
-| [Creative Stitching](#creativestitching) | Explore the possible feasibility of Flutter in image manipulation. |
-| [Sliver AppBar Expansion](#sliverappbarexpansion) | Expansion of flutter widget SliverAppBar, suppert after pinned can switch title leading actions and brightness in app bar widget. |
-| [Absorb Stack](#absorbstack) | Enable the Stack to respond to gestures at the specified level, remove the restriction of priority response to the outermost layer. |
-| [Future Button](#futurebutton) | Disable the button before the end of this future response. |
-| [Text Expansion](#textexpansion) | Text expand and collapse widget. |
-| [Scroll View Jump Top](#scrollviewjumptop) | Wrap the scroll view so that it scrolls to a certain position and the upward button automatically appears, so it can return to the top of the view. |
-| [Side Panel](#sidepanel-colorpicker) | Customize the sidebar panel. |
-| [Color Picker](#sidepanel-colorpicker) | Simple color picker. |
-| [Nav To List View Auto Scroll](#navtolistviewautoscroll) | Navigate to the listview and automatically scroll to the specified index to the middle of the view. |
-| [Combine List View](#combinelistview) | In the listview, provide two lists for it, so that the sub-list is inserted into the main list every few items. |
-| [Story Swiper](#storyswiper) | A very interesting Swiper from [UdaraWanasinghe](https://github.com/UdaraWanasinghe), I expanded on this. | [Reference By Story Swiper](https://github.com/UdaraWanasinghe/StorySwiper) |
-| [Flutter Web View](#flutterwebview) | A Flutter plugin of that provides a WebView widget. [on pub](https://pub.dev/packages/webview_flutter) | I tried the old version a long time ago and will try the latest version in the future.|
-| [Platform View](#platformview) | Try host native platform views within Flutter app by Platform view. | And communication between the two platforms (use **Method Channel**) |
-| [Fireworks](#fireworks) | Everything can be painted. Use CustomPainter to draw a firework. |
-| [Custom Grid View](#customgridview) | Implement irregular GridView layout through custom delegate. |
-| [Surround Square View](#surroundsquareview) | Try to customize the RenderObject to achieve the effect. |
-| [Follow View](#followview) | Try use ScrollController(Listenable) driver Painter. |
+| [App Store Card](#appstorecard) | [Yin Yang Switch](#yinyangswitch) | [Grid Paper Expansion](#gridpaperexpansion) | [Water Wave](#waterwave) | [Creative Stitching](#creativestitching) | [Sliver AppBar Expansion](#sliverappbarexpansion) | [Absorb Stack](#absorbstack) | [Future Button](#futurebutton) | [Text Expansion](#textexpansion) | [Scroll View Jump Top](#scrollviewjumptop) | [Side Panel](#sidepanel-colorpicker) | [Color Picker](#sidepanel-colorpicker) | [Nav To List View Auto Scroll](#navtolistviewautoscroll) | [Combine List View](#combinelistview) | [Story Swiper](#storyswiper) | [Flutter Web View](#flutterwebview) | [Platform View](#platformview) | [Fireworks](#fireworks) | [Custom Grid View](#customgridview) | [Surround Square View](#surroundsquareview) | [Follow View](#followview) | 
 
 **Next, let the picture dance.**
 
 ## AppStoreCard
+
+Realize the animation of the Today tab page card of the Apple App Store.
 
 [Web demo for App Store Card](https://nomeleel.github.io/awesome_flutter/)
 
@@ -45,6 +25,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 ## YinYangSwitch
 
+Use clipper method to achieve irregular shapes.
+
 [Web demo for Yin Yang Switch](https://nomeleel.github.io/awesome_flutter/#/yin_yang_switch_view)
 
 <div align="center">
@@ -52,6 +34,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 </div>
 
 ## GridPaperExpansion
+
+Expansion of flutter widget GridPaper.
 
 [Web demo for Grid Paper Expansion](https://nomeleel.github.io/awesome_flutter/#/grid_paper_exp_view)
 
@@ -61,6 +45,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 ## WaterWave
 
+Combining mathematical trigonometric functions and physical waves to achieve a water wave effect.
+
 [Web demo for Water Wave](https://nomeleel.github.io/awesome_flutter/#/water_wave_view)
 
 <div align="center">
@@ -69,6 +55,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 ## CreativeStitching
 
+Explore the possible feasibility of Flutter in image manipulation.
+
 [Web demo for Creative Stitching](https://nomeleel.github.io/awesome_flutter/#/creative_stitching_view)
 
 <div align="center">
@@ -76,6 +64,8 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 </div>
 
 ## SliverAppBarExpansion
+
+Expansion of flutter widget SliverAppBar, suppert after pinned can switch title leading actions and brightness in app bar widget.
 
 If the initial background color and the pinned background color after scrolling big different, the same app bar cannot adapt to the two backgrounds. At this time, you need to automatically switch the appbar to adapt to the new background.
 
@@ -92,6 +82,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## AbsorbStack
 
+Enable the Stack to respond to gestures at the specified level, remove the restriction of priority response to the outermost layer.
+
 [Web demo for Absorb Stack](https://nomeleel.github.io/awesome_flutter/#/absorb_stack_view)
 
 <div align="center">
@@ -99,6 +91,8 @@ If the initial background color and the pinned background color after scrolling 
 </div>
 
 ## FutureButton
+
+Disable the button before the end of this future response.
 
 [Web demo for Future Button](https://nomeleel.github.io/awesome_flutter/#/future_button_view)
 
@@ -108,6 +102,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## TextExpansion
 
+Text expand and collapse widget.
+
 [Web demo for Text Expansion](https://nomeleel.github.io/awesome_flutter/#/text_expansion_view)
 
 <div align="center">
@@ -115,6 +111,8 @@ If the initial background color and the pinned background color after scrolling 
 </div>
 
 ## ScrollViewJumpTop
+
+Wrap the scroll view so that it scrolls to a certain position and the upward button automatically appears, so it can return to the top of the view.
 
 [Web demo for Scroll View Jump Top](https://nomeleel.github.io/awesome_flutter/#/scroll_view_jump_top_view)
 
@@ -124,6 +122,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## SidePanel-ColorPicker
 
+Customize the sidebar panel. Simple color picker.
+
 [Web demo for Side Panel && Color Picker](https://nomeleel.github.io/fine_client/)
 
 <div align="center">
@@ -131,6 +131,8 @@ If the initial background color and the pinned background color after scrolling 
 </div>
 
 ## NavToListViewAutoScroll
+
+Navigate to the listview and automatically scroll to the specified index to the middle of the view.
 
 [Web demo for Nav To List View Auto Scroll](https://nomeleel.github.io/awesome_flutter/#/nav_to_list_view_auto_scroll_view)
 
@@ -140,6 +142,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## CombineListView
 
+In the listview, provide two lists for it, so that the sub-list is inserted into the main list every few items.
+
 [Web demo for Combine List View](https://nomeleel.github.io/awesome_flutter/#/combine_list_view_view)
 
 <div align="center">
@@ -148,6 +152,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## StorySwiper
 
+A very interesting Swiper from [UdaraWanasinghe](https://github.com/UdaraWanasinghe), I expanded on this. [Reference By Story Swiper](https://github.com/UdaraWanasinghe/StorySwiper)
+
 [Web demo for Story Swiper View](https://nomeleel.github.io/awesome_flutter/#/story_swiper_view)
 
 <div align="center">
@@ -155,6 +161,9 @@ If the initial background color and the pinned background color after scrolling 
 </div>
 
 ## FlutterWebView
+
+A Flutter plugin of that provides a WebView widget. [on pub](https://pub.dev/packages/webview_flutter) 
+I tried the old version a long time ago and will try the latest version in the future.
 
 <!-- **Tried the plugin old version a long time ago.** -->
 
@@ -181,6 +190,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## PlatformView
 
+Try host native platform views within Flutter app by Platform view. And communication between the two platforms (use **Method Channel**)
+
 ### Flutter View Navigation to Native Platform View
 
 <div align="center">
@@ -203,6 +214,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## Fireworks
 
+Everything can be painted. Use CustomPainter to draw a firework.
+
 [Web demo for Fireworks](https://nomeleel.github.io/awesome_flutter/#/fireworks_view)
 
 <div align="center">
@@ -210,6 +223,8 @@ If the initial background color and the pinned background color after scrolling 
 </div>
 
 ## CustomGridView
+
+Implement irregular GridView layout through custom delegate.
 
 [Web demo for Custom Grid View](https://nomeleel.github.io/awesome_flutter/#/custom_grid_view_view)
 
@@ -219,6 +234,8 @@ If the initial background color and the pinned background color after scrolling 
 
 ## SurroundSquare
 
+Try to customize the RenderObject to achieve the effect.
+
 [Web demo for Surround Square](https://nomeleel.github.io/awesome_flutter/#/surround_square)
 
 <div align="center">
@@ -226,6 +243,8 @@ If the initial background color and the pinned background color after scrolling 
 </div>
 
 ## FollowView
+
+Try use ScrollController(Listenable) driver Painter.
 
 [Web demo for follow view](https://nomeleel.github.io/awesome_flutter/#/follow_view)
 
@@ -237,13 +256,13 @@ If the initial background color and the pinned background color after scrolling 
 
 The inevitable thing is that I also found some issues in Flutter.
 
-Current Dev Evn: **Flutter (Channel stable, v1.22.1, on Mac OS X 10.15.5 19F101, locale zh-Hans-CN)**
+Current Dev Evn: **Flutter (Channel stable, 3.0.0, on macOS 12.3.1 21E258 darwin-x64, locale zh-Hans-CN)**
 
 I have also create some issues, but finally found similar ones, whichever is the earliest.
 
-| Issue ID | Description | About | Note
-| :------: | :------: | :------: | :------: |
-| [24786](https://github.com/flutter/flutter/issues/24786) | ReorderableListView#onReorder passes an incorrect new index. | [ReorderableListView](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/reorderable_list.dart#L59) |  |
-| [60594](https://github.com/flutter/flutter/issues/60594) | The target Hero widget is build three times. | [Hero](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/widgets/heroes.dart#L154) |  |
-| [13937](https://github.com/flutter/flutter/issues/13937) | Unable to call a platform channel method from another isolate. | Isolate |  |
-| [59143](https://github.com/flutter/flutter/issues/59143) | Tabbar initialIndex indicator image not working. | TabBar Indicator Image Decoration |  |
+| Issue ID | Description | About | Status
+| :------: | :------: | :------: | ------ |
+| [24786](https://github.com/flutter/flutter/issues/24786) | ReorderableListView#onReorder passes an incorrect new index. | [ReorderableListView](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/material/reorderable_list.dart#L59) | **Closed** We've decided not to correct this issue because the obvious fix introduces a backwards incompatibility that can't be automatically corrected. |
+| [60594](https://github.com/flutter/flutter/issues/60594) | The target Hero widget is build three times. | [Hero](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/widgets/heroes.dart#L154) | **Closed** |
+| [13937](https://github.com/flutter/flutter/issues/13937) | Unable to call a platform channel method from another isolate. | Isolate | **Open** |
+| [59143](https://github.com/flutter/flutter/issues/59143) | Tabbar initialIndex indicator image not working. | TabBar Indicator Image Decoration | **Open** |
