@@ -10,6 +10,8 @@ import 'view_export_list.dart';
 
 Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'absorb_stack_view': (BuildContext context) => const AbsorbStackView(),
+  'animated_scan_view': (BuildContext context) => const AnimatedScanView(),
+  'border_view': (BuildContext context) => const BorderView(),
   'combine_list_view_view': (BuildContext context) => const CombineListViewView(),
   'creative_stitching_view': (BuildContext context) => const CreativeStitchingView(),
   'custom_grid_view_view': (BuildContext context) => const CustomGridViewView(),
@@ -23,12 +25,14 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'interactive_viewer_test_view': (BuildContext context) => const InteractiveViewerTestView(),
   'list_view_auto_scroll_view_view': (BuildContext context) => const ListViewAutoScrollViewView(),
   'list_view_jump_position_view': (BuildContext context) => const ListViewJumpPositionView(),
+  'media_query_mock_padding_view': (BuildContext context) => const MediaQueryMockPaddingView(),
   'native_platform_view': (BuildContext context) => const NativePlatformView(),
   'nav_to_list_view_auto_scroll_view': (BuildContext context) => const NavToListViewAutoScrollView(),
   'nested_scroll_view_with_header_view': (BuildContext context) => const NestedScrollViewWithHeaderView(),
   'physics_test_view': (BuildContext context) => const PhysicsTestView(),
   'refresh_indicator_test_view': (BuildContext context) => const RefreshIndicatorTestView(),
   'scroll_view_jump_top_view': (BuildContext context) => const ScrollViewJumpTopView(),
+  'slider_view': (BuildContext context) => const SliderView(),
   'sliver_app_bar_exp_view': (BuildContext context) => const SliverAppBarExpView(),
   'sliver_app_bar_test_view': (BuildContext context) => const SliverAppBarTestView(),
   'story_swiper_view': (BuildContext context) => const StorySwiperView(),
