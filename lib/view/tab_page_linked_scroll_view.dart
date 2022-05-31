@@ -19,7 +19,7 @@ class _TabPageLinkedScrollViewState extends State<TabPageLinkedScrollView> {
 
   late final ValueNotifier<int> pageIndex = ValueNotifier(initialPage);
 
-  late Key centerKey = ValueKey(initialPage);
+  late ValueKey<int> centerKey = ValueKey(initialPage);
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +77,9 @@ class _TabPageLinkedScrollViewState extends State<TabPageLinkedScrollView> {
                         if (pageController.position.isScrollingNotifier.value) {
                           WidgetsBinding.instance.addPostFrameCallback((_) => pageIndex.value = pIndex);
                         }
+
+                        if (pIndex < centerKey.value) index = 10 - index;
+
                         return Container(
                           height: 100.0 + index * 10,
                           color: Colors.primaries[(index + pIndex) % Colors.primaries.length],
