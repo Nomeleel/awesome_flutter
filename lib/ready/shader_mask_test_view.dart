@@ -38,6 +38,7 @@ class _ShaderMaskTestViewState extends State<ShaderMaskTestView> with SingleTick
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         child: Text('GO'),
         onPressed: () => controller.isCompleted ? controller.reverse() : controller.forward(),
       ),

@@ -72,6 +72,7 @@ class _AnimationTestViewState extends State<AnimationTestView> with SingleTicker
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           //setState(() {
           _height = 150.0;

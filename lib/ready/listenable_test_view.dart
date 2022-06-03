@@ -75,7 +75,7 @@ class _ListenableTestViewState extends State<ListenableTestView> with SingleTick
           ),
         ].map((e) => Expanded(child: Container(color: getColor(e.hashCode), child: e))).toList(),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: go, child: Text('Go')),
+      floatingActionButton: FloatingActionButton(heroTag: null, onPressed: go, child: Text('Go')),
     );
   }
 

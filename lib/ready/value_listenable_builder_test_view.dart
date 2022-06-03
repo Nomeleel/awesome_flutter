@@ -41,6 +41,7 @@ class ValueListenableBuilderTestView extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           counter.value++;
           person.value = person.value.copyWith(age: counter.value);

@@ -84,6 +84,7 @@ class _TraceRedPathTestViewState extends State<TraceRedPathTestView> with Single
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           if (_controller.isCompleted) {
             _controller.reverse();
