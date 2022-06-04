@@ -71,13 +71,19 @@ class _BottomSheetTestViewState extends State<BottomSheetTestView> with SingleTi
   void showBottomSheet() => controller.forward();
 
   void onClosing() => controller.reverse();
-  
+
   Widget content(double height, Color color) {
     return Container(
       height: height,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      alignment: Alignment.center,
+      child: FractionallySizedBox(
+        widthFactor: .7,
+        heightFactor: .5,
+        child: FlutterLogo(style: FlutterLogoStyle.horizontal),
       ),
     );
   }
