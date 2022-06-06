@@ -392,6 +392,22 @@ class EarthwormIndicatorPainter extends CustomIndicatorPainter{
       lerpDouble(fromRect.bottom, toRect.bottom, forward)!,
     );
   }
+  /*
+
+    final yu = fastForward % 1;
+    final chu = (fastForward ~/ 1).toDouble();
+
+    final leftStart = (ltr ? chu : yu);
+    final rightStart = (ltr ? yu : chu);
+
+    return Rect.fromLTRB(
+      lerpDouble(fromRect.left, toRect.left, noHalf ? leftStart : rightStart)!,
+      lerpDouble(fromRect.top, toRect.top, forward)!,
+      lerpDouble(fromRect.right, toRect.right, noHalf ? rightStart : leftStart)!,
+      lerpDouble(fromRect.bottom, toRect.bottom, forward)!,
+    );
+
+  */
 }
 
 class UnderlineIndicatorPainter extends CustomIndicatorPainter{

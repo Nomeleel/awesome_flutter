@@ -17,7 +17,7 @@ class _CustomTabBarViewState extends State<CustomTabBarView> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     // final controller = TabController(length: length, vsync: vsync)
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
 
     // print('value: ------$value');
     // print('value * 2 - 1: -----${value * 2 - 1}');
