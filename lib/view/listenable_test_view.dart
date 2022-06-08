@@ -13,6 +13,7 @@ import '/widget/scaffold_view.dart';
 /// [AnimatedBuilder]
 /// [AlignTransition]
 /// [AnimatedAlign]
+/// [TweenAnimationBuilder]
 
 class ListenableTestView extends StatefulWidget {
   const ListenableTestView({Key? key}) : super(key: key);
@@ -73,6 +74,14 @@ class _ListenableTestViewState extends State<ListenableTestView> with SingleTick
             duration: duration,
             child: labelBuilder('AnimatedAlign + Alignment'),
           ),
+          TweenAnimationBuilder(
+            tween: AlignmentTween(begin: Alignment.topLeft, end: alignment),
+            duration: duration,
+            builder: (BuildContext context, Alignment alignment, Widget? child) {
+              return Align(alignment: alignment, child: child);
+            },
+            child: labelBuilder('TweenAnimationBuilder'),
+          )
         ].map((e) => Expanded(child: Container(color: getColor(e.hashCode), child: e))).toList(),
       ),
       floatingActionButton: FloatingActionButton(heroTag: null, onPressed: go, child: Text('Go')),
