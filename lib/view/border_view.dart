@@ -1,40 +1,63 @@
 import 'package:flutter/material.dart';
 
+import '/widget/scaffold_view.dart';
+
 class BorderView extends StatelessWidget {
   const BorderView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          width: 350,
-          height: 100,
-          decoration: ShapeDecoration(
-            color: Colors.black,
-            shape: SweepStadiumBorder(side: BorderSide(width: 3)),
+    final borderWidth = ValueNotifier(2.0);
+
+    Widget builder(double width) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            decoration: ShapeDecoration(shape: StadiumBorder(side: BorderSide(width: width))),
+            child: FlutterLogo(),
           ),
-        ),
-        Container(
-          width: 350,
-          height: 100,
-          decoration: ShapeDecoration(
-            color: Colors.black,
-            shape: SweepStadiumBorder(side: BorderSide(width: 3), style: 2),
+          Container(
+            decoration: ShapeDecoration(shape: SweepStadiumBorder(side: BorderSide(width: width))),
+            child: FlutterLogo(),
           ),
-        ),
-        ShaderMask(
-          shaderCallback: (bounds) => LinearGradient(colors: Colors.primaries).createShader(bounds),
-          child: Container(
-            width: 350,
-            height: 100,
-            decoration: ShapeDecoration(
-              shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 3)),
+          Container(
+            decoration: ShapeDecoration(shape: SweepStadiumBorder(side: BorderSide(width: width), style: 2)),
+            child: FlutterLogo(),
+          ),
+          ShaderMask(
+            shaderCallback: (bounds) => LinearGradient(colors: Colors.primaries).createShader(bounds),
+            child: Container(
+              decoration: ShapeDecoration(shape: StadiumBorder(side: BorderSide(color: Colors.white, width: width))),
+              child: FlutterLogo(),
             ),
           ),
-        ),
-      ],
+          Slider(
+            value: width,
+            min: 1,
+            max: 110,
+            onChanged: (value) => borderWidth.value = value,
+          ),
+        ].map(mapExpanded).toList(),
+      );
+    }
+
+    return ScaffoldView(
+      title: 'Border View',
+      body: ValueListenableBuilder(
+        valueListenable: borderWidth,
+        builder: (BuildContext context, double value, Widget? child) => builder(value),
+      ),
+    );
+  }
+
+  Widget mapExpanded(Widget child) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        decoration: BoxDecoration(border: Border.all()),
+        child: child,
+      ),
     );
   }
 }
