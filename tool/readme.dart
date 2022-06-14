@@ -14,7 +14,7 @@ void main(List<String> args) {
 
   final dirAssets = assDir.listSync();
   dirAssets.forEach((asset) {
-    if (FileSystemEntity.isFileSync(asset.path)) addAsset(asset.path);
+    if (FileSystemEntity.isFileSync(asset.path)) addAsset(getFileName(asset.path));
   });
 
   if (assetsGroup.isEmpty) return;
@@ -43,7 +43,9 @@ void main(List<String> args) {
 }
 
 addAsset(String name) {
-  final assetSplit = name.split('.').first.split('_');
+  final dotSplit = name.split('.');
+  if (dotSplit.length != 2) return;
+  final assetSplit = dotSplit.first.split('_');
   if (int.tryParse(assetSplit.last) != null) assetSplit.removeLast();
   final key = assetSplit.join('_');
   assetsGroup[key] ??= [];
@@ -51,6 +53,8 @@ addAsset(String name) {
 }
 
 String toUpperCaseOnlyFirstLetter(String str) => str[0].toUpperCase() + str.substring(1).toLowerCase();
+
+String getFileName(String filePath) => filePath.substring(filePath.lastIndexOf(path.separator) + 1);
 
 class MarkdownItem {
   MarkdownItem({required this.name, required this.assetList})
