@@ -8,7 +8,7 @@ You say you are great, I do not believe it, I will verify it myself. Here are so
 
 [Web page for Awesome Flutter](https://nomeleel.github.io/awesome_flutter/)
 
-| [App Store Card](#appstorecard) | [Yin Yang Switch](#yinyangswitch) | [Grid Paper Expansion](#gridpaperexpansion) | [Water Wave](#waterwave) | [Creative Stitching](#creativestitching) | [Sliver AppBar Expansion](#sliverappbarexpansion) | [Absorb Stack](#absorbstack) | [Future Button](#futurebutton) | [Text Expansion](#textexpansion) | [Scroll View Jump Top](#scrollviewjumptop) | [Side Panel](#sidepanel-colorpicker) | [Color Picker](#sidepanel-colorpicker) | [Nav To List View Auto Scroll](#navtolistviewautoscroll) | [Combine List View](#combinelistview) | [Story Swiper](#storyswiper) | [Flutter Web View](#flutterwebview) | [Platform View](#platformview) | [Fireworks](#fireworks) | [Custom Grid View](#customgridview) | [Surround Square View](#surroundsquareview) | [Follow View](#followview) | 
+| [App Store Card](#appstorecard) | [Yin Yang Switch](#yinyangswitch) | [Grid Paper Expansion](#gridpaperexpansion) | [Water Wave](#waterwave) | [Creative Stitching](#creativestitching) | [Sliver AppBar Expansion](#sliverappbarexpansion) | [Absorb Stack](#absorbstack) | [Future Button](#futurebutton) | [Text Expansion](#textexpansion) | [Scroll View Jump Top](#scrollviewjumptop) | [Side Panel](#sidepanel-colorpicker) | [Color Picker](#sidepanel-colorpicker) | [Nav To List View Auto Scroll](#navtolistviewautoscroll) | [Combine List View](#combinelistview) | [Story Swiper](#storyswiper) | [Flutter Web View](#flutterwebview) | [Platform View](#platformview) | [Fireworks](#fireworks) | [Custom Grid View](#customgridview) | [Surround Square View](#surroundsquareview) | [Follow View](#followview) | [Listenable Test View](#listenabletestview) | [Vertical Turn Back List View](#verticalturnbacklistview) | [Tab Page Linked Scroll View](#tabpagelinkedscrollview) | [Tab Bar Expansion](#tabbarexpansion) | [Slider View](#sliderview) | [Shader Mask Test View](#shadermasktestview) | [Search Delegate Test View](#searchdelegatetestview) | [Positioned Not In Stack View](#positionednotinstackview) | [Bottom Sheet Test View](#bottomsheettestview) | [Animated Scan View](#animatedscanview) | <!-- INDEX -->
 
 **Next, let the picture dance.**
 
@@ -246,12 +246,115 @@ Try to customize the RenderObject to achieve the effect.
 
 Try use ScrollController(Listenable) driver Painter.
 
-[Web demo for follow view](https://nomeleel.github.io/awesome_flutter/#/follow_view)
+[Web demo for Follow View](https://nomeleel.github.io/awesome_flutter/#/follow_view)
 
 <div align="center">
     <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/follow_view.gif" width="30%"/>
 </div>
 
+## ListenableTestView
+
+[ValueListenable]、[ValueNotifier]、[ChangeNotifier]、[Animation]、[AnimationController], these are actually [Listenable].
+Listenable is magic that fascinates me.
+
+[Web demo for Listenable Test View](https://nomeleel.github.io/awesome_flutter/#/listenable_test_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/listenable_test_view.gif" width="30%"/>
+</div>
+
+## VerticalTurnBackListView
+
+A list view between ***ListView*** and ***GridView***. Vertical Turn Back List View a special display view.
+
+[Web demo for Vertical Turn Back List View](https://nomeleel.github.io/awesome_flutter/#/vertical_turn_back_list_view_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/vertical_turn_back_list_view_view.gif" width="30%"/>
+</div>
+
+## TabPageLinkedScrollView
+
+Use the center key provided by ***CustomScrollView*** to implement this master-detail scrolling view in a simple and low-cost way.
+
+[Web demo for Tab Page Linked Scroll View](https://nomeleel.github.io/awesome_flutter/#/tab_page_linked_scroll_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/tab_page_linked_scroll_view.gif" width="30%"/>
+</div>
+
+## TabBarExpansion
+
+Expansion for Tab Bar. 
+Add [tabSpacing]、[tabDecoration]、[direction]、[indicatorPainter], focus on tab decorators and indicator decorators and layout direction.
+
+[Web demo for Tab Bar Expansion](https://nomeleel.github.io/awesome_flutter/#/tab_bar_exp_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/tab_bar_exp_view_2.gif" width="30%"/><img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/tab_bar_exp_view.gif" width="30%"/>
+</div>
+
+## SliderView
+
+A slider that is often seen when adjusting brightness style.
+
+[Web demo for Slider View](https://nomeleel.github.io/awesome_flutter/#/slider_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/slider_view.gif" width="30%"/>
+</div>
+
+## ShaderMaskTestView
+
+Use shaders with animation to make it fascinating.
+
+[Web demo for Shader Mask Test View](https://nomeleel.github.io/awesome_flutter/#/shader_mask_test_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/shader_mask_test_view.gif" width="30%"/>
+</div>
+
+## SearchDelegateTestView
+
+For common search behaviors, the flutter official has implemented a set of logic for this. Here, try it by implementing its delegation.
+
+[Web demo for Search Delegate Test View](https://nomeleel.github.io/awesome_flutter/#/search_delegate_test_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/search_delegate_test_view.gif" width="30%"/>
+</div>
+
+## PositionedNotInStackView
+
+After an exception occurs when Positioned is not included in the Stack. Maybe this solution can solve it.
+
+[Web demo for Positioned Not In Stack View](https://nomeleel.github.io/awesome_flutter/#/positioned_not_in_stack_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/positioned_not_in_stack_view.gif" width="30%"/>
+</div>
+
+## BottomSheetTestView
+
+The BottomSheet is not only used in the routing of showModalBottomSheet, for example, it can use own AnimationController  driver AnimatedBuilder and FractionalTranslation achieve the same effect on all inside pages.
+
+[Web demo for Bottom Sheet Test View](https://nomeleel.github.io/awesome_flutter/#/bottom_sheet_test_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/bottom_sheet_test_view.gif" width="30%"/>
+</div>
+
+## AnimatedScanView
+
+Scan animation implemented using the ***stops*** property in the colors gradient of the decoration.
+
+[Web demo for Animated Scan View](https://nomeleel.github.io/awesome_flutter/#/animated_scan_view)
+
+<div align="center">
+    <img src="https://raw.githubusercontent.com/Nomeleel/Assets/master/awesome_flutter/markdown/animated_scan_view.gif" width="30%"/>
+</div>
+
+<!-- DETAIL -->
 ## Found issues in Flutter
 
 The inevitable thing is that I also found some issues in Flutter.
