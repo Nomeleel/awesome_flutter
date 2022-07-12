@@ -6,6 +6,7 @@
 /// 
 /// TabBarView
 /// 添加[scrollDirection]
+/// 添加[viewportFraction]
 
 // Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -1352,6 +1353,7 @@ class TabBarViewExp extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
+    this.viewportFraction = 1.0,
   }) : super(key: key);
 
   /// This widget's selection and animation state.
@@ -1384,6 +1386,13 @@ class TabBarViewExp extends StatefulWidget {
 
   /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
+
+  /// The fraction of the viewport that each page should occupy.
+  ///
+  /// Defaults to 1.0, which means each page fills the viewport in the scrolling
+  /// direction.
+  /// See [PageController] of viewportFraction for [PageView].
+  final double viewportFraction;
 
   @override
   State<TabBarViewExp> createState() => _TabBarViewExpState();
@@ -1438,7 +1447,7 @@ class _TabBarViewExpState extends State<TabBarViewExp> {
     super.didChangeDependencies();
     _updateTabController();
     _currentIndex = _controller?.index;
-    _pageController = PageController(initialPage: _currentIndex ?? 0);
+    _pageController = PageController(initialPage: _currentIndex ?? 0, viewportFraction: widget.viewportFraction);
   }
 
   @override
