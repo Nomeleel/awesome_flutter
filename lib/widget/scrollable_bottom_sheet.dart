@@ -1,9 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 const Duration _bottomSheetEnterDuration = Duration(milliseconds: 250);
 const Duration _bottomSheetExitDuration = Duration(milliseconds: 200);
 const double _minFlingVelocity = 700.0;
 const double _closeProgressThreshold = 0.5;
+
+class ScrollableSheetScrollController extends ScrollController {
+  ScrollableSheetScrollController({
+    required this.handleDragUpdate,
+    required this.handleDragEnd,
+  });
+
+  final void Function(double delta) handleDragUpdate;
+
+  final void Function(double velocity) handleDragEnd;
+
+  @override
+  ScrollPosition createScrollPosition(
+    ScrollPhysics physics,
+    ScrollContext context,
+    ScrollPosition? oldPosition,
+  ) {
+    return ScrollableSheetScrollPosition(
+      physics: physics,
+      context: context,
+      oldPosition: oldPosition,
+      handleDragUpdate: handleDragUpdate,
+      handleDragEnd: handleDragEnd,
+    );
+  }
+}
+
+class ScrollableSheetScrollPosition extends ScrollPositionWithSingleContext {
+  ScrollableSheetScrollPosition({
+    required ScrollPhysics physics,
+    required ScrollContext context,
+    ScrollPosition? oldPosition,
+    required this.handleDragUpdate,
+    required this.handleDragEnd,
+  }) : super(physics: physics, context: context, oldPosition: oldPosition);
+
+  final void Function(double delta) handleDragUpdate;
+
+  final void Function(double velocity) handleDragEnd;
+
+  bool _sheetDragging = false;
+
+  bool get _isSheetDragging =>
+      _sheetDragging || (userScrollDirection == ScrollDirection.forward && pixels <= minScrollExtent);
+
+  @override
+  void applyUserOffset(double delta) {
+    updateUserScrollDirection(delta > 0.0 ? ScrollDirection.forward : ScrollDirection.reverse);
+
+    if (_isSheetDragging) {
+      _sheetDragging = true;
+
+      handleDragUpdate(delta);
+    } else {
+      setPixels(pixels - physics.applyPhysicsToUserOffset(this, delta));
+    }
+  }
+
+  @override
+  void goBallistic(double velocity) {
+    if (_isSheetDragging) {
+      _sheetDragging = false;
+      super.goBallistic(0);
+
+      handleDragEnd(-velocity);
+    } else {
+      super.goBallistic(velocity);
+    }
+  }
+}
 
 /// A material design bottom sheet.
 ///
@@ -21,7 +92,7 @@ const double _closeProgressThreshold = 0.5;
 ///    sheets can be created and displayed with the [showModalBottomSheet]
 ///    function.
 ///
-/// The [BottomSheet] widget itself is rarely used directly. Instead, prefer to
+/// The [ScrollableBottomSheet] widget itself is rarely used directly. Instead, prefer to
 /// create a persistent bottom sheet with [ScaffoldState.showBottomSheet] or
 /// [Scaffold.bottomSheet], and a modal bottom sheet with [showModalBottomSheet].
 ///
@@ -32,13 +103,13 @@ const double _closeProgressThreshold = 0.5;
 ///  * [showModalBottomSheet], which can be used to display a modal bottom
 ///    sheet.
 ///  * <https://material.io/design/components/sheets-bottom.html>
-class BottomSheet extends StatefulWidget {
+class ScrollableBottomSheet extends StatefulWidget {
   /// Creates a bottom sheet.
   ///
   /// Typically, bottom sheets are created implicitly by
   /// [ScaffoldState.showBottomSheet], for persistent bottom sheets, or by
   /// [showModalBottomSheet], for modal bottom sheets.
-  const BottomSheet({
+  const ScrollableBottomSheet({
     Key? key,
     this.animationController,
     this.enableDrag = true,
@@ -51,11 +122,8 @@ class BottomSheet extends StatefulWidget {
     this.constraints,
     required this.onClosing,
     required this.builder,
-  }) : assert(enableDrag != null),
-       assert(onClosing != null),
-       assert(builder != null),
-       assert(elevation == null || elevation >= 0.0),
-       super(key: key);
+  })  : assert(elevation == null || elevation >= 0.0),
+        super(key: key);
 
   /// The animation controller that controls the bottom sheet's entrance and
   /// exit animations.
@@ -75,7 +143,7 @@ class BottomSheet extends StatefulWidget {
   ///
   /// The bottom sheet will wrap the widget produced by this builder in a
   /// [Material] widget.
-  final WidgetBuilder builder;
+  final ScrollableWidgetBuilder builder;
 
   /// If true, the bottom sheet can be dragged up and down and dismissed by
   /// swiping downwards.
@@ -133,7 +201,7 @@ class BottomSheet extends StatefulWidget {
   /// will be [Clip.none].
   final Clip? clipBehavior;
 
-  /// Defines minimum and maximum sizes for a [BottomSheet].
+  /// Defines minimum and maximum sizes for a [ScrollableBottomSheet].
   ///
   /// Typically a bottom sheet will cover the entire width of its
   /// parent. However for large screens you may want to limit the width
@@ -151,10 +219,10 @@ class BottomSheet extends StatefulWidget {
   final BoxConstraints? constraints;
 
   @override
-  State<BottomSheet> createState() => _BottomSheetState();
+  State<ScrollableBottomSheet> createState() => _ScrollableBottomSheetState();
 
   /// Creates an [AnimationController] suitable for a
-  /// [BottomSheet.animationController].
+  /// [ScrollableBottomSheet.animationController].
   ///
   /// This API available as a convenience for a Material compliant bottom sheet
   /// animation. If alternative animation durations are required, a different
@@ -169,9 +237,15 @@ class BottomSheet extends StatefulWidget {
   }
 }
 
-class _BottomSheetState extends State<BottomSheet> {
-
+class _ScrollableBottomSheetState extends State<ScrollableBottomSheet> {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
+
+  late final ScrollableSheetScrollController scrollController = ScrollableSheetScrollController(
+    handleDragUpdate: _handleDragUpdate,
+    handleDragEnd: (velocity) => _handleDragEnd(
+      DragEndDetails(velocity: Velocity(pixelsPerSecond: Offset(0, velocity)), primaryVelocity: velocity),
+    ),
+  );
 
   double get _childHeight {
     final RenderBox renderBox = _childKey.currentContext!.findRenderObject()! as RenderBox;
@@ -184,15 +258,14 @@ class _BottomSheetState extends State<BottomSheet> {
     widget.onDragStart?.call(details);
   }
 
-  void _handleDragUpdate(DragUpdateDetails details) {
+  void _handleDragUpdate(double primaryDelta) {
     assert(
       widget.enableDrag && widget.animationController != null,
       "'BottomSheet.animationController' can not be null when 'BottomSheet.enableDrag' is true. "
       "Use 'BottomSheet.createAnimationController' to create one, or provide another AnimationController.",
     );
-    if (_dismissUnderway)
-      return;
-    widget.animationController!.value -= details.primaryDelta! / _childHeight;
+    if (_dismissUnderway) return;
+    widget.animationController!.value -= primaryDelta / _childHeight;
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -201,8 +274,7 @@ class _BottomSheetState extends State<BottomSheet> {
       "'BottomSheet.animationController' can not be null when 'BottomSheet.enableDrag' is true. "
       "Use 'BottomSheet.createAnimationController' to create one, or provide another AnimationController.",
     );
-    if (_dismissUnderway)
-      return;
+    if (_dismissUnderway) return;
     bool isClosing = false;
     if (details.velocity.pixelsPerSecond.dy > _minFlingVelocity) {
       final double flingVelocity = -details.velocity.pixelsPerSecond.dy / _childHeight;
@@ -213,8 +285,7 @@ class _BottomSheetState extends State<BottomSheet> {
         isClosing = true;
       }
     } else if (widget.animationController!.value < _closeProgressThreshold) {
-      if (widget.animationController!.value > 0.0)
-        widget.animationController!.fling(velocity: -1.0);
+      if (widget.animationController!.value > 0.0) widget.animationController!.fling(velocity: -1.0);
       isClosing = true;
     } else {
       widget.animationController!.forward();
@@ -254,7 +325,7 @@ class _BottomSheetState extends State<BottomSheet> {
       clipBehavior: clipBehavior,
       child: NotificationListener<DraggableScrollableNotification>(
         onNotification: extentChanged,
-        child: widget.builder(context),
+        child: widget.builder(context, scrollController),
       ),
     );
 
@@ -269,12 +340,14 @@ class _BottomSheetState extends State<BottomSheet> {
       );
     }
 
-    return !widget.enableDrag ? bottomSheet : GestureDetector(
-      onVerticalDragStart: _handleDragStart,
-      onVerticalDragUpdate: _handleDragUpdate,
-      onVerticalDragEnd: _handleDragEnd,
-      excludeFromSemantics: true,
-      child: bottomSheet,
-    );
+    return !widget.enableDrag
+        ? bottomSheet
+        : GestureDetector(
+            onVerticalDragStart: _handleDragStart,
+            onVerticalDragUpdate: (details) => _handleDragUpdate(details.primaryDelta!),
+            onVerticalDragEnd: _handleDragEnd,
+            excludeFromSemantics: true,
+            child: bottomSheet,
+          );
   }
 }
