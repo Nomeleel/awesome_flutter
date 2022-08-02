@@ -8,16 +8,21 @@ class ColorfulListView extends StatelessWidget with SliverToBoxAdapterMixin {
     this.itemCount = 77,
     this.itemExtent = 77.77,
     this.itemTextStyle,
+    this.controller,
+    this.padding = EdgeInsets.zero,
   }) : super(key: key);
 
   final int itemCount;
   final double itemExtent;
   final TextStyle? itemTextStyle;
+  final ScrollController? controller;
+  final EdgeInsetsGeometry? padding;
 
   @override
   ListView build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.zero,
+      controller: controller,
+      padding: padding,
       itemCount: itemCount,
       itemBuilder: (BuildContext context, int index) => Container(
         height: itemExtent,
