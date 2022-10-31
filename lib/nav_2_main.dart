@@ -1,9 +1,15 @@
+// ignore_for_file: avoid_print
+
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -14,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Flutter Navigator 2.0 Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -37,8 +43,9 @@ class MyRouteParser extends RouteInformationParser<String> {
   }
 }
 
-class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDelegateMixin<String>, ChangeNotifier {
-  final _stack = <String>[];
+class MyRouteDelegate extends RouterDelegate<String>
+    with PopNavigatorRouterDelegateMixin<String>, ChangeNotifier {
+  final _pages = <String>[];
 
   static MyRouteDelegate of(BuildContext context) {
     final delegate = Router.of(context).routerDelegate;
@@ -46,50 +53,57 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
     return delegate as MyRouteDelegate;
   }
 
+  static MyRouteDelegate? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_RouteDelegateInherited>()?.routeDelegate;
+  }
+
   @override
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   String get currentConfiguration {
-    print('currentConfiguration: ${_stack.last}');
-    return _stack.isNotEmpty ? _stack.last : '/';
+    print('currentConfiguration: ${_pages.last}');
+    return _pages.isNotEmpty ? _pages.last : '/';
   }
 
-  List<String> get stack => List.unmodifiable(_stack);
+  List<String> get pages => List.unmodifiable(_pages);
 
   void push(String newRoute) {
-    _stack.add(newRoute);
+    _pages.add(newRoute);
     notifyListeners();
   }
 
   void pushAndRemoveExist(String newRoute) {
     String mainRouteName = newRoute.split('/').first;
-    _stack.removeWhere((e) => e.split('/').first == mainRouteName);
-    _stack.add(newRoute);
+    _pages.removeWhere((e) => e.split('/').first == mainRouteName);
+    _pages.add(newRoute);
     notifyListeners();
   }
 
   bool canPop() {
-    return _stack.length > 1;
+    return _pages.length > 1;
   }
 
   void pop() {
     print('----------pop--------------');
-    String pageName = _stack.removeLast();
+    String pageName = _pages.removeLast();
     print(pageName);
     print('---------------------------');
     notifyListeners();
   }
 
   void remove(String routeName) {
-    _stack.remove(routeName);
+    print('----------remove: $routeName--------------');
+    print(pages);
+    print('------------------------------------------');
+    _pages.remove(routeName);
     notifyListeners();
   }
 
   void removeAll() {
-    _stack.removeRange(1, _stack.length);
+    _pages.removeRange(1, _pages.length);
     print('------------_stack------------');
-    print(_stack);
+    print(_pages);
     print('---------------------------');
     notifyListeners();
   }
@@ -102,16 +116,15 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
 
   @override
   Future<void> setNewRoutePath(String configuration) {
-    _stack
-      ..clear()
-      ..add(configuration);
+    print('------setNewRoutePath: $configuration');
+    _pages.add(configuration);
     return SynchronousFuture<void>(null);
   }
 
   bool _onPopPage(Route<dynamic> route, dynamic result) {
     print('-------_onPopPage: ${route.settings.name}-----------------');
-    if (_stack.length > 1) {
-      _stack.removeLast();
+    if (canPop()) {
+      _pages.removeLast();
       notifyListeners();
     }
     return route.didPop(result);
@@ -129,20 +142,26 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
 
   @override
   Widget build(BuildContext context) {
-    print('${describeIdentity(this)}.stack: $_stack');
-    return Navigator(
-      key: navigatorKey,
-      onPopPage: _onPopPage,
-      //onGenerateRoute: _onGenerateRoute,
-      pages: [
-        for (final name in _stack)
-          MyPage(
-            key: ValueKey(name),
-            name: name,
-          ),
-      ],
+    print('${describeIdentity(this)}.pages: $_pages');
+    return _RouteDelegateInherited(
+      routeDelegate: this,
+      child: Navigator(
+        key: navigatorKey,
+        onPopPage: _onPopPage,
+        onGenerateRoute: _onGenerateRoute,
+        pages: _pages.map(_buildPage).toList(),
+      ),
     );
   }
+
+  // TODO: Not fully supported.
+  Route<dynamic>? _onGenerateRoute(RouteSettings routeSettings) {
+    // push(routeSettings.name!);
+    _pages.add(routeSettings.name!);
+    return _createRoute(routeSettings);
+  }
+
+  MyPage _buildPage(String page) => MyPage(key: ObjectKey(page), name: page);
 
   // @override
   // Future<bool> popRoute() {
@@ -153,45 +172,66 @@ class MyRouteDelegate extends RouterDelegate<String> with PopNavigatorRouterDele
   // }
 }
 
+class _RouteDelegateInherited extends InheritedWidget {
+  const _RouteDelegateInherited({
+    required this.routeDelegate,
+    required Widget child,
+  }) : super(child: child);
+
+  final MyRouteDelegate routeDelegate;
+
+  @override
+  bool updateShouldNotify(covariant _RouteDelegateInherited oldWidget) {
+    return oldWidget.routeDelegate.pages != routeDelegate.pages;
+  }
+}
+
 class MyPage extends Page {
   const MyPage({
     LocalKey? key,
     String? name,
-  }) : super(
-          key: key,
-          name: name,
-        );
-
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-      settings: this,
-      builder: (BuildContext context) {
-        return name == '/' ? MyHomePage() : MyItemPage(title: name ?? '');
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  }) : super(key: key, name: name);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Route createRoute(BuildContext context) => _createRoute(this);
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+Route _createRoute(RouteSettings settings) {
+  Widget pageBuilder(BuildContext context) =>
+      settings.name == '/' ? const MyHomePage() : MyItemPage(title: settings.name ?? '');
+  return Platform.isIOS
+      ? CupertinoPageRoute(settings: settings, builder: pageBuilder)
+      : MaterialPageRoute(settings: settings, builder: pageBuilder);
+}
+
+extension on BuildContext {
+  MyRouteDelegate get routeDelegate => MyRouteDelegate.maybeOf(this)!;
+
+  MyRouteDelegate get routeDelegate2 => MyRouteDelegate.of(this);
+
+  void push(String newRoute) => routeDelegate.push(newRoute);
+
+  void pushAndRemoveExist(String newRoute) => routeDelegate.pushAndRemoveExist(newRoute);
+
+  bool canPop() => routeDelegate.canPop();
+
+  void pop() => routeDelegate.pop();
+
+  void remove(String routeName) => routeDelegate.remove(routeName);
+
+  void removeAll() => routeDelegate.removeAll();
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
+      appBar: AppBar(title: const Text('Home')),
       body: Center(
         child: ElevatedButton(
-          child: Text('Go'),
-          onPressed: () {
-            MyRouteDelegate.of(context).push('Route/1');
-          },
+          child: const Text('Go'),
+          onPressed: () => context.push('Route/1'),
         ),
       ),
     );
@@ -199,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class MyItemPage extends StatefulWidget {
-  MyItemPage({Key? key, required this.title}) : super(key: key);
+  const MyItemPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -208,22 +248,22 @@ class MyItemPage extends StatefulWidget {
 }
 
 class _MyItemPageState extends State<MyItemPage> {
-  static int _counter = 1;
+  static int _pageIndex = 1;
 
   Future<dynamic> _showDialog() async {
     return await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('Is this being displayed?'),
+          content: const Text('Is this being displayed?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text('NO'),
+              child: const Text('NO'),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text('YES'),
+              child: const Text('YES'),
             ),
           ],
         );
@@ -231,28 +271,38 @@ class _MyItemPageState extends State<MyItemPage> {
     );
   }
 
+  void _remove() {
+    context.remove('Route/2');
+  }
+
   void _removeAll() {
-    MyRouteDelegate.of(context).removeAll();
+    _pageIndex = 1;
+    context.removeAll();
   }
 
-  void _incrementCounter() {
-    _counter++;
-    MyRouteDelegate.of(context).push('Route/$_counter');
-    //Navigator.of(context).pushNamed('Route/$_counter');
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   settings: RouteSettings(name: 'Route/$_counter'),
-    //   builder: (context) => MyHomePage(title: 'Route/$_counter',)
-    // ));
+  void _incrementCounter() => _pageIndex++;
+
+  void _addRoute() {
+    _incrementCounter();
+    context.push('Route/$_pageIndex');
   }
 
-  void _incrementCounter2() {
-    _counter++;
-    MyRouteDelegate.of(context).pushAndRemoveExist('Route_Test/$_counter');
+  void _navAddRoute() {
+    _incrementCounter();
+    Navigator.of(context).pushNamed('Route/$_pageIndex');
+  }
+
+  void _addRouteTest() {
+    _incrementCounter();
+    context.pushAndRemoveExist('Route_Test/$_pageIndex');
+  }
+
+  void _navBack() {
+    Navigator.of(context).pop();
   }
 
   void _back() {
-    Navigator.of(context).pop();
-    //MyRouteDelegate.of(context).pop();
+    context.pop();
   }
 
   @override
@@ -265,19 +315,15 @@ class _MyItemPageState extends State<MyItemPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              widget.title.split('/')[1],
-              style: Theme.of(context).textTheme.headline4,
-            ),
+          children: const <Widget>[
+            Text('Page List:'),
+            PageListView(),
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.min,
+      floatingActionButton: Wrap(
+        spacing: 12,
+        runSpacing: 12,
         children: [
           FloatingActionButton(
             heroTag: 'dialog',
@@ -286,37 +332,53 @@ class _MyItemPageState extends State<MyItemPage> {
               print('dialog result: $dialogResult');
             },
             tooltip: 'Show dialog',
-            child: Icon(Icons.message),
+            child: const Icon(Icons.message),
           ),
-          SizedBox(width: 12.0),
           FloatingActionButton(
             heroTag: 'remove',
+            onPressed: _remove,
+            tooltip: 'Remove Route/2',
+            child: const Icon(Icons.delete),
+          ),
+          FloatingActionButton(
+            heroTag: 'removeAll',
             onPressed: _removeAll,
             tooltip: 'Remove All',
-            child: Icon(Icons.delete),
+            child: const Icon(Icons.delete),
           ),
-          SizedBox(width: 12.0),
           FloatingActionButton(
-            heroTag: 'add',
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
+            heroTag: 'addRoute',
+            onPressed: _addRoute,
+            tooltip: 'Add Route',
+            child: const Icon(Icons.add),
           ),
-          SizedBox(width: 12.0),
           FloatingActionButton(
             backgroundColor: Colors.cyan,
-            heroTag: 'addTest',
-            onPressed: _incrementCounter2,
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
+            heroTag: 'navAddRoute',
+            onPressed: _navAddRoute,
+            tooltip: 'Nav Add Route',
+            child: const Icon(Icons.add),
           ),
-          SizedBox(width: 12.0),
           FloatingActionButton(
-            heroTag: 'back',
-            backgroundColor: MyRouteDelegate.of(context).canPop() ? null : Colors.grey,
-            onPressed: MyRouteDelegate.of(context).canPop() ? _back : null,
-            tooltip: 'Increment',
-            child: Icon(Icons.arrow_back_ios),
+            backgroundColor: Colors.green,
+            heroTag: 'addRouteTest',
+            onPressed: _addRouteTest,
+            tooltip: 'Add Route Test',
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            heroTag: 'routerBack',
+            backgroundColor: context.canPop() ? null : Colors.grey,
+            onPressed: context.canPop() ? _back : null,
+            tooltip: 'Router Back',
+            child: const Icon(Icons.arrow_back_ios),
+          ),
+          FloatingActionButton(
+            heroTag: 'navBack',
+            backgroundColor: context.canPop() ? Colors.cyan : Colors.grey,
+            onPressed: context.canPop() ? _navBack : null,
+            tooltip: 'Nav Back',
+            child: const Icon(Icons.arrow_back_ios),
           ),
         ],
       ),
@@ -327,5 +389,46 @@ class _MyItemPageState extends State<MyItemPage> {
   void dispose() {
     super.dispose();
     print('dispose: ${widget.title}');
+  }
+}
+
+class PageList extends StatelessWidget {
+  const PageList({
+    Key? key,
+    this.pages,
+  }) : super(key: key);
+
+  final List<String>? pages;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(TextSpan(children: [
+      const TextSpan(text: '['),
+      ...[
+        for (String page in (pages ?? context.routeDelegate.pages)) ...[
+          TextSpan(
+            text: page,
+            style: TextStyle(color: Colors.primaries[page.hashCode % Colors.primaries.length]),
+          ),
+          const TextSpan(text: ', '),
+        ]
+      ]..removeLast(),
+      const TextSpan(text: ']'),
+    ]));
+  }
+}
+
+class PageListView extends StatelessWidget {
+  const PageListView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print('PageListView build-------------------');
+    return Column(
+      children: [
+        PageList(pages: context.routeDelegate2.pages),
+        const PageList(),
+      ],
+    );
   }
 }
