@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +115,9 @@ class MyRouteDelegate extends RouterDelegate<String>
   @override
   Future<void> setNewRoutePath(String configuration) {
     print('------setNewRoutePath: $configuration');
-    _pages.add(configuration);
+    _pages
+      ..clear()
+      ..add(configuration);
     return SynchronousFuture<void>(null);
   }
 
@@ -129,16 +129,6 @@ class MyRouteDelegate extends RouterDelegate<String>
     }
     return route.didPop(result);
   }
-
-  // Route<dynamic> _onGenerateRoute(RouteSettings settings) {
-  //   print('-----_onGenerateRoute: $settings------------');
-  //   return MaterialPageRoute(
-  //     settings: settings,
-  //     builder: (context) => MyHomePage(
-  //       title: settings.name,
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -199,9 +189,8 @@ class MyPage extends Page {
 Route _createRoute(RouteSettings settings) {
   Widget pageBuilder(BuildContext context) =>
       settings.name == '/' ? const MyHomePage() : MyItemPage(title: settings.name ?? '');
-  return Platform.isIOS
-      ? CupertinoPageRoute(settings: settings, builder: pageBuilder)
-      : MaterialPageRoute(settings: settings, builder: pageBuilder);
+         // Use by pageTransitionsTheme of theme.
+  return MaterialPageRoute(settings: settings, builder: pageBuilder);
 }
 
 extension on BuildContext {
