@@ -1,4 +1,3 @@
-import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 
 class ScrollViewFloatView extends StatefulWidget {
@@ -15,11 +14,11 @@ class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
   Widget build(BuildContext context) {
     // final height = MediaQuery.of(context).size.height;
     final height = 1000.0;
-    return ScaffoldView(
+    return Scaffold(
       body: CustomScrollView(
         controller: controller,
         slivers: [
-          // SliverToBoxAdapter(child: SizedBox(height: height)),
+          SliverToBoxAdapter(child: SizedBox(height: height)),
           // SliverToBoxAdapter(
           //   child: AnimatedBuilder(
           //     animation: controller,
@@ -51,8 +50,25 @@ class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
           //     );
           //   },
           // ),
-          SliverToBoxAdapter(child: ScrollFloatView()),
-          SliverToBoxAdapter(child: ScrollFloatView()),
+          SliverToBoxAdapter(
+            child: ScrollFloatView(
+              // childHeight: 200,
+              containerHeight: 2000,
+              childBuilder: (BuildContext context) => CircularProgressIndicator(),
+              animatedBuilder: (context, animatedIn, animated, animatedOut, childHeight, child) {
+                return Transform.scale(
+                  scale: 1 - animatedOut,
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: childHeight,
+                    color: ColorTween(begin: Colors.amber, end: Colors.purple).lerp(animatedIn)!.withOpacity(.5),
+                    alignment: Alignment(animated * 2 - 1, 0),
+                    child: child,
+                  ),
+                );
+              },
+            ),
+          ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => Container(
@@ -68,51 +84,70 @@ class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
   }
 }
 
+typedef AnimatedValueWidgetBuilde = Widget Function(
+  BuildContext context,
+  double animatedIn,
+  double animated,
+  double animatedOut,
+  double childHeight,
+  Widget? child,
+);
+
 class ScrollFloatView extends StatelessWidget {
-  const ScrollFloatView({Key? key}) : super(key: key);
+  const ScrollFloatView({
+    Key? key,
+    this.childHeight,
+    required this.containerHeight,
+    required this.animatedBuilder,
+    required this.childBuilder,
+  }) : super(key: key);
+
+  final double? childHeight;
+  final double containerHeight;
+  final AnimatedValueWidgetBuilde animatedBuilder;
+  final WidgetBuilder childBuilder;
 
   @override
   Widget build(BuildContext context) {
     final scrollable = Scrollable.of(context)!;
     final position = scrollable.position;
-    const containerHeight = 817.0 * 3;
-    double? start;
-    print(position.hasViewportDimension);
-    return Container(
+
+    double? start, resetHeight;
+    double animatedIn = 0, animated = 0, animatedOut = 0;
+
+    return SizedBox(
       height: containerHeight,
-      color: Colors.pink,
       child: AnimatedBuilder(
+        // TODO:  Refine Granularity.
         animation: position,
         builder: (ctx, child) {
           if (!position.hasViewportDimension) return SizedBox.shrink();
-          // TODO: refine
-          start ??=
-              context.findRenderObject()!.getTransformTo(scrollable.context.findRenderObject()).getTranslation().y;
-          final height = position.viewportDimension;
-          // final animation = ((position.pixels - start!) / (containerHeight - height)).clamp(0.0, 1.0);
-          final animation = ((position.pixels - start!) / (height * 2)).clamp(0.0, 1.0);
-          print('start: $start');
+          start ??= _startOffsetInScrollView(context, scrollable);
+          final viewportDimension = position.viewportDimension;
+          resetHeight ??= childHeight?.clamp(0, viewportDimension) ?? viewportDimension;
+          final animatedHeight = containerHeight - resetHeight!;
+          final offset = position.pixels - start!;
+          if (offset < 0 && offset > -viewportDimension) {
+            animatedIn = ((offset + viewportDimension) / viewportDimension).clamp(0.0, 1.0);
+          } else if (offset < animatedHeight) {
+            animated = (offset / animatedHeight).clamp(0.0, 1.0);
+          } else {
+            animatedOut = ((offset - animatedHeight) / resetHeight!).clamp(0.0, 1.0);
+          }
 
           return Align(
-            alignment: Alignment(0, animation * 2 - 1),
-            // heightFactor: 3.0,
-            child: Container(
-              height: height,
-              color: ColorTween(begin: Colors.amber, end: Colors.purple).lerp(animation)!.withOpacity(.5),
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(),
-            ),
+            alignment: Alignment(0, animated * 2 - 1),
+            child: animatedBuilder(context, animatedIn, animated, animatedOut, resetHeight!, child),
           );
-          // return Padding(
-          //   padding: EdgeInsets.only(top: 400 - (controller.offset - height1).clamp(0, 400)),
-          //   child: child,
-          // );
         },
-        // child: Container(
-        //   height: height,
-        //   color: Colors.amber,
-        // ),
+        child: childBuilder(context),
       ),
     );
+  }
+
+  double _startOffsetInScrollView(BuildContext context, ScrollableState scrollable) {
+    final box = context.findRenderObject() as RenderBox?;
+    final offset = box?.localToGlobal(Offset.zero, ancestor: scrollable.context.findRenderObject());
+    return offset?.dy ?? 0;
   }
 }
