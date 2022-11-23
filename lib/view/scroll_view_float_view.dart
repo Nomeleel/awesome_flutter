@@ -12,48 +12,34 @@ class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
 
   @override
   Widget build(BuildContext context) {
-    // final height = MediaQuery.of(context).size.height;
-    final height = 1000.0;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: CustomScrollView(
         controller: controller,
         slivers: [
-          SliverToBoxAdapter(child: SizedBox(height: height)),
+          SliverToBoxAdapter(child: Container(height: height + 500, color: Colors.amber)),
           // SliverToBoxAdapter(
-          //   child: AnimatedBuilder(
-          //     animation: controller,
-          //     builder: (context, child) {
-          //       // if (!controller.hasClients) return child!;
-          //       final offset = (controller.offset - height1).clamp(0.0, 400.0);
-          //       return Padding(
-          //         padding: EdgeInsets.only(top: offset),
-          //         child: Opacity(
-          //           opacity: 1 - offset / 800,
+          //   child: ScrollFloatView(
+          //     containerHeight: height * 3,
+          //     floatOut: true,
+          //     childBuilder: (BuildContext context) => FlutterLogo(),
+          //     animatedBuilder: (context, animatedIn, animated, animatedOut, childHeight, child) {
+          //       return Opacity(
+          //         opacity: 1 - animatedOut,
+          //         child: Container(
+          //           height: childHeight,
+          //           color: ColorTween(begin: Colors.amber, end: Colors.purple).lerp(animatedIn)!,
+          //           alignment: Alignment(animated * 2 - 1, 0),
           //           child: child,
           //         ),
           //       );
           //     },
-          //     child: Container(
-          //       height: 400.0,
-          //       color: Colors.amber,
-          //     ),
           //   ),
-          // ),
-          // SliverLayoutBuilder(
-          //   builder: (context, constraints) {
-          //     print(constraints);
-          //     return SliverToBoxAdapter(
-          //       child: Container(
-          //         height: 222,
-          //         color: Colors.pink,
-          //       ),
-          //     );
-          //   },
           // ),
           SliverToBoxAdapter(
             child: ScrollFloatView(
-              // childHeight: 200,
-              containerHeight: 2000,
+              containerHeight: height * 3,
+              floatIn: true,
               childBuilder: (BuildContext context) => CircularProgressIndicator(),
               animatedBuilder: (context, animatedIn, animated, animatedOut, childHeight, child) {
                 return Transform.scale(
@@ -61,7 +47,7 @@ class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: childHeight,
-                    color: ColorTween(begin: Colors.amber, end: Colors.purple).lerp(animatedIn)!.withOpacity(.5),
+                    color: ColorTween(begin: Colors.white, end: Colors.cyan).lerp(animatedIn)!,
                     alignment: Alignment(animated * 2 - 1, 0),
                     child: child,
                   ),
@@ -100,12 +86,16 @@ class ScrollFloatView extends StatelessWidget {
     required this.containerHeight,
     required this.animatedBuilder,
     required this.childBuilder,
+    this.floatIn = false,
+    this.floatOut = false,
   }) : super(key: key);
 
   final double? childHeight;
   final double containerHeight;
   final AnimatedValueWidgetBuilde animatedBuilder;
   final WidgetBuilder childBuilder;
+  final bool floatIn;
+  final bool floatOut;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +104,6 @@ class ScrollFloatView extends StatelessWidget {
 
     double? start, resetHeight;
     double animatedIn = 0, animated = 0, animatedOut = 0;
-
     return SizedBox(
       height: containerHeight,
       child: AnimatedBuilder(
@@ -127,16 +116,21 @@ class ScrollFloatView extends StatelessWidget {
           resetHeight ??= childHeight?.clamp(0, viewportDimension) ?? viewportDimension;
           final animatedHeight = containerHeight - resetHeight!;
           final offset = position.pixels - start!;
-          if (offset < 0 && offset > -viewportDimension) {
+          double align = (offset / animatedHeight);
+          if (offset < -viewportDimension || offset > containerHeight) {
+            return SizedBox.shrink();
+          } else if (offset < 0) {
             animatedIn = ((offset + viewportDimension) / viewportDimension).clamp(0.0, 1.0);
+            if (!floatIn) align = 0;
           } else if (offset < animatedHeight) {
             animated = (offset / animatedHeight).clamp(0.0, 1.0);
           } else {
             animatedOut = ((offset - animatedHeight) / resetHeight!).clamp(0.0, 1.0);
+            if (!floatOut) align = 1;
           }
 
           return Align(
-            alignment: Alignment(0, animated * 2 - 1),
+            alignment: Alignment(0, align * 2 - 1),
             child: animatedBuilder(context, animatedIn, animated, animatedOut, resetHeight!, child),
           );
         },
