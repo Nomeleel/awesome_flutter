@@ -12,6 +12,28 @@ class ScrollViewFloatView extends StatefulWidget {
 class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
   List<Widget> children(double height) => [
         Container(height: height + 500, color: Colors.amber),
+        Container(
+          margin: const EdgeInsets.all(10),
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.amber,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ScrollFloatView2(
+            height: 200,
+            childBuilder: (BuildContext context) => FlutterLogo(),
+            animatedBuilder: (context, animated, child) {
+              return Align(
+                alignment: Alignment(0, animated * 2 - 1),
+                child: Container(
+                  width: 70,
+                  height: 70,
+                  color: Colors.purple,
+                ),
+              );
+            },
+          ),
+        ),
         ScrollFloatView(
           containerHeight: height * 3,
           floatOut: true,
@@ -95,7 +117,7 @@ class _ScrollViewFloatViewState extends State<ScrollViewFloatView> {
   }
 }
 
-typedef AnimatedValueWidgetBuilde = Widget Function(
+typedef AnimatedValueWidgetBuilder = Widget Function(
   BuildContext context,
   double animatedIn,
   double animated,
@@ -117,7 +139,7 @@ class ScrollFloatView extends StatelessWidget {
 
   final double? childHeight;
   final double containerHeight;
-  final AnimatedValueWidgetBuilde animatedBuilder;
+  final AnimatedValueWidgetBuilder animatedBuilder;
   final WidgetBuilder childBuilder;
   final bool floatIn;
   final bool floatOut;
@@ -166,6 +188,60 @@ class ScrollFloatView extends StatelessWidget {
               child: animatedBuilder(context, animatedIn, animated, animatedOut, resetHeight!, child),
             ),
           );
+        },
+        child: childBuilder(context),
+      ),
+    );
+  }
+
+  double? _startOffsetInScrollView(BuildContext context, ScrollPosition position) => position.startOffset(context);
+}
+
+typedef AnimatedValueWidgetBuilder2 = Widget Function(
+  BuildContext context,
+  double animated,
+  Widget? child,
+);
+
+class ScrollFloatView2 extends StatelessWidget {
+  const ScrollFloatView2({
+    super.key,
+    required this.height,
+    required this.animatedBuilder,
+    required this.childBuilder,
+    this.floatIn = false,
+    this.floatOut = false,
+  });
+
+  final double height;
+  final AnimatedValueWidgetBuilder2 animatedBuilder;
+  final WidgetBuilder childBuilder;
+  final bool floatIn;
+  final bool floatOut;
+
+  @override
+  Widget build(BuildContext context) {
+    final scrollable = Scrollable.of(context);
+    if (scrollable == null) return SizedBox.shrink();
+    final position = scrollable.position;
+
+    double? start;
+    return SizedBox(
+      height: height,
+      child: AnimatedBuilder(
+        animation: position,
+        builder: (ctx, child) {
+          start ??= _startOffsetInScrollView(context, position);
+          if (start == null) return SizedBox.shrink();
+
+          final viewportDimension = position.viewportDimension;
+
+          final offset = position.pixels - start!;
+          if (offset < -viewportDimension || offset > height) return SizedBox.shrink();
+
+          double animated = clampDouble((offset + viewportDimension) / (viewportDimension + height), 0.0, 1.0);
+
+          return animatedBuilder(context, animated, child);
         },
         child: childBuilder(context),
       ),
