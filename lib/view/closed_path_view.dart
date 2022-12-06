@@ -11,29 +11,36 @@ class ClosedPathTestView extends StatefulWidget {
 }
 
 class _ClosedPathTestViewState extends State<ClosedPathTestView> {
-  Color? _color = Colors.amber;
+  Color? _color;
   @override
   Widget build(BuildContext context) {
-    final path = Path()..addRect(Rect.fromLTWH(0, 0, 100, 100));
     return Scaffold(
       body: Center(
         child: Container(
-          width: 150,
-          height: 150,
+          width: 300,
+          height: 300,
           decoration: BoxDecoration(border: Border.all()),
-          child: GestureDetector(
-            onTap: () {
-              print('--');
-              if (mounted) {
-                setState(() {
-                  _color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
-                });
-              }
-            },
-            child: ClosedPathView(
-              path,
-              color: _color,
-            ),
+          child: SvgMap(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (mounted) {
+                    setState(() {
+                      _color = Colors.primaries[Random().nextInt(Colors.primaries.length)];
+                      print(_color);
+                    });
+                  }
+                },
+                child: ClosedPathView(
+                  Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
+                  color: _color,
+                ),
+              ),
+              ClosedPathView(
+                Path()..addOval(Rect.fromLTWH(0, 0, 50, 100)),
+                color: _color,
+              ),
+            ],
           ),
         ),
       ),
@@ -43,7 +50,7 @@ class _ClosedPathTestViewState extends State<ClosedPathTestView> {
 
 class ClosedPathView extends SingleChildRenderObjectWidget {
   // TODO: check path closed?
-  const ClosedPathView(this.path, {this.color, super.child});
+  const ClosedPathView(this.path, {this.color, Widget? child}) : super(child: child);
 
   final Path path;
   final Color? color;
@@ -55,7 +62,6 @@ class ClosedPathView extends SingleChildRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderClosedPathView renderObject) {
-    print(color);
     renderObject
       ..path = path
       ..color = color;
@@ -63,16 +69,36 @@ class ClosedPathView extends SingleChildRenderObjectWidget {
 }
 
 class RenderClosedPathView extends RenderProxyBox {
-  RenderClosedPathView(this.path, this.color);
+  RenderClosedPathView(this.path, Color? color) : _color = color;
 
   Path path;
-  Color? color;
 
-  @override
-  void performLayout() {
-    // size = path.getBounds().size;
-    size = Size(constraints.maxWidth, constraints.maxHeight);
+  Color? get color => _color;
+  Color? _color;
+  set color(Color? value) {
+    if (_color != value) {
+      _color = value;
+      markNeedsPaint();
+    }
   }
+
+  // @override
+  // void performLayout() {
+  //   // layout(constraints, parentUsesSize: false);
+  //   size = path.getBounds().size;
+  //   // size = Size(constraints.maxWidth, constraints.maxHeight);
+  // }
+
+  // @override
+  // void performResize() {
+  //   size = path.getBounds().size;
+  // }
+
+  // @override
+  // void layout(Constraints constraints, {bool parentUsesSize = false}) {
+  //   print('layout');
+  //   super.layout(constraints, parentUsesSize: false);
+  // }
 
   @override
   void paint(PaintingContext context, Offset offset) {
@@ -83,12 +109,21 @@ class RenderClosedPathView extends RenderProxyBox {
         ..color = Colors.purple
         ..style = PaintingStyle.stroke,
     );
+
     if (color != null) {
       context.canvas.drawPath(
         path,
         Paint()..color = color!,
       );
     }
+
+    context.canvas.drawPath(
+      Path()..addRect(path.getBounds()),
+      Paint()
+        ..color = Colors.blue
+        ..strokeWidth = 2
+        ..style = PaintingStyle.stroke,
+    );
   }
 
   @override
@@ -100,3 +135,49 @@ class RenderClosedPathView extends RenderProxyBox {
     return false;
   }
 }
+
+class SvgMap extends MultiChildRenderObjectWidget {
+  SvgMap({super.children});
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return RenderSvgMap();
+  }
+}
+
+class RenderSvgMap extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, SvgMapParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, SvgMapParentData> {
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! SvgMapParentData) {
+      child.parentData = SvgMapParentData();
+    }
+  }
+
+  @override
+  void performLayout() {
+    RenderBox? child = firstChild;
+    while (child != null) {
+      final SvgMapParentData childParentData = child.parentData! as SvgMapParentData;
+      // childParentData.offset = Offset(10, 10);
+      child.layout(constraints, parentUsesSize: true);
+
+      child = childParentData.nextSibling;
+    }
+    size = Size(constraints.maxWidth, constraints.maxHeight);
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    defaultPaint(context, offset);
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    return defaultHitTestChildren(result, position: position);
+  }
+}
+
+class SvgMapParentData extends StackParentData {}
