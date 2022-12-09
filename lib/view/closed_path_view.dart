@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../widget/scaffold_view.dart';
+
 class ClosedPathTestView extends StatefulWidget {
   const ClosedPathTestView({Key? key}) : super(key: key);
 
@@ -10,172 +12,200 @@ class ClosedPathTestView extends StatefulWidget {
   State<ClosedPathTestView> createState() => _ClosedPathTestViewState();
 }
 
+final path1 = Path()..addOval(Rect.fromLTWH(0, 0, 100, 100));
+final path2 = Path()..addOval(Rect.fromLTWH(0, 0, 120, 120));
+
 class _ClosedPathTestViewState extends State<ClosedPathTestView> {
   Color? _color;
+
+  final offset1 = Offset(0, 0);
+  final offset2 = Offset(50, 50);
+
+  final size1 = path1.getBounds().size;
+  final size2 = path2.getBounds().size;
+
+  final child1 = Align(
+    alignment: Alignment.bottomLeft,
+    child: GestureDetector(
+      onTap: () {
+        print('-------ClosedPathView child onTap1------------');
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        color: Colors.blue,
+      ),
+    ),
+  );
+
+  final child2 = Center(
+    child: Container(
+      width: 50,
+      height: 50,
+      color: Colors.blue,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(border: Border.all()),
-          child: GestureDetector(
-            onTap: () {
-              print('-------onTap------------');
-              _changeColor();
-            },
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  // width: 100,
-                  // height: 100,
-                  child: GestureDetector(
-                    // behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      print('-------ClosedPathView onTap1------------');
-                      _changeColor();
-                    },
-                    child: ClosedPathView(
-                      Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                      color: _color,
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            print('-------ClosedPathView child onTap1------------');
-                          },
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+    return ScaffoldView(
+      title: 'Closed Path Test View',
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          buildCase1(context),
+          buildCase2(context),
+          buildCase3(context),
+        ]
+            .map(
+              (e) => Expanded(
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  decoration: BoxDecoration(border: Border.all()),
+                  child: e,
                 ),
-                Positioned(
-                  top: 50,
-                  left: 50,
-                  width: 100,
-                  height: 100,
-                  child: GestureDetector(
-                    // behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      print('-------ClosedPathView onTap2------------');
-                    },
-                    child: ClosedPathView(
-                      Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                      color: _color,
-                      child: Center(
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
 
-  Widget _build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(border: Border.all()),
+  Widget buildCase1(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          top: offset1.dx,
+          left: offset1.dy,
+          width: size1.width,
+          height: size1.height,
           child: GestureDetector(
+            // behavior: HitTestBehavior.opaque,
             onTap: () {
-              print('-------onTap------------');
+              print('-------ClosedPathView onTap1------------');
               _changeColor();
             },
-            child: SvgMap(
-              children: [
-                // MapEntity(
-                //   path: Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                //   child: Center(
-                //     child: Container(
-                //       width: 50,
-                //       height: 50,
-                //       color: _color,
-                //     ),
-                //   ),
-                // ),
-                // MapEntity(
-                //   offset: Offset(50, 50),
-                //   path: Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                //   child: Center(
-                //     child: Container(
-                //       width: 50,
-                //       height: 50,
-                //       color: Colors.brown,
-                //     ),
-                //   ),
-                // ),
-                MapEntity(
-                  path: Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                  child: GestureDetector(
-                    // behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      print('-------ClosedPathView onTap1------------');
-                      _changeColor();
-                    },
-                    child: ClosedPathView(
-                      Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                      color: _color,
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            print('-------ClosedPathView child onTap1------------');
-                          },
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                MapEntity(
-                  offset: Offset(50, 50),
-                  path: Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                  child: GestureDetector(
-                    // behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      print('-------ClosedPathView onTap2------------');
-                    },
-                    child: ClosedPathView(
-                      Path()..addOval(Rect.fromLTWH(0, 0, 100, 100)),
-                      color: _color,
-                      child: Center(
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            child: CustomPaint(
+              size: size1,
+              painter: ClosedPathPainter(path1, color: _color),
+              child: child1,
             ),
           ),
         ),
-      ),
+        Positioned(
+          top: offset2.dx,
+          left: offset2.dy,
+          width: size2.width,
+          height: size2.height,
+          child: GestureDetector(
+            // behavior: HitTestBehavior.opaque,
+            onTap: () {
+              print('-------ClosedPathView onTap2------------');
+            },
+            child: CustomPaint(
+              size: size2,
+              painter: ClosedPathPainter(path1, color: _color),
+              child: child2,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCase2(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          top: offset1.dx,
+          left: offset1.dy,
+          child: GestureDetector(
+            // behavior: HitTestBehavior.opaque,
+            onTap: () {
+              print('-------ClosedPathView onTap1------------');
+              _changeColor();
+            },
+            child: ClosedPathView(path1, color: _color, child: child1),
+          ),
+        ),
+        Positioned(
+          top: offset2.dx,
+          left: offset2.dy,
+          child: GestureDetector(
+            // behavior: HitTestBehavior.opaque,
+            onTap: () {
+              print('-------ClosedPathView onTap2------------');
+            },
+            child: ClosedPathView(
+              path2,
+              color: _color,
+              child: child2,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildCase3(BuildContext context) {
+    return SvgMap(
+      children: [
+        /*
+        MapEntity(
+          path: path1,
+          child: Center(
+            child: Container(
+              width: 50,
+              height: 50,
+              color: _color,
+            ),
+          ),
+        ),
+        MapEntity(
+          offset: Offset(50, 50),
+          path: path2,
+          child: Center(
+            child: Container(
+              width: 50,
+              height: 50,
+              color: Colors.brown,
+            ),
+          ),
+        ),
+        */
+        MapEntity(
+          offset: offset1,
+          path: path1,
+          child: GestureDetector(
+            // behavior: HitTestBehavior.opaque,
+            onTap: () {
+              print('-------ClosedPathView onTap1------------');
+              _changeColor();
+            },
+            child: ClosedPathView(
+              path1,
+              color: _color,
+              child: child1,
+            ),
+          ),
+        ),
+        MapEntity(
+          offset: offset2,
+          path: path2,
+          child: GestureDetector(
+            // behavior: HitTestBehavior.opaque,
+            onTap: () {
+              print('-------ClosedPathView onTap2------------');
+            },
+            child: ClosedPathView(
+              path2,
+              color: _color,
+              child: child2,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -189,9 +219,59 @@ class _ClosedPathTestViewState extends State<ClosedPathTestView> {
   }
 }
 
+void _paint(Canvas canvas, Path path, Color? color, [Offset offset = Offset.zero]) {
+  final paintPath = Path()..addPath(path, offset);
+
+  canvas.drawPath(
+    paintPath,
+    Paint()
+      ..color = Colors.purple
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke,
+  );
+
+  if (color != null) {
+    canvas.drawPath(
+      paintPath,
+      Paint()..color = color,
+    );
+  }
+
+  canvas.drawPath(
+    Path()..addRect(offset & path.getBounds().size),
+    Paint()
+      ..color = Colors.blue
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke,
+  );
+}
+
+class ClosedPathPainter extends CustomPainter {
+  const ClosedPathPainter(this.path, {this.color});
+  final Path path;
+  final Color? color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    _paint(canvas, path, color);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // TODO changed
+    return false;
+  }
+
+  @override
+  bool? hitTest(Offset position) {
+    print('---------hitTest-------------');
+    return path.contains(position);
+  }
+}
+
 class ClosedPathView extends SingleChildRenderObjectWidget {
   // TODO: check path closed?
-  const ClosedPathView(this.path, {this.color, super.child});
+  const ClosedPathView(this.path, {this.color, Widget? child}) : super(child: child);
 
   final Path path;
   final Color? color;
@@ -240,30 +320,7 @@ class RenderClosedPathView extends RenderProxyBox {
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    final paintPath = Path()..addPath(path, offset);
-
-    context.canvas.drawPath(
-      paintPath,
-      Paint()
-        ..color = Colors.purple
-        ..strokeWidth = 2
-        ..style = PaintingStyle.stroke,
-    );
-
-    if (color != null) {
-      context.canvas.drawPath(
-        paintPath,
-        Paint()..color = color!,
-      );
-    }
-
-    context.canvas.drawPath(
-      Path()..addRect(offset & path.getBounds().size),
-      Paint()
-        ..color = Colors.blue
-        ..strokeWidth = 2
-        ..style = PaintingStyle.stroke,
-    );
+    _paint(context.canvas, path, color, offset);
 
     if (child != null) context.paintChild(child!, offset);
   }
