@@ -10,14 +10,14 @@ class Layout extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (isDisplayDesktop(context)) {
+        if (isDisplayDesktop(constraints.biggest)) {
           return Container(
             padding: EdgeInsets.all(constraints.maxHeight / 7.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/BigSurBG.jpg'),
+                image: const AssetImage('assets/images/BigSurBG.jpg'),
               ),
             ),
             child: AspectRatio(
@@ -28,10 +28,12 @@ class Layout extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(constraints.maxHeight / 90.0),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(constraints.maxHeight / 25.0),
+                      borderRadius:
+                          BorderRadius.circular(constraints.maxHeight / 25.0),
                       child: child,
                     ),
                   ),
+                  // ignore: prefer_asset_const
                   Image.asset('assets/images/iPhoneCase12.png'),
                 ],
               ),
