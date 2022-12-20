@@ -32,7 +32,7 @@ class CupertinoSlideBack extends StatelessWidget {
         ],
       ),
       onHorizontalDragStart: (DragStartDetails details) {
-        if (details.globalPosition.dx < edgeOffsetLength) {
+        if (details.localPosition.dx < edgeOffsetLength) {
           isCanBack = true;
         }
       },
