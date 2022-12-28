@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,28 +21,35 @@ import 'wrapper/image_wraper.dart';
 
 void main() {
   // configureApp();
-  runApp(MyApp());
+  runZonedGuarded(
+    () => runApp(
+      App(),
+    ),
+    (object, stackTrace) {
+      debugPrint('-----object-----\n$object \n-----stackTrace-----\n$stackTrace');
+    },
+  );
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final child = MaterialApp(
+      key: GlobalObjectKey('App'),
       title: 'Awesome Flutter',
       theme: ThemeData(
         platform: TargetPlatform.iOS,
         primaryColor: Colors.white,
       ),
-      home: Layout(
-        child: const MyHomePage(),
-      ),
+      scrollBehavior: const _ScrollBehavior(),
+      home: const HomePage(),
       routes: viewRoutes,
       onGenerateRoute: (RouteSettings settings) {
         final WidgetBuilder builder = (BuildContext context) {
           final String pageName = kIsWeb ? settings.name!.substring(1) : findSimilarPageName(settings.name!);
-          return Layout(
-            child: viewRoutes.containsKey(pageName) ? viewRoutes[pageName]!(context) : const MyHomePage(),
-          );
+          return viewRoutes.containsKey(pageName) ? viewRoutes[pageName]!(context) : const HomePage();
         };
 
         return (kIsWeb || Platform.isAndroid)
@@ -49,6 +58,7 @@ class MyApp extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
     );
+    return Layout(child: child);
   }
 
   String findSimilarPageName(String pageName) {
@@ -59,16 +69,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  _MyHomePageState();
-
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<AppStoreCardData> _cardDataList = <AppStoreCardData>[];
   List<Widget> _noEnabledList = <Widget>[];
 
@@ -78,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     getData();
   }
 
-  getData() {
+  void getData() {
+    // ignore: prefer_asset_const
     rootBundle.loadString('assets/data/CardDataList.json').then(
       (value) {
         if (value.isNotEmpty) {
@@ -92,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             }
           });
 
-          setState(() {});
+          if (mounted) setState(() {});
         }
       },
     );
@@ -146,4 +155,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       isAlwayShow: data.descriptionMode == AppStoreCardDescriptionMode.classic,
     );
   }
+}
+
+class _ScrollBehavior extends ScrollBehavior {
+  const _ScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => <PointerDeviceKind>{
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.invertedStylus,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.unknown,
+      };
 }
