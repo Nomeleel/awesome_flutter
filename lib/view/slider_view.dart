@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart' hide Slider;
-import 'package:rxdart/rxdart.dart';
+// import 'package:rxdart/rxdart.dart';
 
 import '../widget/slider.dart';
 import '../widget/scaffold_view.dart';
@@ -22,7 +22,7 @@ class _SliderViewState extends State<SliderView> {
   void initState() {
     super.initState();
     _streamSubscription = _streamController.stream
-        .throttleTime(const Duration(milliseconds: 100))
+        // .throttleTime(const Duration(milliseconds: 100))
         .listen((value) => slider.value = value);
   }
 

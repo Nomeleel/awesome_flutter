@@ -1,5 +1,5 @@
 name: awesome_flutter
-description: A new Flutter project.
+description: A awesome Flutter project.
 publish_to: none
 
 # The following defines the version and build number for your application.
@@ -15,7 +15,7 @@ publish_to: none
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:

@@ -1,3 +1,4 @@
+import 'package:awesome_flutter/widget/scaffold_view.dart';
 import 'package:flutter/material.dart';
 
 class MenuView extends StatefulWidget {
@@ -10,7 +11,8 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldView(
+      title: 'Menu View',
       body: Center(
         child: Menu(),
       ),

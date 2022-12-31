@@ -28,12 +28,15 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'list_view_jump_position_view': (BuildContext context) => const ListViewJumpPositionView(),
   'listenable_test_view': (BuildContext context) => const ListenableTestView(),
   'media_query_mock_padding_view': (BuildContext context) => const MediaQueryMockPaddingView(),
+  'menu_view': (BuildContext context) => const MenuView(),
   'native_platform_view': (BuildContext context) => const NativePlatformView(),
   'nav_to_list_view_auto_scroll_view': (BuildContext context) => const NavToListViewAutoScrollView(),
   'nested_scroll_view_with_header_view': (BuildContext context) => const NestedScrollViewWithHeaderView(),
   'physics_test_view': (BuildContext context) => const PhysicsTestView(),
+  'positioned_center_view': (BuildContext context) => const PositionedCenterView(),
   'positioned_not_in_stack_view': (BuildContext context) => const PositionedNotInStackView(),
   'refresh_indicator_test_view': (BuildContext context) => const RefreshIndicatorTestView(),
+  'scroll_view_float_view': (BuildContext context) => const ScrollViewFloatView(),
   'scroll_view_jump_top_view': (BuildContext context) => const ScrollViewJumpTopView(),
   'search_delegate_test_view': (BuildContext context) => const SearchDelegateTestView(),
   'shader_mask_test_view': (BuildContext context) => const ShaderMaskTestView(),
@@ -48,6 +51,7 @@ Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
   'vertical_turn_back_list_view_view': (BuildContext context) => const VerticalTurnBackListViewView(),
   'water_wave_view': (BuildContext context) => const WaterWaveView(),
   'web_view_example_view': (BuildContext context) => const WebViewExampleView(),
+  'woven_grid_view': (BuildContext context) => const WovenGridView(),
   'yin_yang_switch_view': (BuildContext context) => const YinYangSwitchView(),
 
 };
