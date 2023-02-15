@@ -18,6 +18,12 @@ class BorderView extends StatelessWidget {
             child: FlutterLogo(),
           ),
           Container(
+            decoration: ShapeDecoration(
+              shape: ContinuousRectangleBorder(side: BorderSide(width: width), borderRadius: BorderRadius.circular(20)),
+            ),
+            child: FlutterLogo(),
+          ),
+          Container(
             decoration: ShapeDecoration(shape: SweepStadiumBorder(side: BorderSide(width: width))),
             child: FlutterLogo(),
           ),
